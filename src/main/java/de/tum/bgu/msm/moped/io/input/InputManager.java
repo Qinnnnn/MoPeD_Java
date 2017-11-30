@@ -1,6 +1,9 @@
 package de.tum.bgu.msm.moped.io.input;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.io.input.readers.HouseholdTypeDistributionReader;
+import de.tum.bgu.msm.moped.io.input.readers.HouseholdTypeReader;
+import de.tum.bgu.msm.moped.io.input.readers.ZonesReader;
 import org.apache.log4j.Logger;
 
 public class InputManager {
@@ -11,4 +14,12 @@ public class InputManager {
     public InputManager(DataSet dataSet) {
         this.dataSet = dataSet;
     }
+
+    public void readAsStandAlone() {
+        new ZonesReader(dataSet).read();
+        new HouseholdTypeReader(dataSet).read();
+        new HouseholdTypeDistributionReader(dataSet).read();
+    }
+
+
 }

@@ -1,4 +1,12 @@
 package de.tum.bgu.msm.moped.data;
 
-public class Purpose {
+public enum Purpose {
+    HBW,
+    HBSHOP,
+    HBREC,
+    HBSCH,
+    HBCOLL,
+    HBOTH,
+    NHBW,
+    NHBNW;
 }
