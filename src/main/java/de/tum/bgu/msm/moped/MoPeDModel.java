@@ -3,7 +3,12 @@ package de.tum.bgu.msm.moped;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 
+import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
+import de.tum.bgu.msm.moped.resources.Resources;
+import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
+
+import java.util.ResourceBundle;
 
 public class MoPeDModel {
 
@@ -14,28 +19,34 @@ public class MoPeDModel {
     private final DataSet dataSet;
     private boolean initialised = false;
 
-    public MoPeDModel() {
+    public MoPeDModel(ResourceBundle resources) {
         this.dataSet = new DataSet();
         this.manager = new InputManager(dataSet);
-//        Resources.INSTANCE.setResources(resources);
-//        MitoUtil.initializeRandomNumber();
+        Resources.INSTANCE.setResources(resources);
+
     }
 
     public void initializeStandAlone() {
         // Read data if MoPeD is used as a stand-alone program and data are not fed from other program
         logger.info("  Reading input data for MoPeD");
         manager.readAsStandAlone();
-//        manager.readAdditionalData();
     }
 
     public void runModel() {
         long startTime = System.currentTimeMillis();
-        logger.info("Started the Microsimulation Transport Orchestrator (MITO)");
+        logger.info("Started the Model of Pedestrian Demand (MoPeD)");
+        TripGeneration tripGen = new TripGeneration(dataSet);
+        tripGen.run();
+        printOutline(startTime);
+    }
 
-//        TravelDemandGenerator ttd = new TravelDemandGenerator(dataSet);
-//        ttd.generateTravelDemand();
-//
-//        printOutline(startTime);
-//        Purpose.clearBudgets();
+    private void printOutline(long startTime) {
+//        String trips = MitoUtil.customFormat("  " + "###,###", dataSet.getTrips().size());
+//        logger.info("A total of " + trips.trim() + " microscopic trips were generated");
+        logger.info("Completed the Model of Pedestrian Demand (MoPeD)");
+        float endTime = MoPeDUtil.rounder(((System.currentTimeMillis() - startTime) / 60000), 1);
+        int hours = (int) (endTime / 60);
+        int min = (int) (endTime - 60 * hours);
+        logger.info("Runtime: " + hours + " hours and " + min + " minutes.");
     }
 }

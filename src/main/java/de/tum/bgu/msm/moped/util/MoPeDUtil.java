@@ -1,6 +1,10 @@
 package de.tum.bgu.msm.moped.util;
 
+import com.pb.common.util.ResourceUtil;
 import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.util.ResourceBundle;
 
 
 public class MoPeDUtil {
@@ -16,5 +20,20 @@ public class MoPeDUtil {
         if (ind == -1) logger.error("Could not find element " + element +
                 " in array (see method <findPositionInArray> in class <SiloUtil>");
         return ind;
+    }
+
+    public static float rounder(float value, int digits) {
+        // rounds value to digits behind the decimal point
+        return Math.round(value * Math.pow(10, digits) + 0.5) / (float) Math.pow(10, digits);
+    }
+
+    public static ResourceBundle createResourceBundle(String fileName) {
+        // read properties file and return as ResourceBundle
+        File propFile = new File(fileName);
+        return ResourceUtil.getPropertyBundle(propFile);
+    }
+
+    public static void setBaseDirectory(String baseDirectoryInput) {
+        baseDirectory = baseDirectoryInput;
     }
 }

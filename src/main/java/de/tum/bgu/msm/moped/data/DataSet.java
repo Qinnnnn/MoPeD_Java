@@ -12,6 +12,16 @@ public class DataSet {
     private final Map<Integer, Zone> zones= new HashMap<Integer, Zone>();
     private final Map<Integer, HouseholdType> hhTypes= new HashMap<Integer, HouseholdType>();
     private Table<Integer, Integer, Double> distribution;
+    private Table<Integer, Integer, Double> hbShopTripGen;
+    private Table<Integer, Integer, Double> hbRecreationTripGen;
+    private Table<Integer, Integer, Double> hbOtherTripGen;
+    private Table<Integer, Integer, Double> hbSchoolTripGen;
+    private Table<Integer, Integer, Double> hbCollegeProduction;
+    private Map<Integer, Double> hbCollegeAttraction;
+    private Table<Integer, Integer, Double> hbSchoolProduction;
+    private Map<Integer, Double> hbSchoolAttraction;
+    private Table<Integer, Integer, Double> hbWorkProduction;
+    private Map<Integer, Double> hbWorkAttraction;
 
     public void addZone(final Zone zone) {
         Zone test = this.zones.get(zone.getZoneId());
@@ -55,5 +65,49 @@ public class DataSet {
 
     public void setDistribution(Table<Integer, Integer, Double> distribution) {
         this.distribution = distribution;
+    }
+
+    public void setHbShopTripGen(Table<Integer, Integer, Double> hbShopTripGen) {
+        this.hbShopTripGen = hbShopTripGen;
+    }
+
+    public Table<Integer, Integer, Double> getDistribution() {
+        return distribution;
+    }
+
+    public void setHbRecreationTripGen(Table<Integer, Integer, Double> hbRecreationTripGen) {
+        this.hbRecreationTripGen = hbRecreationTripGen;
+    }
+
+    public void setHbOtherTripGen(Table<Integer, Integer, Double> hbOtherTripGen) {
+        this.hbOtherTripGen = hbOtherTripGen;
+    }
+
+    public void setHbSchoolTripGen(Table<Integer, Integer, Double> hbSchoolTripGen) {
+        this.hbSchoolTripGen = hbSchoolTripGen;
+    }
+
+    public void setHbCollegeProduction(Table<Integer, Integer, Double> hbCollegeProduction) {
+        this.hbCollegeProduction = hbCollegeProduction;
+    }
+
+    public void setHbCollegeAttraction(Map<Integer, Double> hbCollegeAttraction) {
+        this.hbCollegeAttraction = hbCollegeAttraction;
+    }
+
+    public void setHbSchoolProduction(Table<Integer, Integer, Double> hbSchoolProduction) {
+        this.hbSchoolProduction = hbSchoolProduction;
+    }
+
+    public void setHbSchoolAttraction(Map<Integer, Double> hbSchoolAttraction) {
+        this.hbSchoolAttraction = hbSchoolAttraction;
+    }
+
+    public void setHbWorkProduction(Table<Integer, Integer, Double> hbWorkProduction) {
+        this.hbWorkProduction = hbWorkProduction;
+    }
+
+    public void setHbWorkAttraction(Map<Integer, Double> hbWorkAttraction) {
+        this.hbWorkAttraction = hbWorkAttraction;
     }
 }
