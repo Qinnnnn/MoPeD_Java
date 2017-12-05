@@ -37,84 +37,82 @@ public class HBCollegeGenerator {
 
 
     public void productionCalculator() {
-        Iterator<Table.Cell<Integer,Integer,Double>> cells = hbCollegeProduction.cellSet().iterator();
-        if (cells.hasNext()){
-            Table.Cell<Integer,Integer,Double> element = cells.next();
-            int zoneId = element.getRowKey();
-            int hhTypeId = element.getColumnKey();
-            double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
-            Zone zone = dataSet.getZone(zoneId);
-            HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
-            int age = hhType.getAge();
-            int hhSize = hhType.getHouseholdSize();
-            double tripGenRate = 0.0;
-            if (hhSize == 1){
-                switch (age){
-                    case 1:
-                        tripGenRate = 0.52380952;
-                        break;
-                    case 2:
-                        tripGenRate = 0.05958549;
-                        break;
-                    case 3:
-                        tripGenRate = 0.02985075;
-                        break;
-                    case 4:
-                        tripGenRate = 0.01823708;
-                        break;
+        for (int zoneId : dataSet.getZones().keySet()){
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
+                Zone zone = dataSet.getZone(zoneId);
+                HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
+                int age = hhType.getAge();
+                int hhSize = hhType.getHouseholdSize();
+                double tripGenRate = 0.0;
+                if (hhSize == 1){
+                    switch (age){
+                        case 1:
+                            tripGenRate = 0.52380952;
+                            break;
+                        case 2:
+                            tripGenRate = 0.05958549;
+                            break;
+                        case 3:
+                            tripGenRate = 0.02985075;
+                            break;
+                        case 4:
+                            tripGenRate = 0.01823708;
+                            break;
+                    }
+                }else if (hhSize == 2){
+                    switch (age){
+                        case 1:
+                            tripGenRate = 0.48387097;
+                            break;
+                        case 2:
+                            tripGenRate = 0.17915691;
+                            break;
+                        case 3:
+                            tripGenRate = 0.03581267;
+                            break;
+                        case 4:
+                            tripGenRate = 0.03353057;
+                            break;
+                    }
+                } else if (hhSize == 3){
+                    switch (age){
+                        case 1:
+                            tripGenRate = 1.00000000;
+                            break;
+                        case 2:
+                            tripGenRate = 0.23421927;
+                            break;
+                        case 3:
+                            tripGenRate = 0.33980583;
+                            break;
+                        case 4:
+                            tripGenRate = 0.06557377;
+                            break;
+                    }
+                } else if (hhSize == 4) {
+                    switch (age){
+                        case 1:
+                            tripGenRate = 0.45833333;
+                            break;
+                        case 2:
+                            tripGenRate = 0.38158996;
+                            break;
+                        case 3:
+                            tripGenRate = 0.58510638;
+                            break;
+                        case 4:
+                            tripGenRate = 0.00000000;
+                            break;
+                    }
                 }
-            }else if (hhSize == 2){
-                switch (age){
-                    case 1:
-                        tripGenRate = 0.48387097;
-                        break;
-                    case 2:
-                        tripGenRate = 0.17915691;
-                        break;
-                    case 3:
-                        tripGenRate = 0.03581267;
-                        break;
-                    case 4:
-                        tripGenRate = 0.03353057;
-                        break;
-                }
-            } else if (hhSize == 3){
-                switch (age){
-                    case 1:
-                        tripGenRate = 1.00000000;
-                        break;
-                    case 2:
-                        tripGenRate = 0.23421927;
-                        break;
-                    case 3:
-                        tripGenRate = 0.33980583;
-                        break;
-                    case 4:
-                        tripGenRate = 0.06557377;
-                        break;
-                }
-            } else if (hhSize == 4) {
-                switch (age){
-                    case 1:
-                        tripGenRate = 0.45833333;
-                        break;
-                    case 2:
-                        tripGenRate = 0.38158996;
-                        break;
-                    case 3:
-                        tripGenRate = 0.58510638;
-                        break;
-                    case 4:
-                        tripGenRate = 0.00000000;
-                        break;
-                }
-            }
 
-            if (tripGenRate != 0){
-                double tripGen = tripGenRate * distribution * 1.074;
-                hbCollegeProduction.put(zoneId,hhTypeId,tripGen);
-            }else{
-                logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + age + "age and " + hhSize +"persons");
+                if (tripGenRate != 0){
+                    double tripGen = tripGenRate * distribution * 1.074;
+                    hbCollegeProduction.put(zoneId,hhTypeId,tripGen);
+                }else{
+                    logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + age + "age and " + hhSize +"persons");
+                }
             }
 
         }

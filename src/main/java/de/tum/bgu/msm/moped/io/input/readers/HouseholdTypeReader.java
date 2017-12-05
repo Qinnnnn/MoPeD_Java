@@ -4,6 +4,7 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
 
@@ -28,7 +29,7 @@ public class HouseholdTypeReader extends CSVReader {
     @Override
     public void read() {
         logger.info("  Reading householdType from kcwhia file");
-        super.read(Properties.get().HOUSEHOLDTYPE, ",");
+        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPE), ",");
     }
 
     @Override

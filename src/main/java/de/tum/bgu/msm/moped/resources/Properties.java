@@ -5,29 +5,13 @@ import com.pb.common.util.ResourceUtil;
 
 public class Properties {
 
-    public final String ZONES;
-    public final String ZONESATTRIBUTE;
-    public final String HOUSEHOLDTYPE;
-    public final String HOUSEHOLDTYPEDISTRIBUTION;
+    public static final String BASE= "base.directory";
+    public static final String ZONES = "zone.data.file";
+    public static final String ZONESATTRIBUTE = "zoneAttributes.data.file";
+    public static final String HOUSEHOLDTYPE = "householdType.data.file";
+    public static final String HOUSEHOLDTYPEDISTRIBUTION = "householdTypeDistribution.data.file";
+    public static final String PIE = "pie.data.file";
+    public static final String TRANSPORT = "transport.data.file";
+    public static final String OUTPUTPATH = "output.path";
 
-    private static Properties instance;
-
-    public Properties(ResourceBundle bundle) {
-        ZONES = ResourceUtil.getProperty(bundle, "zone.data.file");
-        ZONESATTRIBUTE = ResourceUtil.getProperty(bundle, "zoneAttributes.data.file");
-        HOUSEHOLDTYPE = ResourceUtil.getProperty(bundle, "householdType.data.file");
-        HOUSEHOLDTYPEDISTRIBUTION = ResourceUtil.getProperty(bundle, "householdTypeDistribution.data.file");
-    }
-
-
-    public static Properties get() {
-        if(instance == null) {
-            throw new RuntimeException("Properties not initialized yet! Make sure to call initializeProperties Method first!");
-        }
-        return instance;
-    }
-
-    public static void initializeProperties(ResourceBundle bundle) {
-        instance = new Properties(bundle);
-    }
 }

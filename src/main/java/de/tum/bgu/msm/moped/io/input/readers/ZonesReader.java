@@ -4,6 +4,7 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Zone;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 
 public class ZonesReader extends CSVReader {
@@ -15,12 +16,12 @@ public class ZonesReader extends CSVReader {
 
     @Override
     public void read() {
-        super.read(Properties.get().ZONES, ",");
+        super.read(Resources.INSTANCE.getString(Properties.ZONES), ",");
     }
 
     @Override
     protected void processHeader(String[] header) {
-        idIndex = MoPeDUtil.findPositionInArray("ZoneId", header);
+        idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
     }
 
     @Override

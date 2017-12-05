@@ -30,55 +30,52 @@ public class HBRecreationGenerator {
     }
 
     public void productionCalculator() {
-        Iterator<Table.Cell<Integer,Integer,Double>> cells = hbRecreationProduction.cellSet().iterator();
-        if (cells.hasNext()){
-            Table.Cell<Integer,Integer,Double> element = cells.next();
-            int zoneId = element.getRowKey();
-            int hhTypeId = element.getColumnKey();
-            double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
-            Zone zone = dataSet.getZone(zoneId);
-            HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
-            int workers = hhType.getWorkers();
-            int hhSize = hhType.getHouseholdSize();
-            double tripGenRate = 0.0;
-            if (workers < hhSize){
-                switch (hhSize){
-                    case 1:
-                        tripGenRate = 0.47897259;
-                        break;
-                    case 2:
-                        tripGenRate = 0.88111840;
-                        break;
-                    case 3:
-                        tripGenRate = 1.21373370;
-                        break;
-                    case 4:
-                        tripGenRate = 2.24007530;
-                        break;
+        for (int zoneId : dataSet.getZones().keySet()){
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
+                Zone zone = dataSet.getZone(zoneId);
+                HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
+                int workers = hhType.getWorkers();
+                int hhSize = hhType.getHouseholdSize();
+                double tripGenRate = 0.0;
+                if (workers < hhSize){
+                    switch (hhSize){
+                        case 1:
+                            tripGenRate = 0.47897259;
+                            break;
+                        case 2:
+                            tripGenRate = 0.88111840;
+                            break;
+                        case 3:
+                            tripGenRate = 1.21373370;
+                            break;
+                        case 4:
+                            tripGenRate = 2.24007530;
+                            break;
+                    }
+                }else if (workers == hhSize){
+                    switch (hhSize){
+                        case 1:
+                            tripGenRate = 0.50317472;
+                            break;
+                        case 2:
+                            tripGenRate = 0.57970395;
+                            break;
+                        case 3:
+                            tripGenRate = 1.16564740;
+                            break;
+                    }
+                } else{
+                    logger.warn("Number of workers is bigger than householdsize");
                 }
-            }else if (workers == hhSize){
-                switch (hhSize){
-                    case 1:
-                        tripGenRate = 0.50317472;
-                        break;
-                    case 2:
-                        tripGenRate = 0.57970395;
-                        break;
-                    case 3:
-                        tripGenRate = 1.16564740;
-                        break;
+
+                if (tripGenRate != 0){
+                    double tripGen = tripGenRate * distribution * 1.2;
+                    hbRecreationProduction.put(zoneId,hhTypeId,tripGen);
+                }else{
+                    logger.warn("no HBRecreation - tripGenRate matches to" + hhType.getHhTypeId() + "with" + workers + "workers and " + hhSize +"persons");
                 }
-            } else{
-                logger.warn("Number of workers is bigger than householdsize");
             }
-
-            if (tripGenRate != 0){
-                double tripGen = tripGenRate * distribution * 1.2;
-                hbRecreationProduction.put(zoneId,hhTypeId,tripGen);
-            }else{
-                logger.warn("no HBRecreation - tripGenRate matches to" + hhType.getHhTypeId() + "with" + workers + "workers and " + hhSize +"persons");
-            }
-
 
         }
 

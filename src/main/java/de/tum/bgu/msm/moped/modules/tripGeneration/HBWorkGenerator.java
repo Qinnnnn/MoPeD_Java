@@ -19,11 +19,10 @@ public class HBWorkGenerator {
     private final DataSet dataSet;
     private Table<Integer, Integer, Double> hbWorkProduction;
     private Map<Integer, Double> hbWorkAttraction;
+
     public HBWorkGenerator(DataSet dataSet) {
         this.dataSet = dataSet;
     }
-
-
 
     public void run () {
         Collection<Integer> zones = dataSet.getZones().keySet();
@@ -38,32 +37,28 @@ public class HBWorkGenerator {
 
 
     public void productionCalculator() {
-        Iterator<Table.Cell<Integer,Integer,Double>> cells = hbWorkProduction.cellSet().iterator();
-        if (cells.hasNext()){
-            Table.Cell<Integer,Integer,Double> cell = cells.next();
-            int zoneId = cell.getRowKey();
-            int hhTypeId = cell.getColumnKey();
-            double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
-            Zone zone = dataSet.getZone(zoneId);
-            HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
-            int workers = hhType.getWorkers();
-            double tripGenRate = 0.0;
-            if (workers == 1){
-                tripGenRate = 1.38325222;
-            }else if (workers == 2){
-                tripGenRate = 2.39110122;
-            } else if (workers == 3){
-                tripGenRate = 3.88667372;
+        double productionSum = 0.0;
+        for (int zoneId : dataSet.getZones().keySet()){
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
+                //Zone zone = dataSet.getZone(zoneId);
+                HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
+                int workers = hhType.getWorkers();
+                double tripGenRate = 0.0;
+                if (workers == 1){
+                    tripGenRate = 1.38325222;
+                }else if (workers == 2){
+                    tripGenRate = 2.39110122;
+                } else if (workers == 3){
+                    tripGenRate = 3.88667372;
+                }
+                double tripGen = tripGenRate * distribution;
+                hbWorkProduction.put(zoneId,hhTypeId,tripGen);
+                //Calculate the total trip production
+                productionSum += tripGen;
             }
-            double tripGen = tripGenRate * distribution;
-            hbWorkProduction.put(zoneId,hhTypeId,tripGen);
         }
 
-        //Calculate the total trip production
-        double productionSum = 0.0;
-        for (double pr: hbWorkProduction.values()){
-            productionSum += pr;
-        }
 
         //Calculate the total trip attraction
         double attractionSum = 0.0;
@@ -71,17 +66,20 @@ public class HBWorkGenerator {
             attractionSum += at;
         }
 
+
+
         //balance production and attraction
+        double newProductionSum = 0.0;
         double factor = attractionSum/productionSum;
-        Iterator<Table.Cell<Integer,Integer,Double>> productions = hbWorkProduction.cellSet().iterator();
-        if (cells.hasNext()) {
-            Table.Cell<Integer, Integer, Double> production = cells.next();
-            int zoneId = production.getRowKey();
-            int hhTypeId = production.getColumnKey();
-            double oldPR = production.getValue();
-            double newPR = oldPR * factor;
-            hbWorkProduction.put(zoneId,hhTypeId,newPR);
+        for (int zoneId : dataSet.getZones().keySet()){
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                double oldPR = hbWorkProduction.get(zoneId,hhTypeId);
+                double newPR = oldPR * factor;
+                hbWorkProduction.put(zoneId,hhTypeId,newPR);
+                newProductionSum += newPR;
+            }
         }
+
 
     }
 

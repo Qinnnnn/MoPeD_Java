@@ -4,6 +4,7 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Zone;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 
 public class ZoneAttributesReader extends CSVReader {
@@ -38,12 +39,12 @@ public class ZoneAttributesReader extends CSVReader {
 
     @Override
     public void read() {
-        super.read(Properties.get().ZONESATTRIBUTE, ",");
+        super.read(Resources.INSTANCE.getString(Properties.ZONESATTRIBUTE), ",");
     }
 
     @Override
     protected void processHeader(String[] header) {
-        idIndex = MoPeDUtil.findPositionInArray("ZoneId", header);
+        idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
         agricultureIndex = MoPeDUtil.findPositionInArray("afm", header);
         constructionIndex = MoPeDUtil.findPositionInArray("con", header);
         financialIndex = MoPeDUtil.findPositionInArray("fi", header);
@@ -72,29 +73,29 @@ public class ZoneAttributesReader extends CSVReader {
     @Override
     protected void processRecord(String[] record) {
         int zoneId = Integer.parseInt(record[idIndex]);
-        double agriculture = Integer.parseInt(record[agricultureIndex]);
-        double construction = Integer.parseInt(record[constructionIndex]);
-        double financial = Integer.parseInt(record[financialIndex]);
-        double government = Integer.parseInt(record[governmentIndex]);
-        double manufacturing = Integer.parseInt(record[manufacturingIndex]);
-        double retail = Integer.parseInt(record[retailIndex]);
-        double service = Integer.parseInt(record[serviceIndex]);
-        double transportation = Integer.parseInt(record[transportationIndex]);
-        double wholesale = Integer.parseInt(record[wholesaleIndex]);
-        double parkCostShort = Integer.parseInt(record[parkCostShortIndex]);
-        double parkCostLong = Integer.parseInt(record[parkCostLongIndex]);
-        double peakHousehold = Integer.parseInt(record[peakHouseholdIndex]);
-        double peakEmployment = Integer.parseInt(record[peakEmploymentIndex]);
-        double offpeakHousehold = Integer.parseInt(record[offpeakHouseholdIndex]);
-        double offpeakEmployment = Integer.parseInt(record[offpeakEmploymentIndex]);
-        double intersection = Integer.parseInt(record[intersectionIndex]);
-        double shoppingArea = Integer.parseInt(record[shoppingAreaIndex]);
-        double singleFamily = Integer.parseInt(record[singleFamilyIndex]);
-        double collegeVehicleTrip = Integer.parseInt(record[collegeVehicleTripIndex]);
-        double auov = Integer.parseInt(record[auovIndex]);
-        double parkCharge = Integer.parseInt(record[parkChargeIndex]);
-        double canpnr = Integer.parseInt(record[canpnrIndex]);
-        double caninf = Integer.parseInt(record[caninfIndex]);
+        double agriculture = Double.parseDouble(record[agricultureIndex]);
+        double construction = Double.parseDouble(record[constructionIndex]);
+        double financial = Double.parseDouble(record[financialIndex]);
+        double government = Double.parseDouble(record[governmentIndex]);
+        double manufacturing = Double.parseDouble(record[manufacturingIndex]);
+        double retail = Double.parseDouble(record[retailIndex]);
+        double service = Double.parseDouble(record[serviceIndex]);
+        double transportation = Double.parseDouble(record[transportationIndex]);
+        double wholesale = Double.parseDouble(record[wholesaleIndex]);
+        double parkCostShort = Double.parseDouble(record[parkCostShortIndex]);
+        double parkCostLong = Double.parseDouble(record[parkCostLongIndex]);
+        double peakHousehold = Double.parseDouble(record[peakHouseholdIndex]);
+        double peakEmployment = Double.parseDouble(record[peakEmploymentIndex]);
+        double offpeakHousehold = Double.parseDouble(record[offpeakHouseholdIndex]);
+        double offpeakEmployment = Double.parseDouble(record[offpeakEmploymentIndex]);
+        double intersection = Double.parseDouble(record[intersectionIndex]);
+        double shoppingArea = Double.parseDouble(record[shoppingAreaIndex]);
+        double singleFamily = Double.parseDouble(record[singleFamilyIndex]);
+        double collegeVehicleTrip = Double.parseDouble(record[collegeVehicleTripIndex]);
+        double auov = Double.parseDouble(record[auovIndex]);
+        double parkCharge = Double.parseDouble(record[parkChargeIndex]);
+        double canpnr = Double.parseDouble(record[canpnrIndex]);
+        double caninf = Double.parseDouble(record[caninfIndex]);
 
         dataSet.getZone(zoneId).setAgriculture(agriculture);
         dataSet.getZone(zoneId).setAgriculture(construction);

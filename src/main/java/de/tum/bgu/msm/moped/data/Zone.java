@@ -29,6 +29,12 @@ public class Zone {
     private double parkCharge;
     private double canpnr;
     private double caninf;
+    private double pie;
+    private int pieFlag;
+    private int tazId;
+    private int wa;
+    private double stfwy;
+    private double trail;
 
     public Zone(int id){ this.zoneId = id; }
 
@@ -216,5 +222,51 @@ public class Zone {
 
     public void setCaninf(double caninf) {
         this.caninf = caninf;
+    }
+
+    public double getPie() { return pie; }
+
+    public void setPie(double pie) {
+        this.pie = pie;
+    }
+
+    public int getPieFlag() {
+        return pieFlag;
+    }
+
+    public void setPieFlag(int pieFlag) {
+        this.pieFlag = pieFlag;
+    }
+
+    public int getTazId() {
+        return tazId;
+    }
+
+    public void setTazId(int tazId) {
+        this.tazId = tazId;
+    }
+
+    public int getWa() {
+        return wa;
+    }
+
+    public void setWa(int wa) {
+        this.wa = wa;
+    }
+
+    public double getStfwy() {
+        return stfwy;
+    }
+
+    public void setStfwy(double stfwy) {
+        this.stfwy = stfwy;
+    }
+
+    public double getTrail() {
+        return trail;
+    }
+
+    public void setTrail(double trail) {
+        this.trail = trail;
     }
 }

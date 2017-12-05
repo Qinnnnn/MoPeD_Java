@@ -5,6 +5,7 @@ import com.google.common.collect.Table;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 
 import java.util.Collection;
@@ -22,13 +23,13 @@ public class HouseholdTypeDistributionReader extends CSVReader{
         Collection<Integer> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         distribution = ArrayTable.create(zones, households);
-        super.read(Properties.get().HOUSEHOLDTYPEDISTRIBUTION, ",");
+        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
         dataSet.setDistribution(distribution);
     }
 
     @Override
     protected void processHeader(String[] header) {
-        zoneIndex = MoPeDUtil.findPositionInArray("ZoneId", header);
+        zoneIndex = MoPeDUtil.findPositionInArray("zoneID", header);
     }
 
     @Override

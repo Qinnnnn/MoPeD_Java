@@ -30,55 +30,52 @@ public class HBOtherGenerator {
     }
 
     public void productionCalculator() {
-        Iterator<Table.Cell<Integer,Integer,Double>> cells = hbOtherProduction.cellSet().iterator();
-        if (cells.hasNext()){
-            Table.Cell<Integer,Integer,Double> element = cells.next();
-            int zoneId = element.getRowKey();
-            int hhTypeId = element.getColumnKey();
-            double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
-            Zone zone = dataSet.getZone(zoneId);
-            HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
-            int workers = hhType.getWorkers();
-            int hhSize = hhType.getHouseholdSize();
-            double tripGenRate = 0.0;
-            if (workers < hhSize){
-                switch (hhSize){
-                    case 1:
-                        tripGenRate = 0.89368165;
-                        break;
-                    case 2:
-                        tripGenRate = 1.62810500;
-                        break;
-                    case 3:
-                        tripGenRate = 2.22561020;
-                        break;
-                    case 4:
-                        tripGenRate = 3.48763360;
-                        break;
+        for (int zoneId : dataSet.getZones().keySet()){
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
+                Zone zone = dataSet.getZone(zoneId);
+                HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
+                int workers = hhType.getWorkers();
+                int hhSize = hhType.getHouseholdSize();
+                double tripGenRate = 0.0;
+                if (workers < hhSize){
+                    switch (hhSize){
+                        case 1:
+                            tripGenRate = 0.89368165;
+                            break;
+                        case 2:
+                            tripGenRate = 1.62810500;
+                            break;
+                        case 3:
+                            tripGenRate = 2.22561020;
+                            break;
+                        case 4:
+                            tripGenRate = 3.48763360;
+                            break;
+                    }
+                }else if (workers == hhSize){
+                    switch (hhSize){
+                        case 1:
+                            tripGenRate = 0.54391065;
+                            break;
+                        case 2:
+                            tripGenRate = 1.24163040;
+                            break;
+                        case 3:
+                            tripGenRate = 1.44898570;
+                            break;
+                    }
+                } else{
+                    logger.warn("Number of workers is bigger than householdsize");
                 }
-            }else if (workers == hhSize){
-                switch (hhSize){
-                    case 1:
-                        tripGenRate = 0.54391065;
-                        break;
-                    case 2:
-                        tripGenRate = 1.24163040;
-                        break;
-                    case 3:
-                        tripGenRate = 1.44898570;
-                        break;
+
+                if (tripGenRate != 0){
+                    double tripGen = tripGenRate * distribution * 1.2;
+                    hbOtherProduction.put(zoneId,hhTypeId,tripGen);
+                }else{
+                    logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + workers + "workers and " + hhSize +"persons");
                 }
-            } else{
-                logger.warn("Number of workers is bigger than householdsize");
             }
-
-            if (tripGenRate != 0){
-                double tripGen = tripGenRate * distribution * 1.2;
-                hbOtherProduction.put(zoneId,hhTypeId,tripGen);
-            }else{
-                logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + workers + "workers and " + hhSize +"persons");
-            }
-
 
         }
 
