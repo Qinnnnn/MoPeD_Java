@@ -8,9 +8,9 @@ import org.apache.log4j.Logger;
 
 import java.util.Collection;
 
-public class HBRecreationWalk {
+public class HBSchoolWalk {
 
-    private static final Logger logger = Logger.getLogger(HBRecreationWalk.class);
+    private static final Logger logger = Logger.getLogger(HBSchoolWalk.class);
     private final DataSet dataSet;
     private Table<Integer, Integer, Double> WalkTrip;
     private Table<Integer, Integer, Double> WalkExpUtility;
@@ -18,7 +18,7 @@ public class HBRecreationWalk {
 
 
 
-    public HBRecreationWalk(DataSet dataSet) {
+    public HBSchoolWalk(DataSet dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -31,7 +31,7 @@ public class HBRecreationWalk {
         walkUtilityCalculator();
         vehicleUtilityCalculator();
         walkTripsCalculator();
-        dataSet.setHbRecreationWalk(WalkTrip);
+        dataSet.setHbSchoolWalk(WalkTrip);
     }
 
     private void walkUtilityCalculator() {
@@ -46,7 +46,7 @@ public class HBRecreationWalk {
             for (int hhTypeId : dataSet.getHhTypes().keySet()) {
                 HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
                 //household-related utility
-                double utilityHousehold = 0.288 + -4.377 + 0.191*(hhType.getHouseholdSize()==2?1:0) + -0.242*(hhType.getAge()==3?1:0)+ 0.208*(hhType.getWorkers()==1?1:0)+ 0.301*(hhType.getWorkers()==2?1:0) +
+                double utilityHousehold = 0.444 + -4.377 + 0.191*(hhType.getHouseholdSize()==2?1:0) + -0.242*(hhType.getAge()==3?1:0)+ 0.208*(hhType.getWorkers()==1?1:0)+ 0.301*(hhType.getWorkers()==2?1:0) +
                         1.089*(hhType.getCars()==0?1:0) + -0.463*(hhType.getCars()==2?1:0) + -0.690*(hhType.getCars()==3?1:0)+ 0.295*(hhType.getKids()==1?1:0) + 0.455*(hhType.getKids()==2?1:0) + 0.479*(hhType.getKids()==3?1:0);
                 //total utility
                 double utilitySum = utilityZone + utilityHousehold;
@@ -80,7 +80,7 @@ public class HBRecreationWalk {
                 double vehicleExpUtility = VehicleExpUtility.get(zoneId,hhTypeId);
                 double sumExpUtility = walkExpUtility + vehicleExpUtility;
                 double walkProbability = walkExpUtility/sumExpUtility;
-                double walkTrips = walkProbability * dataSet.getHbRecreationTripGen().get(zoneId,hhTypeId);
+                double walkTrips = walkProbability * dataSet.getHbSchoolProduction().get(zoneId,hhTypeId);
                 WalkTrip.put(zoneId,hhTypeId,walkTrips);
             }
         }

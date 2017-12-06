@@ -21,7 +21,13 @@ public class WalkModeChoice extends Module {
         logger.info("  Started walk mode choice model.");
         hbWorkWalk();
         hbShopWalk();
-
+        hbRecreationWalk();
+        hbOtherWalk();
+        try {
+            writeOut();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         logger.info("  Completed walk mode choice model.");
     }
 
@@ -33,6 +39,26 @@ public class WalkModeChoice extends Module {
     private void hbShopWalk() {
         HBShopWalk hbShopWalk = new HBShopWalk(dataSet);
         hbShopWalk.run();
+    }
+
+    private void hbRecreationWalk() {
+        HBRecreationWalk hbRecreationWalk = new HBRecreationWalk(dataSet);
+        hbRecreationWalk.run();
+    }
+
+    private void hbOtherWalk() {
+        HBOtherWalk hbOtherWalk = new HBOtherWalk(dataSet);
+        hbOtherWalk.run();
+    }
+
+    private void hbSchoolWalk() {
+        HBSchoolWalk hbSchoolWalk = new HBSchoolWalk(dataSet);
+        hbSchoolWalk.run();
+    }
+
+    private void hbCollegeWalk() {
+        HBCollegeWalk hbCollegeWalk = new HBCollegeWalk(dataSet);
+        hbCollegeWalk.run();
     }
 
     private void writeOut()throws FileNotFoundException {
