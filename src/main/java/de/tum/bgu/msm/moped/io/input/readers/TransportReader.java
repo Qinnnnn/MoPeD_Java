@@ -31,7 +31,7 @@ public class TransportReader extends CSVReader {
 
     @Override
     protected void processRecord(String[] record) {
-        int zoneId = Integer.parseInt(record[idIndex]);
+        long zoneId = Long.parseLong(record[idIndex]);
         int wa = Integer.parseInt(record[waIndex]);
         double stfwy = Double.parseDouble(record[stfwyIndex]);
         double trail = Double.parseDouble(record[trailIndex]);

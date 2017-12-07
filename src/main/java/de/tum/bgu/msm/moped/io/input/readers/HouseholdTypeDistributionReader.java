@@ -12,7 +12,7 @@ import java.util.Collection;
 
 public class HouseholdTypeDistributionReader extends CSVReader{
 
-    private Table<Integer, Integer, Double> distribution;
+    private Table<Long, Integer, Double> distribution;
 
     public HouseholdTypeDistributionReader(DataSet dataSet) { super(dataSet);}
 
@@ -20,7 +20,7 @@ public class HouseholdTypeDistributionReader extends CSVReader{
 
     @Override
     public void read() {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         distribution = ArrayTable.create(zones, households);
         super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
@@ -29,12 +29,14 @@ public class HouseholdTypeDistributionReader extends CSVReader{
 
     @Override
     protected void processHeader(String[] header) {
-        zoneIndex = MoPeDUtil.findPositionInArray("zoneID", header);
+        //String header = "''zoneId''";
+        //zoneIndex = MoPeDUtil.findPositionInArray("zoneId", header);
+        zoneIndex = 0;
     }
 
     @Override
     protected void processRecord(String[] record) {
-        int zoneId = Integer.parseInt(record[zoneIndex]);
+        long zoneId = Long.parseLong(record[zoneIndex]);
         for (int id=1; id< record.length; id++){
             distribution.put(zoneId, id, Double.parseDouble(record[id]));
         }

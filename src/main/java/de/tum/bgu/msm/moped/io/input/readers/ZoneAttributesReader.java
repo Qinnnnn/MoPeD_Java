@@ -72,7 +72,7 @@ public class ZoneAttributesReader extends CSVReader {
 
     @Override
     protected void processRecord(String[] record) {
-        int zoneId = Integer.parseInt(record[idIndex]);
+        long zoneId = Long.parseLong(record[idIndex]);
         double agriculture = Double.parseDouble(record[agricultureIndex]);
         double construction = Double.parseDouble(record[constructionIndex]);
         double financial = Double.parseDouble(record[financialIndex]);

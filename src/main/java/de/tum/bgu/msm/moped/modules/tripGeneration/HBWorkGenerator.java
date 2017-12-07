@@ -17,18 +17,18 @@ public class HBWorkGenerator {
 
     private static final Logger logger = Logger.getLogger(HBWorkGenerator.class);
     private final DataSet dataSet;
-    private Table<Integer, Integer, Double> hbWorkProduction;
-    private Map<Integer, Double> hbWorkAttraction;
+    private Table<Long, Integer, Double> hbWorkProduction;
+    private Map<Long, Double> hbWorkAttraction;
 
     public HBWorkGenerator(DataSet dataSet) {
         this.dataSet = dataSet;
     }
 
     public void run () {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         hbWorkProduction = ArrayTable.create(zones, households);
-        hbWorkAttraction = new HashMap<Integer, Double>();
+        hbWorkAttraction = new HashMap<Long, Double>();
         attractionCalculator();
         productionCalculator();
         dataSet.setHbWorkProduction(hbWorkProduction);
@@ -38,7 +38,7 @@ public class HBWorkGenerator {
 
     public void productionCalculator() {
         double productionSum = 0.0;
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
                 //Zone zone = dataSet.getZone(zoneId);
@@ -71,7 +71,7 @@ public class HBWorkGenerator {
         //balance production and attraction
         double newProductionSum = 0.0;
         double factor = attractionSum/productionSum;
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double oldPR = hbWorkProduction.get(zoneId,hhTypeId);
                 double newPR = oldPR * factor;

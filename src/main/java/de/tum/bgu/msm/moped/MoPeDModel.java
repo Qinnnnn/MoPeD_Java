@@ -3,11 +3,14 @@ package de.tum.bgu.msm.moped;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 
+import de.tum.bgu.msm.moped.io.output.OutputWriter;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
+import de.tum.bgu.msm.moped.modules.walkModeChoice.WalkModeChoice;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
 
+import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 public class MoPeDModel {
@@ -37,6 +40,17 @@ public class MoPeDModel {
         logger.info("Started the Model of Pedestrian Demand (MoPeD)");
         TripGeneration tripGen = new TripGeneration(dataSet);
         tripGen.run();
+        long generationTime = System.currentTimeMillis()-startTime;
+        System.out.println(generationTime);
+        WalkModeChoice walkMode = new WalkModeChoice(dataSet);
+        walkMode.run();
+        long modeChoiceTime = System.currentTimeMillis()-generationTime;
+        System.out.println(modeChoiceTime);
+        try {
+            writeOut();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         printOutline(startTime);
     }
 
@@ -48,5 +62,10 @@ public class MoPeDModel {
         int hours = (int) (endTime / 60);
         int min = (int) (endTime - 60 * hours);
         logger.info("Runtime: " + hours + " hours and " + min + " minutes.");
+    }
+
+    private void writeOut()throws FileNotFoundException {
+        OutputWriter writer = new OutputWriter();
+        writer.writeOut(dataSet);
     }
 }

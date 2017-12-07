@@ -14,7 +14,7 @@ public class HBRecreationGenerator {
 
     private static final Logger logger = Logger.getLogger(HBRecreationGenerator.class);
     private final DataSet dataSet;
-    private Table<Integer, Integer, Double> hbRecreationProduction;
+    private Table<Long, Integer, Double> hbRecreationProduction;
     public HBRecreationGenerator(DataSet dataSet) {
         this.dataSet = dataSet;
     }
@@ -22,7 +22,7 @@ public class HBRecreationGenerator {
 
 
     public void run () {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         hbRecreationProduction = ArrayTable.create(zones, households);
         productionCalculator();
@@ -30,7 +30,7 @@ public class HBRecreationGenerator {
     }
 
     public void productionCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
                 Zone zone = dataSet.getZone(zoneId);

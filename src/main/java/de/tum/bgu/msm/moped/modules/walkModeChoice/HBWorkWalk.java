@@ -12,9 +12,9 @@ public class HBWorkWalk {
 
     private static final Logger logger = Logger.getLogger(HBWorkWalk.class);
     private final DataSet dataSet;
-    private Table<Integer, Integer, Double> WalkTrip;
-    private Table<Integer, Integer, Double> WalkExpUtility;
-    private Table<Integer, Integer, Double> VehicleExpUtility;
+    private Table<Long, Integer, Double> WalkTrip;
+    private Table<Long, Integer, Double> WalkExpUtility;
+    private Table<Long, Integer, Double> VehicleExpUtility;
 
 
 
@@ -23,7 +23,7 @@ public class HBWorkWalk {
     }
 
     public void run () {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         WalkTrip = ArrayTable.create(zones, households);
         WalkExpUtility = ArrayTable.create(zones, households);
@@ -35,7 +35,7 @@ public class HBWorkWalk {
     }
 
     private void walkUtilityCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()) {
+        for (long zoneId : dataSet.getZones().keySet()) {
             //zonal-related utility
             double pie = dataSet.getZone(zoneId).getPie();
             int pieFlag = dataSet.getZone(zoneId).getPieFlag();
@@ -58,7 +58,7 @@ public class HBWorkWalk {
     }
 
     private void vehicleUtilityCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()) {
+        for (long zoneId : dataSet.getZones().keySet()) {
             //TODO: zonal-related utility
             double utilityZone = 0.0;
 
@@ -73,7 +73,7 @@ public class HBWorkWalk {
     }
 
     private void walkTripsCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()) {
+        for (long zoneId : dataSet.getZones().keySet()) {
             for (int hhTypeId : dataSet.getHhTypes().keySet()) {
                 double walkExpUtility = WalkExpUtility.get(zoneId,hhTypeId);
                 double vehicleExpUtility = VehicleExpUtility.get(zoneId,hhTypeId);

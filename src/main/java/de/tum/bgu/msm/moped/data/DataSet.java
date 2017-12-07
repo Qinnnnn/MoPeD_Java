@@ -9,24 +9,24 @@ import java.util.Map;
 public class DataSet {
 
     private static final Logger logger = Logger.getLogger(DataSet.class);
-    private final Map<Integer, Zone> zones= new HashMap<Integer, Zone>();
+    private final Map<Long, Zone> zones= new HashMap<Long, Zone>();
     private final Map<Integer, HouseholdType> hhTypes= new HashMap<Integer, HouseholdType>();
-    private Table<Integer, Integer, Double> distribution;
-    private Table<Integer, Integer, Double> hbShopTripGen;
-    private Table<Integer, Integer, Double> hbRecreationTripGen;
-    private Table<Integer, Integer, Double> hbOtherTripGen;
-    private Table<Integer, Integer, Double> hbCollegeProduction;
-    private Map<Integer, Double> hbCollegeAttraction;
-    private Table<Integer, Integer, Double> hbSchoolProduction;
-    private Map<Integer, Double> hbSchoolAttraction;
-    private Table<Integer, Integer, Double> hbWorkProduction;
-    private Map<Integer, Double> hbWorkAttraction;
-    private Table<Integer, Integer, Double> hbWorkWalk;
-    private Table<Integer, Integer, Double> hbShopWalk;
-    private Table<Integer, Integer, Double> hbRecreationWalk;
-    private Table<Integer, Integer, Double> hbOtherWalk;
-    private Table<Integer, Integer, Double> hbCollegeWalk;
-    private Table<Integer, Integer, Double> hbSchoolWalk;
+    private Table<Long, Integer, Double> distribution;
+    private Table<Long, Integer, Double> hbShopTripGen;
+    private Table<Long, Integer, Double> hbRecreationTripGen;
+    private Table<Long, Integer, Double> hbOtherTripGen;
+    private Table<Long, Integer, Double> hbCollegeProduction;
+    private Map<Long, Double> hbCollegeAttraction;
+    private Table<Long, Integer, Double> hbSchoolProduction;
+    private Map<Long, Double> hbSchoolAttraction;
+    private Table<Long, Integer, Double> hbWorkProduction;
+    private Map<Long, Double> hbWorkAttraction;
+    private Table<Long, Integer, Double> hbWorkWalk;
+    private Table<Long, Integer, Double> hbShopWalk;
+    private Table<Long, Integer, Double> hbRecreationWalk;
+    private Table<Long, Integer, Double> hbOtherWalk;
+    private Table<Long, Integer, Double> hbCollegeWalk;
+    private Table<Long, Integer, Double> hbSchoolWalk;
 
     public void addZone(final Zone zone) {
         Zone test = this.zones.get(zone.getZoneId());
@@ -52,7 +52,7 @@ public class DataSet {
         hhTypes.put(householdType.getHhTypeId(), householdType);
     }
 
-    public Map<Integer, Zone> getZones() {
+    public Map<Long, Zone> getZones() {
         return zones;
     }
 
@@ -60,7 +60,7 @@ public class DataSet {
         return hhTypes;
     }
 
-    public Zone getZone(int id) {
+    public Zone getZone(Long id) {
         return zones.get(id);
     }
 
@@ -68,93 +68,115 @@ public class DataSet {
         return hhTypes.get(id);
     }
 
-    public void setDistribution(Table<Integer, Integer, Double> distribution) {
+    public void setDistribution(Table<Long, Integer, Double> distribution) {
         this.distribution = distribution;
     }
 
-    public void setHbShopTripGen(Table<Integer, Integer, Double> hbShopTripGen) {
+    public void setHbShopTripGen(Table<Long, Integer, Double> hbShopTripGen) {
         this.hbShopTripGen = hbShopTripGen;
     }
 
-    public Table<Integer, Integer, Double> getDistribution() {
+    public Table<Long, Integer, Double> getDistribution() {
         return distribution;
     }
 
-    public void setHbRecreationTripGen(Table<Integer, Integer, Double> hbRecreationTripGen) {
+    public void setHbRecreationTripGen(Table<Long, Integer, Double> hbRecreationTripGen) {
         this.hbRecreationTripGen = hbRecreationTripGen;
     }
 
-    public void setHbOtherTripGen(Table<Integer, Integer, Double> hbOtherTripGen) {
+    public void setHbOtherTripGen(Table<Long, Integer, Double> hbOtherTripGen) {
         this.hbOtherTripGen = hbOtherTripGen;
     }
 
-    public void setHbCollegeProduction(Table<Integer, Integer, Double> hbCollegeProduction) {
+    public void setHbCollegeProduction(Table<Long, Integer, Double> hbCollegeProduction) {
         this.hbCollegeProduction = hbCollegeProduction;
     }
 
-    public void setHbCollegeAttraction(Map<Integer, Double> hbCollegeAttraction) {
+    public void setHbCollegeAttraction(Map<Long, Double> hbCollegeAttraction) {
         this.hbCollegeAttraction = hbCollegeAttraction;
     }
 
-    public void setHbSchoolProduction(Table<Integer, Integer, Double> hbSchoolProduction) {
+    public void setHbSchoolProduction(Table<Long, Integer, Double> hbSchoolProduction) {
         this.hbSchoolProduction = hbSchoolProduction;
     }
 
-    public void setHbSchoolAttraction(Map<Integer, Double> hbSchoolAttraction) {
+    public void setHbSchoolAttraction(Map<Long, Double> hbSchoolAttraction) {
         this.hbSchoolAttraction = hbSchoolAttraction;
     }
 
-    public void setHbWorkProduction(Table<Integer, Integer, Double> hbWorkProduction) {
+    public void setHbWorkProduction(Table<Long, Integer, Double> hbWorkProduction) {
         this.hbWorkProduction = hbWorkProduction;
     }
 
-    public void setHbWorkAttraction(Map<Integer, Double> hbWorkAttraction) {
+    public void setHbWorkAttraction(Map<Long, Double> hbWorkAttraction) {
         this.hbWorkAttraction = hbWorkAttraction;
     }
 
-    public Table<Integer, Integer, Double> getHbWorkProduction() {
+    public Table<Long, Integer, Double> getHbWorkProduction() {
         return hbWorkProduction;
     }
 
-    public Map<Integer, Double> getHbWorkAttraction() {
+    public Map<Long, Double> getHbWorkAttraction() {
         return hbWorkAttraction;
     }
 
-    public void setHbWorkWalk(Table<Integer, Integer, Double> hbWorkWalk) { this.hbWorkWalk = hbWorkWalk; }
+    public void setHbWorkWalk(Table<Long, Integer, Double> hbWorkWalk) { this.hbWorkWalk = hbWorkWalk; }
 
-    public void setHbShopWalk(Table<Integer, Integer, Double> hbShopWalk) { this.hbShopWalk = hbShopWalk; }
+    public void setHbShopWalk(Table<Long, Integer, Double> hbShopWalk) { this.hbShopWalk = hbShopWalk; }
 
-    public void setHbRecreationWalk(Table<Integer, Integer, Double> hbRecreationWalk) { this.hbRecreationWalk = hbRecreationWalk; }
+    public void setHbRecreationWalk(Table<Long, Integer, Double> hbRecreationWalk) { this.hbRecreationWalk = hbRecreationWalk; }
 
-    public void setHbOtherWalk(Table<Integer, Integer, Double> hbOtherWalk) {
+    public void setHbOtherWalk(Table<Long, Integer, Double> hbOtherWalk) {
         this.hbOtherWalk = hbOtherWalk;
     }
 
-    public void setHbCollegeWalk(Table<Integer, Integer, Double> hbCollegeWalk) {
+    public void setHbCollegeWalk(Table<Long, Integer, Double> hbCollegeWalk) {
         this.hbCollegeWalk = hbCollegeWalk;
     }
 
-    public void setHbSchoolWalk(Table<Integer, Integer, Double> hbSchoolWalk) {
+    public void setHbSchoolWalk(Table<Long, Integer, Double> hbSchoolWalk) {
         this.hbSchoolWalk = hbSchoolWalk;
     }
 
-    public Table<Integer, Integer, Double> getHbShopTripGen() {
-        return hbShopTripGen;
-    }
+    public Table<Long, Integer, Double> getHbShopTripGen() { return hbShopTripGen; }
 
-    public Table<Integer, Integer, Double> getHbRecreationTripGen() {
+    public Table<Long, Integer, Double> getHbRecreationTripGen() {
         return hbRecreationTripGen;
     }
 
-    public Table<Integer, Integer, Double> getHbOtherTripGen() {
+    public Table<Long, Integer, Double> getHbOtherTripGen() {
         return hbOtherTripGen;
     }
 
-    public Table<Integer, Integer, Double> getHbCollegeProduction() {
+    public Table<Long, Integer, Double> getHbCollegeProduction() {
         return hbCollegeProduction;
     }
 
-    public Table<Integer, Integer, Double> getHbSchoolProduction() {
+    public Table<Long, Integer, Double> getHbSchoolProduction() {
         return hbSchoolProduction;
+    }
+
+    public Table<Long, Integer, Double> getHbWorkWalk() {
+        return hbWorkWalk;
+    }
+
+    public Table<Long, Integer, Double> getHbShopWalk() {
+        return hbShopWalk;
+    }
+
+    public Table<Long, Integer, Double> getHbRecreationWalk() {
+        return hbRecreationWalk;
+    }
+
+    public Table<Long, Integer, Double> getHbOtherWalk() {
+        return hbOtherWalk;
+    }
+
+    public Table<Long, Integer, Double> getHbCollegeWalk() {
+        return hbCollegeWalk;
+    }
+
+    public Table<Long, Integer, Double> getHbSchoolWalk() {
+        return hbSchoolWalk;
     }
 }

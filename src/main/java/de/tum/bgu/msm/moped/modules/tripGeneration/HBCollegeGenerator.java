@@ -16,8 +16,8 @@ public class HBCollegeGenerator {
 
     private static final Logger logger = Logger.getLogger(HBCollegeGenerator.class);
     private final DataSet dataSet;
-    private Table<Integer, Integer, Double> hbCollegeProduction;
-    private Map<Integer, Double> hbCollegeAttraction;
+    private Table<Long, Integer, Double> hbCollegeProduction;
+    private Map<Long, Double> hbCollegeAttraction;
     public HBCollegeGenerator(DataSet dataSet) {
         this.dataSet = dataSet;
     }
@@ -25,10 +25,10 @@ public class HBCollegeGenerator {
 
 
     public void run () {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         hbCollegeProduction = ArrayTable.create(zones, households);
-        hbCollegeAttraction = new HashMap<Integer, Double>();
+        hbCollegeAttraction = new HashMap<Long, Double>();
         productionCalculator();
         attractionCalculator();
         dataSet.setHbCollegeProduction(hbCollegeProduction);
@@ -37,7 +37,7 @@ public class HBCollegeGenerator {
 
 
     public void productionCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
                 Zone zone = dataSet.getZone(zoneId);

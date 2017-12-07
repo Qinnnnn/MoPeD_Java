@@ -13,7 +13,7 @@ public abstract class CSVReader extends AbstractInputReader{
 
     private BufferedReader reader;
 
-    private int numberOfRecords = 0;
+    private long numberOfRecords = 0;
 
     protected CSVReader(DataSet dataSet) {
         super(dataSet);

@@ -15,7 +15,7 @@ public class HBShopGenerator {
 
     private static final Logger logger = Logger.getLogger(HBShopGenerator.class);
     private final DataSet dataSet;
-    private Table<Integer, Integer, Double> hbShopProduction;
+    private Table<Long, Integer, Double> hbShopProduction;
     public HBShopGenerator(DataSet dataSet) {
         this.dataSet = dataSet;
     }
@@ -23,7 +23,7 @@ public class HBShopGenerator {
 
 
     public void run () {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         hbShopProduction = ArrayTable.create(zones, households);
         productionCalculator();
@@ -31,7 +31,7 @@ public class HBShopGenerator {
     }
 
     public void productionCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
                 HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);

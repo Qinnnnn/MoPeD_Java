@@ -13,8 +13,8 @@ public class HBSchoolGenerator {
 
     private static final Logger logger = Logger.getLogger(HBSchoolGenerator.class);
     private final DataSet dataSet;
-    private Table<Integer, Integer, Double> hbSchoolProduction;
-    private Map<Integer, Double> hbSchoolAttraction;
+    private Table<Long, Integer, Double> hbSchoolProduction;
+    private Map<Long, Double> hbSchoolAttraction;
     public HBSchoolGenerator(DataSet dataSet) {
         this.dataSet = dataSet;
     }
@@ -22,10 +22,10 @@ public class HBSchoolGenerator {
 
 
     public void run () {
-        Collection<Integer> zones = dataSet.getZones().keySet();
+        Collection<Long> zones = dataSet.getZones().keySet();
         Collection<Integer> households = dataSet.getHhTypes().keySet();
         hbSchoolProduction = ArrayTable.create(zones, households);
-        hbSchoolAttraction = new HashMap<Integer, Double>();
+        hbSchoolAttraction = new HashMap<Long, Double>();
         productionCalculator();
         attractionCalculator();
         dataSet.setHbSchoolProduction(hbSchoolProduction);
@@ -33,7 +33,7 @@ public class HBSchoolGenerator {
     }
 
     public void productionCalculator() {
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
                 Zone zone = dataSet.getZone(zoneId);
@@ -97,7 +97,7 @@ public class HBSchoolGenerator {
 
         double calibrationParameter = schoolTarget/hbSchoolTripSum;
 
-        for (int zoneId : dataSet.getZones().keySet()){
+        for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double nonCaliTripGen = hbSchoolProduction.get(zoneId,hhTypeId);
                 double caliTripGen = nonCaliTripGen * calibrationParameter;
@@ -110,8 +110,8 @@ public class HBSchoolGenerator {
 
     public void attractionCalculator() {
 
-        Set<Integer> zoneIdList = hbSchoolProduction.rowKeySet();
-        for (int zoneId : zoneIdList){
+        Set<Long> zoneIdList = hbSchoolProduction.rowKeySet();
+        for (long zoneId : zoneIdList){
             double attraction = 0.0;
             for (double pr : hbSchoolProduction.row(zoneId).values()){
                 attraction += pr;

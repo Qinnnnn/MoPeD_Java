@@ -31,7 +31,7 @@ public class PIEReader extends CSVReader {
 
     @Override
     protected void processRecord(String[] record) {
-        int zoneId = Integer.parseInt(record[idIndex]);
+        long zoneId = Long.parseLong(record[idIndex]);
         int taz = Integer.parseInt(record[tazIndex]);
         double pie = Double.parseDouble(record[pieIndex]);
         int pieFlag = Integer.parseInt(record[pieFlagIndex]);

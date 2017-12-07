@@ -12,6 +12,6 @@ public class Properties {
     public static final String HOUSEHOLDTYPEDISTRIBUTION = "householdTypeDistribution.data.file";
     public static final String PIE = "pie.data.file";
     public static final String TRANSPORT = "transport.data.file";
-    public static final String OUTPUTPATH = "output.path";
-
+    public static final String OUTPUT_TG = "output.tripGeneration";
+    public static final String OUTPUT_WM = "output.modeSplit";
 }

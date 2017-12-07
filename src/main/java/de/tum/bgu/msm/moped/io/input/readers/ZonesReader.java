@@ -26,7 +26,7 @@ public class ZonesReader extends CSVReader {
 
     @Override
     protected void processRecord(String[] record) {
-        int zoneId = Integer.parseInt(record[idIndex]);
+        long zoneId = Long.parseLong(record[idIndex]);
         Zone zone = new Zone(zoneId);
         dataSet.addZone(zone);
     }

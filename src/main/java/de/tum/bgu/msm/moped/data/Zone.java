@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 public class Zone {
 
     private static final Logger logger = Logger.getLogger(Zone.class);
-    private final int zoneId;
+    private final long zoneId;
     private double agriculture;
     private double construction;
     private double financial;
@@ -36,9 +36,9 @@ public class Zone {
     private double stfwy;
     private double trail;
 
-    public Zone(int id){ this.zoneId = id; }
+    public Zone(long id){ this.zoneId = id; }
 
-    public int getZoneId() { return zoneId; }
+    public long getZoneId() { return zoneId; }
 
     public double getAgriculture() {
         return agriculture;

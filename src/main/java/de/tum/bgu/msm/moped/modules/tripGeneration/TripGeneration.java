@@ -1,14 +1,8 @@
 package de.tum.bgu.msm.moped.modules.tripGeneration;
 
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Table;
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.io.output.TripGenerationWriter;
 import de.tum.bgu.msm.moped.modules.Module;
 import org.apache.log4j.Logger;
-
-import java.io.FileNotFoundException;
-import java.util.Collection;
 
 public class TripGeneration extends Module {
 
@@ -23,17 +17,12 @@ public class TripGeneration extends Module {
         logger.info("  Started trip generation model.");
         long startTime = System.currentTimeMillis();
         hbWorkGenerator();
-        System.out.println(System.currentTimeMillis() - startTime);
-        hbShopGenerator();
-        hbRecreationGenerator();
-        hbSchoolGenerator();
-        hbCollegeGenerator();
-        hbOtherGenerator();
-        try {
-            writeOut();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        System.out.println(System.currentTimeMillis() - startTime);
+//        hbShopGenerator();
+//        hbRecreationGenerator();
+//        hbSchoolGenerator();
+//        hbCollegeGenerator();
+//        hbOtherGenerator();
         logger.info("  Completed trip generation model.");
     }
 
@@ -67,9 +56,5 @@ public class TripGeneration extends Module {
         hbShopGenerator.run();
     }
 
-    private void writeOut()throws FileNotFoundException {
-        TripGenerationWriter writer = new TripGenerationWriter();
-        writer.writeOut(dataSet);
-    }
 
 }

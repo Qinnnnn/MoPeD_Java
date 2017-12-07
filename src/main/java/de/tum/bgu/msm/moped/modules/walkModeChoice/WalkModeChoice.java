@@ -1,12 +1,8 @@
 package de.tum.bgu.msm.moped.modules.walkModeChoice;
 
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.io.output.TripGenerationWriter;
 import de.tum.bgu.msm.moped.modules.Module;
-import de.tum.bgu.msm.moped.modules.tripGeneration.*;
 import org.apache.log4j.Logger;
-
-import java.io.FileNotFoundException;
 
 public class WalkModeChoice extends Module {
 
@@ -20,14 +16,11 @@ public class WalkModeChoice extends Module {
     public void run()  {
         logger.info("  Started walk mode choice model.");
         hbWorkWalk();
-        hbShopWalk();
-        hbRecreationWalk();
-        hbOtherWalk();
-        try {
-            writeOut();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        hbShopWalk();
+//        hbRecreationWalk();
+//        hbOtherWalk();
+//        hbSchoolWalk();
+//        hbCollegeWalk();
         logger.info("  Completed walk mode choice model.");
     }
 
@@ -61,9 +54,6 @@ public class WalkModeChoice extends Module {
         hbCollegeWalk.run();
     }
 
-    private void writeOut()throws FileNotFoundException {
-        TripGenerationWriter writer = new TripGenerationWriter();
-        writer.writeOut(dataSet);
-    }
+
 
 }
