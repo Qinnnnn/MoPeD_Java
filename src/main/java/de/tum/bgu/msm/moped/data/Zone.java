@@ -6,6 +6,7 @@ public class Zone {
 
     private static final Logger logger = Logger.getLogger(Zone.class);
     private final long zoneId;
+    private final long superPAZId;
     private double agriculture;
     private double construction;
     private double financial;
@@ -35,10 +36,20 @@ public class Zone {
     private int wa;
     private double stfwy;
     private double trail;
+    private double hbWorkWalkTrips;
+    private double hbShopWalkTrips;
+    private double hbRecreationWalkTrips;
+    private double hbOtherWalkTrips;
+    private double hbSchoolWalkTrips;
+    private double hbCollegeWalkTrips;
 
-    public Zone(long id){ this.zoneId = id; }
+    public Zone(long id, long superPAZ){ this.zoneId = id; this.superPAZId = superPAZ;}
 
     public long getZoneId() { return zoneId; }
+
+    public long getSuperPAZId() {
+        return superPAZId;
+    }
 
     public double getAgriculture() {
         return agriculture;
@@ -268,5 +279,53 @@ public class Zone {
 
     public void setTrail(double trail) {
         this.trail = trail;
+    }
+
+    public double getHbWorkWalkTrips() {
+        return hbWorkWalkTrips;
+    }
+
+    public void setHbWorkWalkTrips(double hbWorkWalkTrips) {
+        this.hbWorkWalkTrips = hbWorkWalkTrips;
+    }
+
+    public double getHbShopWalkTrips() {
+        return hbShopWalkTrips;
+    }
+
+    public void setHbShopWalkTrips(double hbShopWalkTrips) {
+        this.hbShopWalkTrips = hbShopWalkTrips;
+    }
+
+    public double getHbRecreationWalkTrips() {
+        return hbRecreationWalkTrips;
+    }
+
+    public void setHbRecreationWalkTrips(double hbRecreationWalkTrips) {
+        this.hbRecreationWalkTrips = hbRecreationWalkTrips;
+    }
+
+    public double getHbOtherWalkTrips() {
+        return hbOtherWalkTrips;
+    }
+
+    public void setHbOtherWalkTrips(double hbOtherWalkTrips) {
+        this.hbOtherWalkTrips = hbOtherWalkTrips;
+    }
+
+    public double getHbSchoolWalkTrips() {
+        return hbSchoolWalkTrips;
+    }
+
+    public void setHbSchoolWalkTrips(double hbSchoolWalkTrips) {
+        this.hbSchoolWalkTrips = hbSchoolWalkTrips;
+    }
+
+    public double getHbCollegeWalkTrips() {
+        return hbCollegeWalkTrips;
+    }
+
+    public void setHbCollegeWalkTrips(double hbCollegeWalkTrips) {
+        this.hbCollegeWalkTrips = hbCollegeWalkTrips;
     }
 }

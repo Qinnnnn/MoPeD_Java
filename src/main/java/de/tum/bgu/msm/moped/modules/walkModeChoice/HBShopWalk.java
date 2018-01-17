@@ -75,14 +75,17 @@ public class HBShopWalk {
 
     private void walkTripsCalculator() {
         for (long zoneId : dataSet.getZones().keySet()) {
+            double totalWalkTrips = 0.0;
             for (int hhTypeId : dataSet.getHhTypes().keySet()) {
                 double walkExpUtility = WalkExpUtility.get(zoneId,hhTypeId);
                 double vehicleExpUtility = VehicleExpUtility.get(zoneId,hhTypeId);
                 double sumExpUtility = walkExpUtility + vehicleExpUtility;
                 double walkProbability = walkExpUtility/sumExpUtility;
-                double walkTrips = walkProbability * dataSet.getHbShopTripGen().get(zoneId,hhTypeId);
+                double walkTrips = walkProbability * dataSet.getHbShopTripGen().get(zoneId, hhTypeId);
                 WalkTrip.put(zoneId,hhTypeId,walkTrips);
+                totalWalkTrips += walkTrips;
             }
+            dataSet.getZone(zoneId).setHbShopWalkTrips(totalWalkTrips);
         }
     }
 }

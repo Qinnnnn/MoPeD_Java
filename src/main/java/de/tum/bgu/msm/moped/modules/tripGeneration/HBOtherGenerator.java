@@ -69,12 +69,15 @@ public class HBOtherGenerator {
                     logger.warn("Number of workers is bigger than householdsize");
                 }
 
+                double tripGen;
+
                 if (tripGenRate != 0){
-                    double tripGen = tripGenRate * distribution * 1.2;
-                    hbOtherProduction.put(zoneId,hhTypeId,tripGen);
+                    tripGen = tripGenRate * distribution * 1.2;
                 }else{
-                    logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + workers + "workers and " + hhSize +"persons");
+                    tripGen = 0.0;
                 }
+
+                hbOtherProduction.put(zoneId,hhTypeId,tripGen);
             }
 
         }

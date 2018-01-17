@@ -71,12 +71,16 @@ public class HBSchoolGenerator {
                     }
                 }
 
+                double tripGen;
+
                 if (tripGenRate != 0){
-                    double tripGen = tripGenRate * distribution;
-                    hbSchoolProduction.put(zoneId,hhTypeId,tripGen);
+                    tripGen = tripGenRate * distribution;
+
                 }else{
-                    logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + kids + "kids and " + hhSize +"persons");
+                    tripGen = 0.0;
                 }
+
+                hbSchoolProduction.put(zoneId,hhTypeId,tripGen);
             }
 
         }

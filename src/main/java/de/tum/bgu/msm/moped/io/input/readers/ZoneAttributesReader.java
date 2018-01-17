@@ -98,7 +98,7 @@ public class ZoneAttributesReader extends CSVReader {
         double caninf = Double.parseDouble(record[caninfIndex]);
 
         dataSet.getZone(zoneId).setAgriculture(agriculture);
-        dataSet.getZone(zoneId).setAgriculture(construction);
+        dataSet.getZone(zoneId).setConstruction(construction);
         dataSet.getZone(zoneId).setFinancial(financial);
         dataSet.getZone(zoneId).setGovernment(government);
         dataSet.getZone(zoneId).setManufacturing(manufacturing);

@@ -1,6 +1,7 @@
 package de.tum.bgu.msm.moped.modules.walkModeChoice;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.modules.Module;
 import org.apache.log4j.Logger;
 
@@ -13,14 +14,29 @@ public class WalkModeChoice extends Module {
     }
 
     @Override
-    public void run()  {
+    public void run(Purpose purpose)  {
         logger.info("  Started walk mode choice model.");
-        hbWorkWalk();
-//        hbShopWalk();
-//        hbRecreationWalk();
-//        hbOtherWalk();
-//        hbSchoolWalk();
-//        hbCollegeWalk();
+
+        switch (purpose) {
+            case HBW:
+                hbWorkWalk();
+                break;
+            case HBSHOP:
+                hbShopWalk();
+                break;
+            case HBREC:
+                hbRecreationWalk();
+                break;
+            case HBOTH:
+                hbOtherWalk();
+                break;
+            case HBSCH:
+                hbSchoolWalk();
+                break;
+            case HBCOLL:
+                hbCollegeWalk();
+                break;
+        }
         logger.info("  Completed walk mode choice model.");
     }
 

@@ -107,12 +107,16 @@ public class HBCollegeGenerator {
                     }
                 }
 
+                double tripGen;
+
                 if (tripGenRate != 0){
-                    double tripGen = tripGenRate * distribution * 1.074;
-                    hbCollegeProduction.put(zoneId,hhTypeId,tripGen);
+                    tripGen = tripGenRate * distribution * 1.074;
+
                 }else{
-                    logger.warn("no HBOther - tripGenRate matches to" + hhType.getHhTypeId() + "with" + age + "age and " + hhSize +"persons");
+                    tripGen = 0.0;
                 }
+
+                hbCollegeProduction.put(zoneId,hhTypeId,tripGen);
             }
 
         }

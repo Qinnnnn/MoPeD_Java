@@ -75,6 +75,7 @@ public class HBRecreationWalk {
 
     private void walkTripsCalculator() {
         for (long zoneId : dataSet.getZones().keySet()) {
+            double totalWalkTrips = 0.0;
             for (int hhTypeId : dataSet.getHhTypes().keySet()) {
                 double walkExpUtility = WalkExpUtility.get(zoneId,hhTypeId);
                 double vehicleExpUtility = VehicleExpUtility.get(zoneId,hhTypeId);
@@ -82,7 +83,9 @@ public class HBRecreationWalk {
                 double walkProbability = walkExpUtility/sumExpUtility;
                 double walkTrips = walkProbability * dataSet.getHbRecreationTripGen().get(zoneId,hhTypeId);
                 WalkTrip.put(zoneId,hhTypeId,walkTrips);
+                totalWalkTrips += walkTrips;
             }
+            dataSet.getZone(zoneId).setHbRecreationWalkTrips(totalWalkTrips);
         }
     }
 }

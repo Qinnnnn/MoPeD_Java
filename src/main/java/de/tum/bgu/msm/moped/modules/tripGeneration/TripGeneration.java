@@ -1,6 +1,7 @@
 package de.tum.bgu.msm.moped.modules.tripGeneration;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.modules.Module;
 import org.apache.log4j.Logger;
 
@@ -13,16 +14,31 @@ public class TripGeneration extends Module {
     }
 
     @Override
-    public void run()  {
+    public void run(Purpose purpose)  {
         logger.info("  Started trip generation model.");
         long startTime = System.currentTimeMillis();
-        hbWorkGenerator();
-//        System.out.println(System.currentTimeMillis() - startTime);
-//        hbShopGenerator();
-//        hbRecreationGenerator();
-//        hbSchoolGenerator();
-//        hbCollegeGenerator();
-//        hbOtherGenerator();
+
+        switch (purpose) {
+            case HBW:
+                hbWorkGenerator();
+                break;
+            case HBSHOP:
+                hbShopGenerator();
+                break;
+            case HBREC:
+                hbRecreationGenerator();
+                break;
+            case HBOTH:
+                hbOtherGenerator();
+                break;
+            case HBSCH:
+                hbSchoolGenerator();
+                break;
+            case HBCOLL:
+                hbCollegeGenerator();
+                break;
+        }
+
         logger.info("  Completed trip generation model.");
     }
 

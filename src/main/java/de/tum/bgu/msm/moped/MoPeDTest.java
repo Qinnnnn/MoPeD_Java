@@ -1,6 +1,7 @@
 package de.tum.bgu.msm.moped;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
@@ -15,17 +16,19 @@ class MoPeDTest {
 
     public static void main(String[] args) {
         // main run method
+        //set purpose
+        Purpose purpose = Purpose.HBW;
         MoPeDTest test = new MoPeDTest();
         ResourceBundle rb = MoPeDUtil.createResourceBundle(args[0]);
         MoPeDUtil.setBaseDirectory(rb.getString("base.directory"));
-        test.run(rb);
+        test.run(rb,purpose);
     }
 
-    private void run (ResourceBundle resources) {
+    private void run (ResourceBundle resources, Purpose purpose) {
         // main run method
         logger.info("Started the Model of Pedestrian Demand (MoPeD)");
         MoPeDModel model = new MoPeDModel(resources);
         model.initializeStandAlone();
-        model.runModel();
+        model.runModel(purpose);
     }
 }

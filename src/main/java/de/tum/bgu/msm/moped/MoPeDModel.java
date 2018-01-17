@@ -1,9 +1,11 @@
 package de.tum.bgu.msm.moped;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 
-import de.tum.bgu.msm.moped.io.output.OutputWriter;
+import de.tum.bgu.msm.moped.io.output.*;
+import de.tum.bgu.msm.moped.modules.destinationChoice.TripDistribution;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
 import de.tum.bgu.msm.moped.modules.walkModeChoice.WalkModeChoice;
 import de.tum.bgu.msm.moped.resources.Resources;
@@ -35,19 +37,29 @@ public class MoPeDModel {
         manager.readAsStandAlone();
     }
 
-    public void runModel() {
+    public void runModel(Purpose purpose) {
         long startTime = System.currentTimeMillis();
         logger.info("Started the Model of Pedestrian Demand (MoPeD)");
+
         TripGeneration tripGen = new TripGeneration(dataSet);
-        tripGen.run();
-        long generationTime = System.currentTimeMillis()-startTime;
+        tripGen.run(purpose);
+        long generationTime = System.currentTimeMillis()- startTime;
         System.out.println(generationTime);
+
+        long t1 = System.currentTimeMillis();
         WalkModeChoice walkMode = new WalkModeChoice(dataSet);
-        walkMode.run();
-        long modeChoiceTime = System.currentTimeMillis()-generationTime;
+        walkMode.run(purpose);
+        long modeChoiceTime = System.currentTimeMillis()- t1;
         System.out.println(modeChoiceTime);
+
+        long t2 = System.currentTimeMillis();
+        TripDistribution distribution = new TripDistribution(dataSet);
+        distribution.run(purpose);
+        long distributionTime = System.currentTimeMillis()- t2;
+        System.out.println(distributionTime);
+
         try {
-            writeOut();
+            writeOut(purpose);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -55,8 +67,6 @@ public class MoPeDModel {
     }
 
     private void printOutline(long startTime) {
-//        String trips = MitoUtil.customFormat("  " + "###,###", dataSet.getTrips().size());
-//        logger.info("A total of " + trips.trim() + " microscopic trips were generated");
         logger.info("Completed the Model of Pedestrian Demand (MoPeD)");
         float endTime = MoPeDUtil.rounder(((System.currentTimeMillis() - startTime) / 60000), 1);
         int hours = (int) (endTime / 60);
@@ -64,8 +74,8 @@ public class MoPeDModel {
         logger.info("Runtime: " + hours + " hours and " + min + " minutes.");
     }
 
-    private void writeOut()throws FileNotFoundException {
-        OutputWriter writer = new OutputWriter();
-        writer.writeOut(dataSet);
+    private void writeOut(Purpose purpose)throws FileNotFoundException {
+        OutputWriter writer = new OutputWriter(dataSet);
+        writer.run(purpose);
     }
 }

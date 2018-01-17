@@ -7,6 +7,8 @@ import de.tum.bgu.msm.moped.data.HouseholdType;
 import org.apache.log4j.Logger;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HBWorkWalk {
 
@@ -15,7 +17,6 @@ public class HBWorkWalk {
     private Table<Long, Integer, Double> WalkTrip;
     private Table<Long, Integer, Double> WalkExpUtility;
     private Table<Long, Integer, Double> VehicleExpUtility;
-
 
 
     public HBWorkWalk(DataSet dataSet) {
@@ -74,6 +75,7 @@ public class HBWorkWalk {
 
     private void walkTripsCalculator() {
         for (long zoneId : dataSet.getZones().keySet()) {
+            double totalWalkTrips = 0.0;
             for (int hhTypeId : dataSet.getHhTypes().keySet()) {
                 double walkExpUtility = WalkExpUtility.get(zoneId,hhTypeId);
                 double vehicleExpUtility = VehicleExpUtility.get(zoneId,hhTypeId);
@@ -81,7 +83,9 @@ public class HBWorkWalk {
                 double walkProbability = walkExpUtility/sumExpUtility;
                 double walkTrips = walkProbability * dataSet.getHbWorkProduction().get(zoneId,hhTypeId);
                 WalkTrip.put(zoneId,hhTypeId,walkTrips);
+                totalWalkTrips += walkTrips;
             }
+            dataSet.getZone(zoneId).setHbWorkWalkTrips(totalWalkTrips);
         }
     }
 }

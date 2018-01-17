@@ -59,24 +59,22 @@ public class HBWorkGenerator {
             }
         }
 
-
         //Calculate the total trip attraction
+        //TODO: this for loop can be omitted!!!
         double attractionSum = 0.0;
         for (double at: hbWorkAttraction.values()){
             attractionSum += at;
         }
 
-
-
         //balance production and attraction
-        double newProductionSum = 0.0;
+        //double newProductionSum = 0.0;
         double factor = attractionSum/productionSum;
         for (long zoneId : dataSet.getZones().keySet()){
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
                 double oldPR = hbWorkProduction.get(zoneId,hhTypeId);
                 double newPR = oldPR * factor;
                 hbWorkProduction.put(zoneId,hhTypeId,newPR);
-                newProductionSum += newPR;
+                //newProductionSum += newPR;
             }
         }
 
@@ -85,7 +83,6 @@ public class HBWorkGenerator {
 
 
     private void attractionCalculator() {
-
         for (Zone zone : dataSet.getZones().values()){
             double retailEmpl = 0.0;
             double shopEmpl = zone.getShoppingArea()/1000*3;
@@ -98,6 +95,5 @@ public class HBWorkGenerator {
             double attraction = totalEmpl * 1.48;
             hbWorkAttraction.put(zone.getZoneId(),attraction);
         }
-
     }
 }

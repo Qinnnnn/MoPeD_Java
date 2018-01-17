@@ -80,7 +80,7 @@ public class HBShopGenerator {
                             tripGenRate = 1.51069650;
                             break;
                     }
-                }else{
+                }else if (workers == 3){
                     switch (hhSize){
                         case 3:
                             tripGenRate = 1.00633950;
@@ -91,12 +91,15 @@ public class HBShopGenerator {
                     }
                 }
 
+                double tripGen;
+
                 if (tripGenRate != 0){
-                    double tripGen = tripGenRate * distribution * 1.2;
-                    hbShopProduction.put(zoneId,hhTypeId,tripGen);
+                     tripGen = tripGenRate * distribution * 1.2;
                 }else{
-                    logger.warn("no HBShop - tripGenRate matches to" + hhType.getHhTypeId() + "with" + workers + "workers and " + hhSize +"persons");
+                     tripGen = 0.0;
                 }
+
+                hbShopProduction.put(zoneId,hhTypeId,tripGen);
             }
 
         }
