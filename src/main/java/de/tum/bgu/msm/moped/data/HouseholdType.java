@@ -1,10 +1,8 @@
 package de.tum.bgu.msm.moped.data;
 
-import org.apache.log4j.Logger;
 
 public class HouseholdType {
 
-    private static final Logger logger = Logger.getLogger(HouseholdType.class);
     private final int hhTypeId;
     private String hhTypeName;
     private int kids;
@@ -28,10 +26,6 @@ public class HouseholdType {
 
     public int getHhTypeId() {
         return hhTypeId;
-    }
-
-    public String getHhTypeName() {
-        return hhTypeName;
     }
 
     public int getKids() {

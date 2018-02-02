@@ -56,8 +56,15 @@ public class HouseholdTypeReader extends CSVReader {
         int householdSize = Integer.parseInt(record[hIndex]);
         int income = Integer.parseInt(record[iIndex]);
         int age = Integer.parseInt(record[aIndex]);
-        HouseholdType hhType = new HouseholdType(name, householdId, kids, cars, workers, householdSize, income, age);
-        dataSet.addHouseholdType(hhType);
+
+        if((workers > householdSize) || (kids > householdSize)){
+            //logger.warn("householdTypeID" + householdId + " is an invalid household type. " + workers + "Workers, " + kids + "Kids, " + householdSize + "Household Size.");
+            return;
+        } else {
+            HouseholdType hhType = new HouseholdType(name, householdId, kids, cars, workers, householdSize, income, age);
+            dataSet.addHouseholdType(hhType);
+        }
+
     }
 
 }

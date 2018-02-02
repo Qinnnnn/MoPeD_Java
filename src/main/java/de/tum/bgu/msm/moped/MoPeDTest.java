@@ -16,7 +16,6 @@ class MoPeDTest {
 
     public static void main(String[] args) {
         // main run method
-        //set purpose
         Purpose purpose = Purpose.HBW;
         MoPeDTest test = new MoPeDTest();
         ResourceBundle rb = MoPeDUtil.createResourceBundle(args[0]);

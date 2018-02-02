@@ -9,6 +9,4 @@ public enum Purpose {
     HBOTH,
     NHBW,
     NHBNW;
-
-
 }

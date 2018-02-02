@@ -1,243 +1,143 @@
 package de.tum.bgu.msm.moped.data;
 
-import org.apache.log4j.Logger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Zone {
 
-    private static final Logger logger = Logger.getLogger(Zone.class);
-    private final long zoneId;
-    private final long superPAZId;
-    private double agriculture;
-    private double construction;
-    private double financial;
-    private double government;
-    private double manufacturing;
-    private double retail;
-    private double service;
-    private double transportation;
-    private double wholesale;
-    private double parkCostShort;
-    private double parkCostLong;
-    private double peakHousehold;
-    private double peakEmployment;
-    private double offpeakHousehold;
-    private double offpeakEmployment;
-    private double intersection;
-    private double shoppingArea;
-    private double singleFamily;
-    private double collegeVehicleTrip;
-    private double auov;
-    private double parkCharge;
-    private double canpnr;
-    private double caninf;
-    private double pie;
+    private int index;
+    private final int zoneId;
+    private final int superPAZId;
+    private final float totalHH;
+    private float agriculture;
+    private float construction;
+    private float financial;
+    private float government;
+    private float manufacturing;
+    private float retail;
+    private float service;
+    private float transportation;
+    private float wholesale;
+    private float shoppingArea;
+    private float collegeVehicleTrip;
+    private float pie;
     private int pieFlag;
     private int tazId;
     private int wa;
-    private double stfwy;
-    private double trail;
-    private double hbWorkWalkTrips;
-    private double hbShopWalkTrips;
-    private double hbRecreationWalkTrips;
-    private double hbOtherWalkTrips;
-    private double hbSchoolWalkTrips;
-    private double hbCollegeWalkTrips;
+    private float stfwy;
+    private Map<Purpose, Float> totalWalkTripsByPurpose = new HashMap<>();
 
-    public Zone(long id, long superPAZ){ this.zoneId = id; this.superPAZId = superPAZ;}
+    public Zone(int id, int superPAZ, float totalHH){
+        this.zoneId = id;
+        this.superPAZId = superPAZ;
+        this.totalHH = totalHH;
+    }
 
-    public long getZoneId() { return zoneId; }
+    public int getIndex() {
+        return index;
+    }
 
-    public long getSuperPAZId() {
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getZoneId() { return zoneId; }
+
+    public int getSuperPAZId() {
         return superPAZId;
     }
 
-    public double getAgriculture() {
+    public float getAgriculture() {
         return agriculture;
     }
 
-    public void setAgriculture(double agriculture) {
+    public void setAgriculture(float agriculture) {
         this.agriculture = agriculture;
     }
 
-    public double getConstruction() {
+    public float getConstruction() {
         return construction;
     }
 
-    public void setConstruction(double construction) {
+    public void setConstruction(float construction) {
         this.construction = construction;
     }
 
-    public double getFinancial() {
+    public float getFinancial() {
         return financial;
     }
 
-    public void setFinancial(double financial) {
+    public void setFinancial(float financial) {
         this.financial = financial;
     }
 
-    public double getGovernment() {
+    public float getGovernment() {
         return government;
     }
 
-    public void setGovernment(double government) {
+    public void setGovernment(float government) {
         this.government = government;
     }
 
-    public double getManufacturing() {
+    public float getManufacturing() {
         return manufacturing;
     }
 
-    public void setManufacturing(double manufacturing) {
+    public void setManufacturing(float manufacturing) {
         this.manufacturing = manufacturing;
     }
 
-    public double getRetail() {
+    public float getRetail() {
         return retail;
     }
 
-    public void setRetail(double retail) {
+    public void setRetail(float retail) {
         this.retail = retail;
     }
 
-    public double getService() {
+    public float getService() {
         return service;
     }
 
-    public void setService(double service) {
+    public void setService(float service) {
         this.service = service;
     }
 
-    public double getTransportation() {
+    public float getTransportation() {
         return transportation;
     }
 
-    public void setTransportation(double transportation) {
+    public void setTransportation(float transportation) {
         this.transportation = transportation;
     }
 
-    public double getWholesale() {
+    public float getWholesale() {
         return wholesale;
     }
 
-    public void setWholesale(double wholesale) {
+    public void setWholesale(float wholesale) {
         this.wholesale = wholesale;
     }
 
-    public double getParkCostShort() {
-        return parkCostShort;
-    }
-
-    public void setParkCostShort(double parkCostShort) {
-        this.parkCostShort = parkCostShort;
-    }
-
-    public double getParkCostLong() {
-        return parkCostLong;
-    }
-
-    public void setParkCostLong(double parkCostLong) {
-        this.parkCostLong = parkCostLong;
-    }
-
-    public double getPeakHousehold() {
-        return peakHousehold;
-    }
-
-    public void setPeakHousehold(double peakHousehold) {
-        this.peakHousehold = peakHousehold;
-    }
-
-    public double getPeakEmployment() {
-        return peakEmployment;
-    }
-
-    public void setPeakEmployment(double peakEmployment) {
-        this.peakEmployment = peakEmployment;
-    }
-
-    public double getOffpeakHousehold() {
-        return offpeakHousehold;
-    }
-
-    public void setOffpeakHousehold(double offpeakHousehold) {
-        this.offpeakHousehold = offpeakHousehold;
-    }
-
-    public double getOffpeakEmployment() {
-        return offpeakEmployment;
-    }
-
-    public void setOffpeakEmployment(double offpeakEmployment) {
-        this.offpeakEmployment = offpeakEmployment;
-    }
-
-    public double getIntersection() {
-        return intersection;
-    }
-
-    public void setIntersection(double intersection) {
-        this.intersection = intersection;
-    }
-
-    public double getShoppingArea() {
+    public float getShoppingArea() {
         return shoppingArea;
     }
 
-    public void setShoppingArea(double shoppingArea) {
+    public void setShoppingArea(float shoppingArea) {
         this.shoppingArea = shoppingArea;
     }
 
-    public double getSingleFamily() {
-        return singleFamily;
-    }
-
-    public void setSingleFamily(double singleFamily) {
-        this.singleFamily = singleFamily;
-    }
-
-    public double getCollegeVehicleTrip() {
+    public float getCollegeVehicleTrip() {
         return collegeVehicleTrip;
     }
 
-    public void setCollegeVehicleTrip(double collegeVehicleTrip) {
+    public void setCollegeVehicleTrip(float collegeVehicleTrip) {
         this.collegeVehicleTrip = collegeVehicleTrip;
     }
 
-    public double getAuov() {
-        return auov;
-    }
+    public float getPie() { return pie; }
 
-    public void setAuov(double auov) {
-        this.auov = auov;
-    }
-
-    public double getParkCharge() {
-        return parkCharge;
-    }
-
-    public void setParkCharge(double parkCharge) {
-        this.parkCharge = parkCharge;
-    }
-
-    public double getCanpnr() {
-        return canpnr;
-    }
-
-    public void setCanpnr(double canpnr) {
-        this.canpnr = canpnr;
-    }
-
-    public double getCaninf() {
-        return caninf;
-    }
-
-    public void setCaninf(double caninf) {
-        this.caninf = caninf;
-    }
-
-    public double getPie() { return pie; }
-
-    public void setPie(double pie) {
+    public void setPie(float pie) {
         this.pie = pie;
     }
 
@@ -249,14 +149,6 @@ public class Zone {
         this.pieFlag = pieFlag;
     }
 
-    public int getTazId() {
-        return tazId;
-    }
-
-    public void setTazId(int tazId) {
-        this.tazId = tazId;
-    }
-
     public int getWa() {
         return wa;
     }
@@ -265,67 +157,21 @@ public class Zone {
         this.wa = wa;
     }
 
-    public double getStfwy() {
+    public float getStfwy() {
         return stfwy;
     }
 
-    public void setStfwy(double stfwy) {
+    public void setStfwy(float stfwy) {
         this.stfwy = stfwy;
     }
 
-    public double getTrail() {
-        return trail;
+    public float getTotalHH() { return totalHH; }
+
+    public Map<Purpose, Float> getTotalWalkTripsByPurpose() {
+        return totalWalkTripsByPurpose;
     }
 
-    public void setTrail(double trail) {
-        this.trail = trail;
-    }
-
-    public double getHbWorkWalkTrips() {
-        return hbWorkWalkTrips;
-    }
-
-    public void setHbWorkWalkTrips(double hbWorkWalkTrips) {
-        this.hbWorkWalkTrips = hbWorkWalkTrips;
-    }
-
-    public double getHbShopWalkTrips() {
-        return hbShopWalkTrips;
-    }
-
-    public void setHbShopWalkTrips(double hbShopWalkTrips) {
-        this.hbShopWalkTrips = hbShopWalkTrips;
-    }
-
-    public double getHbRecreationWalkTrips() {
-        return hbRecreationWalkTrips;
-    }
-
-    public void setHbRecreationWalkTrips(double hbRecreationWalkTrips) {
-        this.hbRecreationWalkTrips = hbRecreationWalkTrips;
-    }
-
-    public double getHbOtherWalkTrips() {
-        return hbOtherWalkTrips;
-    }
-
-    public void setHbOtherWalkTrips(double hbOtherWalkTrips) {
-        this.hbOtherWalkTrips = hbOtherWalkTrips;
-    }
-
-    public double getHbSchoolWalkTrips() {
-        return hbSchoolWalkTrips;
-    }
-
-    public void setHbSchoolWalkTrips(double hbSchoolWalkTrips) {
-        this.hbSchoolWalkTrips = hbSchoolWalkTrips;
-    }
-
-    public double getHbCollegeWalkTrips() {
-        return hbCollegeWalkTrips;
-    }
-
-    public void setHbCollegeWalkTrips(double hbCollegeWalkTrips) {
-        this.hbCollegeWalkTrips = hbCollegeWalkTrips;
+    public void addTotalWalkTrips(float totalWalkTrips, Purpose purpose) {
+        this.totalWalkTripsByPurpose.put(purpose, totalWalkTrips);
     }
 }

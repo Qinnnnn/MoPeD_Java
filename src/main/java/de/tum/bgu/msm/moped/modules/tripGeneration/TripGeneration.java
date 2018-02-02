@@ -16,8 +16,6 @@ public class TripGeneration extends Module {
     @Override
     public void run(Purpose purpose)  {
         logger.info("  Started trip generation model.");
-        long startTime = System.currentTimeMillis();
-
         switch (purpose) {
             case HBW:
                 hbWorkGenerator();
@@ -38,7 +36,6 @@ public class TripGeneration extends Module {
                 hbCollegeGenerator();
                 break;
         }
-
         logger.info("  Completed trip generation model.");
     }
 

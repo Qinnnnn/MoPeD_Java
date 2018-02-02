@@ -18,17 +18,14 @@ import java.util.ResourceBundle;
 public class MoPeDModel {
 
     private static final Logger logger = Logger.getLogger(MoPeDModel.class);
-    private static String scenarioName;
 
     private final InputManager manager;
     private final DataSet dataSet;
-    private boolean initialised = false;
 
     public MoPeDModel(ResourceBundle resources) {
         this.dataSet = new DataSet();
         this.manager = new InputManager(dataSet);
         Resources.INSTANCE.setResources(resources);
-
     }
 
     public void initializeStandAlone() {
@@ -52,6 +49,7 @@ public class MoPeDModel {
         long modeChoiceTime = System.currentTimeMillis()- t1;
         System.out.println(modeChoiceTime);
 
+        manager.readAsStandAlone2();
         long t2 = System.currentTimeMillis();
         TripDistribution distribution = new TripDistribution(dataSet);
         distribution.run(purpose);
@@ -75,7 +73,7 @@ public class MoPeDModel {
     }
 
     private void writeOut(Purpose purpose)throws FileNotFoundException {
-        OutputWriter writer = new OutputWriter(dataSet);
-        writer.run(purpose);
+        OutputWriter writer = new OutputWriter(dataSet,purpose);
+        writer.run();
     }
 }

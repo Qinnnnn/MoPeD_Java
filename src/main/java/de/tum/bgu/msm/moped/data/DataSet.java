@@ -1,7 +1,9 @@
 package de.tum.bgu.msm.moped.data;
 
-import com.google.common.collect.Table;
+import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
+import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
 import org.apache.log4j.Logger;
+import org.jblas.FloatMatrix;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,39 +11,23 @@ import java.util.Map;
 public class DataSet {
 
     private static final Logger logger = Logger.getLogger(DataSet.class);
-    private final Map<Long, Zone> zones= new HashMap<Long, Zone>();
-    private final Map<Integer, HouseholdType> hhTypes= new HashMap<Integer, HouseholdType>();
-    private Table<Long, Integer, Double> distribution;
-    private Table<Long, Integer, Double> hbShopTripGen;
-    private Table<Long, Integer, Double> hbRecreationTripGen;
-    private Table<Long, Integer, Double> hbOtherTripGen;
-    private Table<Long, Integer, Double> hbCollegeProduction;
-    private Map<Long, Double> hbCollegeAttraction;
-    private Table<Long, Integer, Double> hbSchoolProduction;
-    private Map<Long, Double> hbSchoolAttraction;
-    private Table<Long, Integer, Double> hbWorkProduction;
-    private Map<Long, Double> hbWorkAttraction;
-    private Table<Long, Integer, Double> hbWorkWalk;
-    private Table<Long, Integer, Double> hbShopWalk;
-    private Table<Long, Integer, Double> hbRecreationWalk;
-    private Table<Long, Integer, Double> hbOtherWalk;
-    private Table<Long, Integer, Double> hbCollegeWalk;
-    private Table<Long, Integer, Double> hbSchoolWalk;
-    private Map<Long, SuperPAZ> originSuperPAZs= new HashMap<Long, SuperPAZ>();
-    private Map<Long, SuperPAZ> destinationSuperPAZs= new HashMap<Long, SuperPAZ>();
-    private Table<Long, Long, Double> impedance;
-    private Table<Long, Long, Double> hbWorkDistribution;
-    private Table<Long, Long, Double> hbShopDistribution;
-    private Table<Long, Long, Double> hbRecreationDistribution;
-    private Table<Long, Long, Double> hbOtherDistribution;
-    private Table<Long, Long, Double> hbCollegeDistribution;
-    private Table<Long, Long, Double> hbSchoolDistribution;
+    private final int HOUSEHOLDTYPESIZE = 4097;
+    private Map<Integer, Zone> zones = new HashMap<>();
+    private Map<Integer, SuperPAZ> superPAZs = new HashMap<>();
+    private Map<Integer, HouseholdType> hhTypes = new HashMap<>();
+    private Map<Integer, Zone> originPAZs = new HashMap<>();
+    private Map<Integer, SuperPAZ> destinationSuperPAZs = new HashMap<>();
+    private FloatMatrix distribution;
+    private FloatMatrix impedance;
 
+    private Map<Purpose, FloatMatrix> productionsByPurpose = new HashMap<>();
+    private  Map<Purpose, FloatMatrix> walkTripsByPurpose = new HashMap<>();
+    private Map<Purpose, DenseLargeFloatMatrix2D> distributionsByPurpose = new HashMap<>();
 
-    public void addZone(final Zone zone) {
+    public void addZone( Zone zone) {
         Zone test = this.zones.get(zone.getZoneId());
-        if(test != null) {
-            if(test.equals(zone)) {
+        if (test != null) {
+            if (test.equals(zone)) {
                 logger.warn("Zone " + zone.getZoneId() + " was already added to data set.");
                 return;
             }
@@ -50,10 +36,21 @@ public class DataSet {
         zones.put(zone.getZoneId(), zone);
     }
 
-    public void addHouseholdType(final HouseholdType householdType) {
+    public void addSuperPAZ( SuperPAZ superPAZ) {
+        SuperPAZ test = this.superPAZs.get(superPAZ.getSuperPAZId());
+        if (test != null) {
+            if (test.equals(superPAZ)) {
+                return;
+            }
+            throw new IllegalArgumentException("SuperPAZ id " + superPAZ.getSuperPAZId() + " already exists!");
+        }
+        superPAZs.put(superPAZ.getSuperPAZId(), superPAZ);
+    }
+
+    public void addHouseholdType( HouseholdType householdType) {
         HouseholdType test = this.hhTypes.get(householdType.getHhTypeId());
-        if(test != null) {
-            if(test.equals(householdType)) {
+        if (test != null) {
+            if (test.equals(householdType)) {
                 logger.warn("HouseholdType " + householdType.getHhTypeId() + " was already added to data set.");
                 return;
             }
@@ -62,31 +59,45 @@ public class DataSet {
         hhTypes.put(householdType.getHhTypeId(), householdType);
     }
 
-    public void addOriginSuperPAZ(final SuperPAZ superPAZ) {
-        SuperPAZ test = this.originSuperPAZs.get(superPAZ.getSuperPAZId());
-        if(test != null) {
-            if(test.equals(superPAZ)) {
-                logger.warn("originSuperPAZs " + superPAZ.getSuperPAZId() + " was already added to data set.");
+    public void addOriginPAZ(int index, Zone zone) {
+        Zone test = this.originPAZs.get(index);
+        if (test != null) {
+            if (test.equals(zone)) {
+                logger.warn("originPAZs " + zone.getZoneId() + " was already added to data set.");
                 return;
             }
-            throw new IllegalArgumentException("originSuperPAZs id " + superPAZ.getSuperPAZId() + " already exists!");
+            throw new IllegalArgumentException("originPAZs id " + zone.getZoneId() + " already exists!");
         }
-        originSuperPAZs.put(superPAZ.getSuperPAZId(), superPAZ);
+        originPAZs.put(index, zone);
     }
 
-    public void addDestinationSuperPAZ(final SuperPAZ superPAZ) {
-        SuperPAZ test = this.destinationSuperPAZs.get(superPAZ.getSuperPAZId());
-        if(test != null) {
-            if(test.equals(superPAZ)) {
-                //logger.warn("destinationSuperPAZ " + superPAZ.getSuperPAZId() + " was already added to data set.");
+
+    public void addDestinationSuperPAZ(int index, SuperPAZ superPAZ) {
+        SuperPAZ test = this.destinationSuperPAZs.get(index);
+        if (test != null) {
+            if (test.equals(superPAZ)) {
                 return;
             }
             throw new IllegalArgumentException("destinationSuperPAZ id " + superPAZ.getSuperPAZId() + " already exists!");
         }
-        destinationSuperPAZs.put(superPAZ.getSuperPAZId(), superPAZ);
+        destinationSuperPAZs.put(index, superPAZ);
     }
 
-    public Map<Long, Zone> getZones() {
+
+    public void addProduction(FloatMatrix production, Purpose purpose) {
+        this.productionsByPurpose.put(purpose, production);
+    }
+
+    public void addWalkTrips(FloatMatrix production, Purpose purpose) {
+        this.walkTripsByPurpose.put(purpose, production);
+    }
+
+    public void addDistribution(DenseLargeFloatMatrix2D production, Purpose purpose) {
+        this.distributionsByPurpose.put(purpose, production);
+    }
+
+
+    public Map<Integer, Zone> getZones() {
         return zones;
     }
 
@@ -94,186 +105,65 @@ public class DataSet {
         return hhTypes;
     }
 
+    public Map<Integer, Zone> getOriginPAZs() {
+        return originPAZs;
+    }
 
-    public Zone getZone(Long id) {
+    public Map<Integer, SuperPAZ> getSuperPAZs() { return superPAZs; }
+
+    public Map<Integer, SuperPAZ> getDestinationSuperPAZs() {
+        return destinationSuperPAZs;
+    }
+
+    public Zone getZone(int id) {
         return zones.get(id);
     }
 
-    public HouseholdType getHouseholdType(int id) { return hhTypes.get(id); }
+    public SuperPAZ getSuperPAZ(int id) {
+        return superPAZs.get(id);
+    }
 
-    public Map<Long, SuperPAZ> getOriginSuperPAZs() { return originSuperPAZs; }
+    public HouseholdType getHouseholdType(int id) {
+        return hhTypes.get(id);
+    }
 
-    public Map<Long, SuperPAZ> getDestinationSuperPAZs() { return destinationSuperPAZs; }
+    public Zone getOriginPAZ(int id) {
+        return originPAZs.get(id);
+    }
 
-    public SuperPAZ getOriginSuperPAZ(Long id) { return originSuperPAZs.get(id); }
+    public SuperPAZ getDestinationSuperPAZ(int id) {
+        return destinationSuperPAZs.get(id);
+    }
 
-    public SuperPAZ getDestinationSuperPAZ(Long id) { return destinationSuperPAZs.get(id); }
-
-    public void setDistribution(Table<Long, Integer, Double> distribution) {
+    public void setDistribution(FloatMatrix distribution) {
         this.distribution = distribution;
     }
 
-    public void setHbShopTripGen(Table<Long, Integer, Double> hbShopTripGen) {
-        this.hbShopTripGen = hbShopTripGen;
-    }
-
-    public Table<Long, Integer, Double> getDistribution() {
+    public FloatMatrix getDistribution() {
         return distribution;
     }
 
-    public void setHbRecreationTripGen(Table<Long, Integer, Double> hbRecreationTripGen) {
-        this.hbRecreationTripGen = hbRecreationTripGen;
-    }
-
-    public void setHbOtherTripGen(Table<Long, Integer, Double> hbOtherTripGen) {
-        this.hbOtherTripGen = hbOtherTripGen;
-    }
-
-    public void setHbCollegeProduction(Table<Long, Integer, Double> hbCollegeProduction) {
-        this.hbCollegeProduction = hbCollegeProduction;
-    }
-
-    public void setHbCollegeAttraction(Map<Long, Double> hbCollegeAttraction) {
-        this.hbCollegeAttraction = hbCollegeAttraction;
-    }
-
-    public void setHbSchoolProduction(Table<Long, Integer, Double> hbSchoolProduction) {
-        this.hbSchoolProduction = hbSchoolProduction;
-    }
-
-    public void setHbSchoolAttraction(Map<Long, Double> hbSchoolAttraction) {
-        this.hbSchoolAttraction = hbSchoolAttraction;
-    }
-
-    public void setHbWorkProduction(Table<Long, Integer, Double> hbWorkProduction) {
-        this.hbWorkProduction = hbWorkProduction;
-    }
-
-    public void setHbWorkAttraction(Map<Long, Double> hbWorkAttraction) {
-        this.hbWorkAttraction = hbWorkAttraction;
-    }
-
-    public Table<Long, Integer, Double> getHbWorkProduction() {
-        return hbWorkProduction;
-    }
-
-    public Map<Long, Double> getHbWorkAttraction() {
-        return hbWorkAttraction;
-    }
-
-    public Table<Long, Integer, Double> getHbShopTripGen() { return hbShopTripGen; }
-
-    public Table<Long, Integer, Double> getHbRecreationTripGen() {
-        return hbRecreationTripGen;
-    }
-
-    public Table<Long, Integer, Double> getHbOtherTripGen() {
-        return hbOtherTripGen;
-    }
-
-    public Table<Long, Integer, Double> getHbCollegeProduction() {
-        return hbCollegeProduction;
-    }
-
-    public Table<Long, Integer, Double> getHbSchoolProduction() {
-        return hbSchoolProduction;
-    }
-
-    public void setImpedance(Table<Long, Long, Double> impedance) {
+    public void setImpedance(FloatMatrix impedance) {
         this.impedance = impedance;
     }
 
-    public Table<Long, Long, Double> getImpedance() { return impedance; }
-
-    public void setHbWorkWalk(Table<Long, Integer, Double> hbWorkWalk) { this.hbWorkWalk = hbWorkWalk; }
-
-    public void setHbShopWalk(Table<Long, Integer, Double> hbShopWalk) {
-        this.hbShopWalk = hbShopWalk;
+    public FloatMatrix getImpedance() {
+        return impedance;
     }
 
-    public void setHbRecreationWalk(Table<Long, Integer, Double> hbRecreationWalk) { this.hbRecreationWalk = hbRecreationWalk; }
-
-    public void setHbOtherWalk(Table<Long, Integer, Double> hbOtherWalk) {
-        this.hbOtherWalk = hbOtherWalk;
+    public Map<Purpose, FloatMatrix> getProductionsByPurpose() {
+        return productionsByPurpose;
     }
 
-    public void setHbCollegeWalk(Table<Long, Integer, Double> hbCollegeWalk) {
-        this.hbCollegeWalk = hbCollegeWalk;
+    public Map<Purpose, FloatMatrix> getWalkTripsByPurpose() {
+        return walkTripsByPurpose;
     }
 
-    public void setHbSchoolWalk(Table<Long, Integer, Double> hbSchoolWalk) {
-        this.hbSchoolWalk = hbSchoolWalk;
+    public Map<Purpose, DenseLargeFloatMatrix2D> getDistributionsByPurpose() {
+        return distributionsByPurpose;
     }
 
-    public void setHbWorkDistribution(Table<Long, Long, Double> hbWorkDistribution) {
-        this.hbWorkDistribution = hbWorkDistribution;
-    }
-
-    public void setHbShopDistribution(Table<Long, Long, Double> hbShopDistribution) {
-        this.hbShopDistribution = hbShopDistribution;
-    }
-
-    public void setHbRecreationDistribution(Table<Long, Long, Double> hbRecreationDistribution) {
-        this.hbRecreationDistribution = hbRecreationDistribution;
-    }
-
-    public void setHbOtherDistribution(Table<Long, Long, Double> hbOtherDistribution) {
-        this.hbOtherDistribution = hbOtherDistribution;
-    }
-
-    public void setHbCollegeDistribution(Table<Long, Long, Double> hbCollegeDistribution) {
-        this.hbCollegeDistribution = hbCollegeDistribution;
-    }
-
-    public void setHbSchoolDistribution(Table<Long, Long, Double> hbSchoolDistribution) {
-        this.hbSchoolDistribution = hbSchoolDistribution;
-    }
-
-    public Table<Long, Integer, Double> getHbWorkWalk() {
-        return hbWorkWalk;
-    }
-
-    public Table<Long, Integer, Double> getHbShopWalk() {
-        return hbShopWalk;
-    }
-
-    public Table<Long, Integer, Double> getHbRecreationWalk() {
-        return hbRecreationWalk;
-    }
-
-    public Table<Long, Integer, Double> getHbOtherWalk() {
-        return hbOtherWalk;
-    }
-
-    public Table<Long, Integer, Double> getHbCollegeWalk() {
-        return hbCollegeWalk;
-    }
-
-    public Table<Long, Integer, Double> getHbSchoolWalk() {
-        return hbSchoolWalk;
-    }
-
-    public Table<Long, Long, Double> getHbWorkDistribution() {
-        return hbWorkDistribution;
-    }
-
-    public Table<Long, Long, Double> getHbShopDistribution() {
-        return hbShopDistribution;
-    }
-
-    public Table<Long, Long, Double> getHbRecreationDistribution() {
-        return hbRecreationDistribution;
-    }
-
-    public Table<Long, Long, Double> getHbOtherDistribution() {
-        return hbOtherDistribution;
-    }
-
-    public Table<Long, Long, Double> getHbCollegeDistribution() {
-        return hbCollegeDistribution;
-    }
-
-    public Table<Long, Long, Double> getHbSchoolDistribution() {
-        return hbSchoolDistribution;
+    public int getHOUSEHOLDTYPESIZE() {
+        return HOUSEHOLDTYPESIZE;
     }
 }

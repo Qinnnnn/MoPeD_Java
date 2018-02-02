@@ -1,20 +1,18 @@
 package de.tum.bgu.msm.moped.io.input.readers;
 
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
-
-import java.util.Collection;
+import org.apache.commons.math3.linear.OpenMapRealMatrix;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.jblas.FloatMatrix;
 
 public class SuperPAZImpedanceReader extends CSVReader{
 
-    private Table<Long, Long, Double> impedance;
+    private FloatMatrix impedance;
 
     public SuperPAZImpedanceReader(DataSet dataSet) { super(dataSet);}
 
@@ -24,7 +22,8 @@ public class SuperPAZImpedanceReader extends CSVReader{
 
     @Override
     public void read() {
-        impedance = HashBasedTable.create();
+        //impedance = new OpenMapRealMatrix(dataSet.getSuperPAZs().size(), dataSet.getDestinationSuperPAZs().size());
+        impedance = new FloatMatrix(60110, dataSet.getDestinationSuperPAZs().size());
         super.read(Resources.INSTANCE.getString(Properties.SUPERPAZIMPEDANCE), ",");
         dataSet.setImpedance(impedance);
     }
@@ -38,14 +37,16 @@ public class SuperPAZImpedanceReader extends CSVReader{
 
     @Override
     protected void processRecord(String[] record) {
-        long origin = Long.parseLong(record[originIndex]);
-        long destination = Long.parseLong(record[destinationIndex]);
+        int origin = Integer.parseInt(record[originIndex]);
+        int destination = Integer.parseInt(record[destinationIndex]);
         double distance = Double.parseDouble(record[distanceIndex]);
-        SuperPAZ superPAZ = dataSet.getDestinationSuperPAZ(destination);
-        if (superPAZ == null){
-            superPAZ = new SuperPAZ(destination, "DESTINATION");
+        float distanceInMile = (float)distance / 5280.0f;
+        SuperPAZ originSuperPAZ = dataSet.getSuperPAZ(origin);
+        SuperPAZ destinationSuperPAZ = dataSet.getSuperPAZ(destination);
+        if ((originSuperPAZ.getHousehold() != 0.0) & (destinationSuperPAZ.getTotalEmpl() != 0.0)&(distanceInMile <= 3.0)) {
+            distanceInMile = Math.max(440.0f / 5280.0f,distanceInMile);
+            impedance.put(origin, destinationSuperPAZ.getIndex(), distanceInMile);
+            originSuperPAZ.getImpedanceToSuperPAZs().put(destinationSuperPAZ.getIndex(), distanceInMile);
         }
-        dataSet.addDestinationSuperPAZ(superPAZ);
-        impedance.put(origin, destination, distance);
     }
 }

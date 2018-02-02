@@ -1,146 +1,104 @@
 package de.tum.bgu.msm.moped.modules.tripGeneration;
 
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Table;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
+import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.Zone;
-import org.apache.log4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+public class HBCollegeGenerator extends TripGenerator {
 
-public class HBCollegeGenerator {
+    private float productionSum = 0.0f;
 
-    private static final Logger logger = Logger.getLogger(HBCollegeGenerator.class);
-    private final DataSet dataSet;
-    private Table<Long, Integer, Double> hbCollegeProduction;
-    private Map<Long, Double> hbCollegeAttraction;
     public HBCollegeGenerator(DataSet dataSet) {
-        this.dataSet = dataSet;
+        super(dataSet, Purpose.HBCOLL);
     }
 
-
-
-    public void run () {
-        Collection<Long> zones = dataSet.getZones().keySet();
-        Collection<Integer> households = dataSet.getHhTypes().keySet();
-        hbCollegeProduction = ArrayTable.create(zones, households);
-        hbCollegeAttraction = new HashMap<Long, Double>();
-        productionCalculator();
-        attractionCalculator();
-        dataSet.setHbCollegeProduction(hbCollegeProduction);
-        dataSet.setHbCollegeAttraction(hbCollegeAttraction);
-    }
-
-
-    public void productionCalculator() {
-        for (long zoneId : dataSet.getZones().keySet()){
-            for (int hhTypeId : dataSet.getHhTypes().keySet()){
-                double distribution = dataSet.getDistribution().get(zoneId,hhTypeId);
-                Zone zone = dataSet.getZone(zoneId);
-                HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
-                int age = hhType.getAge();
-                int hhSize = hhType.getHouseholdSize();
-                double tripGenRate = 0.0;
-                if (hhSize == 1){
-                    switch (age){
-                        case 1:
-                            tripGenRate = 0.52380952;
-                            break;
-                        case 2:
-                            tripGenRate = 0.05958549;
-                            break;
-                        case 3:
-                            tripGenRate = 0.02985075;
-                            break;
-                        case 4:
-                            tripGenRate = 0.01823708;
-                            break;
-                    }
-                }else if (hhSize == 2){
-                    switch (age){
-                        case 1:
-                            tripGenRate = 0.48387097;
-                            break;
-                        case 2:
-                            tripGenRate = 0.17915691;
-                            break;
-                        case 3:
-                            tripGenRate = 0.03581267;
-                            break;
-                        case 4:
-                            tripGenRate = 0.03353057;
-                            break;
-                    }
-                } else if (hhSize == 3){
-                    switch (age){
-                        case 1:
-                            tripGenRate = 1.00000000;
-                            break;
-                        case 2:
-                            tripGenRate = 0.23421927;
-                            break;
-                        case 3:
-                            tripGenRate = 0.33980583;
-                            break;
-                        case 4:
-                            tripGenRate = 0.06557377;
-                            break;
-                    }
-                } else if (hhSize == 4) {
-                    switch (age){
-                        case 1:
-                            tripGenRate = 0.45833333;
-                            break;
-                        case 2:
-                            tripGenRate = 0.38158996;
-                            break;
-                        case 3:
-                            tripGenRate = 0.58510638;
-                            break;
-                        case 4:
-                            tripGenRate = 0.00000000;
-                            break;
-                    }
-                }
-
-                double tripGen;
-
-                if (tripGenRate != 0){
-                    tripGen = tripGenRate * distribution * 1.074;
-
-                }else{
-                    tripGen = 0.0;
-                }
-
-                hbCollegeProduction.put(zoneId,hhTypeId,tripGen);
+    @Override
+    protected float calculateProduction(float distribution, HouseholdType hhType) {
+        int age = hhType.getAge();
+        int hhSize = hhType.getHouseholdSize();
+        float tripGenRate = 0.0f;
+        if (hhSize == 1){
+            switch (age){
+                case 1:
+                    tripGenRate = 0.52380952f;
+                    break;
+                case 2:
+                    tripGenRate = 0.05958549f;
+                    break;
+                case 3:
+                    tripGenRate = 0.02985075f;
+                    break;
+                case 4:
+                    tripGenRate = 0.01823708f;
+                    break;
             }
-
+        }else if (hhSize == 2){
+            switch (age){
+                case 1:
+                    tripGenRate = 0.48387097f;
+                    break;
+                case 2:
+                    tripGenRate = 0.17915691f;
+                    break;
+                case 3:
+                    tripGenRate = 0.03581267f;
+                    break;
+                case 4:
+                    tripGenRate = 0.03353057f;
+                    break;
+            }
+        } else if (hhSize == 3){
+            switch (age){
+                case 1:
+                    tripGenRate = 1.00000000f;
+                    break;
+                case 2:
+                    tripGenRate = 0.23421927f;
+                    break;
+                case 3:
+                    tripGenRate = 0.33980583f;
+                    break;
+                case 4:
+                    tripGenRate = 0.06557377f;
+                    break;
+            }
+        } else if (hhSize == 4) {
+            switch (age){
+                case 1:
+                    tripGenRate = 0.45833333f;
+                    break;
+                case 2:
+                    tripGenRate = 0.38158996f;
+                    break;
+                case 3:
+                    tripGenRate = 0.58510638f;
+                    break;
+                case 4:
+                    tripGenRate = 0.00000000f;
+                    break;
+            }
         }
 
+        float tripGen;
+
+        if (tripGenRate != 0){
+            tripGen = tripGenRate * distribution * 1.074f;
+
+        }else{
+            tripGen = 0.0f;
+        }
+        productionSum += tripGen;
+        return tripGen;
     }
 
-
-    private void attractionCalculator() {
-        double productionSum = 0.0;
-        for (double pr : hbCollegeProduction.values()){
-            productionSum += pr;
-        }
-
-        double collegeTripSum = 0.0;
+    @Override
+    protected void scaleProductions() {
+        float collegeTripSum = 0.0f;
         for (Zone zone : dataSet.getZones().values()){
             collegeTripSum += zone.getCollegeVehicleTrip();
         }
-
-        double balanceParameter = productionSum/collegeTripSum;
-
-        for (Zone zone : dataSet.getZones().values()){
-            double newAttraction = zone.getCollegeVehicleTrip()*balanceParameter;
-            hbCollegeAttraction.put(zone.getZoneId(),newAttraction);
-        }
-
+        float balanceParameter = productionSum/collegeTripSum;
+        production = production.muli(balanceParameter);
     }
 }

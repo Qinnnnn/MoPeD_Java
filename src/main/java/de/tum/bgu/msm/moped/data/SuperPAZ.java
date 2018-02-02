@@ -1,104 +1,104 @@
 package de.tum.bgu.msm.moped.data;
 
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class SuperPAZ {
 
-    private static final Logger logger = Logger.getLogger(SuperPAZ.class);
-    private final long superPAZId;
+    private final int superPAZId;
     private final String type;
-    private double household;
-    private double totalEmpl;
-    private double financial;
-    private double government;
-    private double retail;
-    private double service;
-    private double pie;
-    private double slope;
+    private int index;
+    private float household;
+    private float totalEmpl;
+    private float financial;
+    private float government;
+    private float retail;
+    private float service;
+    private float pie;
+    private float slope;
     private int freeway;
     private int park;
-    private Map<Long, Zone> pazList= new HashMap<Long, Zone>();
-    private double hbWorkWalkTrips;
-    private double hbShopWalkTrips;
-    private double hbRecreationWalkTrips;
-    private double hbOtherWalkTrips;
-    private double hbSchoolWalkTrips;
-    private double hbCollegeWalkTrips;
+    private Map<Integer, Zone> pazList= new HashMap<>();
+    private Map<Integer, Float> impedanceToSuperPAZs = new HashMap<>();
 
-
-    public SuperPAZ(long superPAZId, String type) {
+    public SuperPAZ(int superPAZId, String type) {
         this.superPAZId = superPAZId;
         this.type = type;
     }
 
-    public long getSuperPAZId() {
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getSuperPAZId() {
         return superPAZId;
     }
 
-    public double getHousehold() {
+    public float getHousehold() {
         return household;
     }
 
-    public void setHousehold(double household) {
+    public void setHousehold(float household) {
         this.household = household;
     }
 
-    public double getTotalEmpl() {
+    public float getTotalEmpl() {
         return totalEmpl;
     }
 
-    public void setTotalEmpl(double totalEmpl) {
+    public void setTotalEmpl(float totalEmpl) {
         this.totalEmpl = totalEmpl;
     }
 
-    public double getFinancial() {
+    public float getFinancial() {
         return financial;
     }
 
-    public void setFinancial(double financial) {
+    public void setFinancial(float financial) {
         this.financial = financial;
     }
 
-    public double getGovernment() {
+    public float getGovernment() {
         return government;
     }
 
-    public void setGovernment(double government) {
+    public void setGovernment(float government) {
         this.government = government;
     }
 
-    public double getRetail() {
+    public float getRetail() {
         return retail;
     }
 
-    public void setRetail(double retail) {
+    public void setRetail(float retail) {
         this.retail = retail;
     }
 
-    public double getService() {
+    public float getService() {
         return service;
     }
 
-    public void setService(double service) {
+    public void setService(float service) {
         this.service = service;
     }
 
-    public double getPie() {
+    public float getPie() {
         return pie;
     }
 
-    public void setPie(double pie) {
+    public void setPie(float pie) {
         this.pie = pie;
     }
 
-    public double getSlope() {
+    public float getSlope() {
         return slope;
     }
 
-    public void setSlope(double slope) {
+    public void setSlope(float slope) {
         this.slope = slope;
     }
 
@@ -118,57 +118,10 @@ public class SuperPAZ {
         this.park = park;
     }
 
-    public Map<Long, Zone> getPazs() { return pazList; }
+    public Map<Integer, Zone> getPazs() { return pazList; }
 
-    public String getType() {
-        return type;
+    public Map<Integer, Float> getImpedanceToSuperPAZs() {
+        return impedanceToSuperPAZs;
     }
 
-    public double getHbWorkWalkTrips() {
-        return hbWorkWalkTrips;
-    }
-
-    public void setHbWorkWalkTrips(double hbWorkWalkTrips) {
-        this.hbWorkWalkTrips = hbWorkWalkTrips;
-    }
-
-    public double getHbShopWalkTrips() {
-        return hbShopWalkTrips;
-    }
-
-    public void setHbShopWalkTrips(double hbShopWalkTrips) {
-        this.hbShopWalkTrips = hbShopWalkTrips;
-    }
-
-    public double getHbRecreationWalkTrips() {
-        return hbRecreationWalkTrips;
-    }
-
-    public void setHbRecreationWalkTrips(double hbRecreationWalkTrips) {
-        this.hbRecreationWalkTrips = hbRecreationWalkTrips;
-    }
-
-    public double getHbOtherWalkTrips() {
-        return hbOtherWalkTrips;
-    }
-
-    public void setHbOtherWalkTrips(double hbOtherWalkTrips) {
-        this.hbOtherWalkTrips = hbOtherWalkTrips;
-    }
-
-    public double getHbSchoolWalkTrips() {
-        return hbSchoolWalkTrips;
-    }
-
-    public void setHbSchoolWalkTrips(double hbSchoolWalkTrips) {
-        this.hbSchoolWalkTrips = hbSchoolWalkTrips;
-    }
-
-    public double getHbCollegeWalkTrips() {
-        return hbCollegeWalkTrips;
-    }
-
-    public void setHbCollegeWalkTrips(double hbCollegeWalkTrips) {
-        this.hbCollegeWalkTrips = hbCollegeWalkTrips;
-    }
 }

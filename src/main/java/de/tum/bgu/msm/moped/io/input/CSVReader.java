@@ -35,6 +35,7 @@ public abstract class CSVReader extends AbstractInputReader{
             logger.error("Error parsing record number " + numberOfRecords + ": " + e.getMessage(), e);
         }
         logger.info("Read " + numberOfRecords + " records.");
+        numberOfRecords = 0;
     }
 
     private void initializeReader(String fileName, String delimiter) {

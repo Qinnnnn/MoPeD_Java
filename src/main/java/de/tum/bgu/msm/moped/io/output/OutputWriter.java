@@ -2,77 +2,154 @@ package de.tum.bgu.msm.moped.io.output;
 
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
-import de.tum.bgu.msm.moped.modules.Module;
-import de.tum.bgu.msm.moped.modules.tripGeneration.*;
-import org.apache.log4j.Logger;
+import de.tum.bgu.msm.moped.data.SuperPAZ;
+import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
+import org.apache.commons.math3.linear.RealMatrix;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
-public class OutputWriter extends Module {
+public class OutputWriter {
 
-    private static final Logger logger = Logger.getLogger(OutputWriter.class);
+    private final DataSet dataSet;
+    private final Purpose purpose;
 
-    public OutputWriter(DataSet dataSet) {
-        super(dataSet);
+    public OutputWriter(DataSet dataSet, Purpose purpose) {
+        this.dataSet = dataSet;
+        this.purpose = purpose;
     }
 
-    @Override
-    public void run(Purpose purpose) throws FileNotFoundException {
-        logger.info("  Started write out.");
-        long startTime = System.currentTimeMillis();
+    public void run () throws FileNotFoundException {
+        if (purpose.equals(Purpose.HBSCH)||purpose.equals(Purpose.HBCOLL)){
+            writeOutTG();
+            writeOutWM();
+        }else{
+            writeOutTG();
+            writeOutWM();
+            writeOutTripLength();
+            writeOutIntrazonalTrip();
+        }
+    }
 
-        switch (purpose) {
-            case HBW:
-                outputWriterHBWork();
-                break;
-            case HBSHOP:
-                outputWriterHBShop();
-                break;
-            case HBREC:
-                outputWriterHBRecreation();
-                break;
-            case HBOTH:
-                outputWriterHBOther();
-                break;
-            case HBSCH:
-                outputWriterHBSchool();
-                break;
-            case HBCOLL:
-                outputWriterHBCollege();
-                break;
+
+    public void writeOutTG () throws FileNotFoundException  {
+        String outputTripGen = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_TG);
+        StringBuilder tripGen = new StringBuilder();
+
+        //write header
+        tripGen.append("zoneId,tripGen");
+        tripGen.append('\n');
+
+        //write data
+        for (Zone zone : dataSet.getOriginPAZs().values()){
+            float sumTripGen = 0.0f;
+            tripGen.append(zone.getZoneId());
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                float pr = dataSet.getProductionsByPurpose().get(purpose).get(zone.getIndex(),hhTypeId);
+                sumTripGen += pr;
+            }
+            tripGen.append(',');
+            tripGen.append(sumTripGen);
+            tripGen.append('\n');
         }
 
-        logger.info("  Completed write out.");
+        writeToFile(outputTripGen,tripGen.toString());
+
     }
 
-    private void outputWriterHBWork() throws FileNotFoundException {
-        OutputWriterHBWork outputWriterHBWork = new OutputWriterHBWork(dataSet);
-        outputWriterHBWork.run();
+    public void writeOutWM () throws FileNotFoundException  {
+        String outputWalkTrip = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_WM);
+        StringBuilder walkMode = new StringBuilder();
+
+        //write header
+        walkMode.append("zoneId,walkMode");
+        walkMode.append('\n');
+
+        //write data
+
+        for (Zone zone : dataSet.getOriginPAZs().values()){
+            float sumWalkTrip = 0.0f;
+            walkMode.append(zone.getZoneId());
+            for (int hhTypeId : dataSet.getHhTypes().keySet()){
+                float walkTrip = dataSet.getWalkTripsByPurpose().get(purpose).get(zone.getIndex(),hhTypeId);
+                sumWalkTrip += walkTrip;
+            }
+            walkMode.append(',');
+            walkMode.append(sumWalkTrip);
+            walkMode.append('\n');
+        }
+
+        writeToFile(outputWalkTrip,walkMode.toString());
+
     }
 
-    private void outputWriterHBShop() throws FileNotFoundException {
-        OutputWriterHBShop outputWriterHBShop = new OutputWriterHBShop(dataSet);
-        outputWriterHBShop.run();
+    public void writeOutTripLength () throws FileNotFoundException  {
+        String outputDistribution = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_TRIPLENGTH);
+        StringBuilder distribution = new StringBuilder();
+
+        //write header
+
+        distribution.append("zoneId,TripLength");
+        distribution.append('\n');
+
+        //write data
+        for (Zone zone : dataSet.getOriginPAZs().values()){
+            int superPAZ = zone.getSuperPAZId();
+            double sumDistribution = 0.0;
+            double sumTrips = 0.0;
+            distribution.append(zone.getZoneId());
+            for (int destination : dataSet.getDestinationSuperPAZs().keySet()){
+                double trips = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),destination);
+                if (trips != 0.0){
+                    double impedance = dataSet.getImpedance().get(superPAZ, destination);
+                    double distance = trips * impedance;
+                    sumDistribution += distance;
+                    sumTrips += trips;
+                }
+            }
+
+            distribution.append(",");
+            distribution.append(sumDistribution);
+            distribution.append(",");
+            distribution.append(sumTrips);
+            distribution.append('\n');
+        }
+
+        writeToFile(outputDistribution,distribution.toString());
+
     }
 
-    private void outputWriterHBRecreation() throws FileNotFoundException {
-        OutputWriterHBRecreation outputWriterHBRecreation = new OutputWriterHBRecreation(dataSet);
-        outputWriterHBRecreation.run();
+    public void writeOutIntrazonalTrip () throws FileNotFoundException  {
+        String outputDistribution = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_INTRAZONAL);
+        StringBuilder distribution = new StringBuilder();
+
+        distribution.append("zoneId, InnerZoneTrip");
+        distribution.append('\n');
+
+        for (Zone zone : dataSet.getOriginPAZs().values()){
+            distribution.append(zone.getZoneId());
+            for (SuperPAZ superPAZ : dataSet.getDestinationSuperPAZs().values()){
+                int originSuperPAZ = zone.getSuperPAZId();
+                if (originSuperPAZ == superPAZ.getSuperPAZId()){
+                    distribution.append(",");
+                    distribution.append(dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex()));
+                }
+            }
+            distribution.append('\n');
+        }
+
+        writeToFile(outputDistribution,distribution.toString());
+
     }
 
-    private void outputWriterHBOther() throws FileNotFoundException {
-        OutputWriterHBOther outputWriterHBOther = new OutputWriterHBOther(dataSet);
-        outputWriterHBOther.run();
-    }
 
-    private void outputWriterHBSchool() throws FileNotFoundException {
-        OutputWriterHBSchool outputWriterHBSchool = new OutputWriterHBSchool(dataSet);
-        outputWriterHBSchool.run();
-    }
-
-    private void outputWriterHBCollege() throws FileNotFoundException {
-        OutputWriterHBcollege outputWriterHBCollege = new OutputWriterHBcollege(dataSet);
-        outputWriterHBCollege.run();
+    public static void writeToFile(String path, String building) throws FileNotFoundException {
+        PrintWriter bd = new PrintWriter(new FileOutputStream(path, true));
+        bd.write(building);
+        bd.close();
     }
 
 

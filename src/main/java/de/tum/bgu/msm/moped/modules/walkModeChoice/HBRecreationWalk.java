@@ -1,91 +1,25 @@
 package de.tum.bgu.msm.moped.modules.walkModeChoice;
 
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Table;
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.HouseholdType;
-import org.apache.log4j.Logger;
+import de.tum.bgu.msm.moped.data.Purpose;
 
-import java.util.Collection;
-
-public class HBRecreationWalk {
-
-    private static final Logger logger = Logger.getLogger(HBRecreationWalk.class);
-    private final DataSet dataSet;
-    private Table<Long, Integer, Double> WalkTrip;
-    private Table<Long, Integer, Double> WalkExpUtility;
-    private Table<Long, Integer, Double> VehicleExpUtility;
-
-
+public final class HBRecreationWalk extends WalkTripGenerator {
 
     public HBRecreationWalk(DataSet dataSet) {
-        this.dataSet = dataSet;
+        super(dataSet, Purpose.HBREC);
     }
 
-    public void run () {
-        Collection<Long> zones = dataSet.getZones().keySet();
-        Collection<Integer> households = dataSet.getHhTypes().keySet();
-        WalkTrip = ArrayTable.create(zones, households);
-        WalkExpUtility = ArrayTable.create(zones, households);
-        VehicleExpUtility = ArrayTable.create(zones, households);
-        walkUtilityCalculator();
-        vehicleUtilityCalculator();
-        walkTripsCalculator();
-        dataSet.setHbRecreationWalk(WalkTrip);
+    @Override
+    protected float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy) {
+        float utilityZone = -1.093f * stfwy + 0.792f * wa+ 0.043f * pie + 0.530f * pieFlag;
+        return utilityZone;
     }
 
-    private void walkUtilityCalculator() {
-        for (long zoneId : dataSet.getZones().keySet()) {
-            //zonal-related utility
-            double stfwy = dataSet.getZone(zoneId).getStfwy();
-            double pie = dataSet.getZone(zoneId).getPie();
-            int pieFlag = dataSet.getZone(zoneId).getPieFlag();
-            int wa = dataSet.getZone(zoneId).getWa();
-            double utilityZone = -1.093 * stfwy + 0.792 * wa+ 0.043 * pie + 0.530 * pieFlag;
-
-            for (int hhTypeId : dataSet.getHhTypes().keySet()) {
-                HouseholdType hhType = dataSet.getHouseholdType(hhTypeId);
-                //household-related utility
-                double utilityHousehold = 0.288 + -4.377 + 0.191*(hhType.getHouseholdSize()==2?1:0) + -0.242*(hhType.getAge()==3?1:0)+ 0.208*(hhType.getWorkers()==1?1:0)+ 0.301*(hhType.getWorkers()==2?1:0) +
-                        1.089*(hhType.getCars()==0?1:0) + -0.463*(hhType.getCars()==2?1:0) + -0.690*(hhType.getCars()==3?1:0)+ 0.295*(hhType.getKids()==1?1:0) + 0.455*(hhType.getKids()==2?1:0) + 0.479*(hhType.getKids()==3?1:0);
-                //total utility
-                double utilitySum = utilityZone + utilityHousehold;
-
-                //exponential utility
-                double expUtility = Math.exp(utilitySum);
-                WalkExpUtility.put(zoneId,hhTypeId,expUtility);
-            }
-        }
-    }
-
-    private void vehicleUtilityCalculator() {
-        for (long zoneId : dataSet.getZones().keySet()) {
-            //TODO: zonal-related utility
-            double utilityZone = 0.0;
-
-            for (int hhTypeId : dataSet.getHhTypes().keySet()) {
-                //TODO: household-related utility
-                double utilityHousehold = 0.0;
-                double utilitySum = utilityZone + utilityHousehold;
-                double expUtility = Math.exp(utilitySum);
-                VehicleExpUtility.put(zoneId,hhTypeId,expUtility);
-            }
-        }
-    }
-
-    private void walkTripsCalculator() {
-        for (long zoneId : dataSet.getZones().keySet()) {
-            double totalWalkTrips = 0.0;
-            for (int hhTypeId : dataSet.getHhTypes().keySet()) {
-                double walkExpUtility = WalkExpUtility.get(zoneId,hhTypeId);
-                double vehicleExpUtility = VehicleExpUtility.get(zoneId,hhTypeId);
-                double sumExpUtility = walkExpUtility + vehicleExpUtility;
-                double walkProbability = walkExpUtility/sumExpUtility;
-                double walkTrips = walkProbability * dataSet.getHbRecreationTripGen().get(zoneId,hhTypeId);
-                WalkTrip.put(zoneId,hhTypeId,walkTrips);
-                totalWalkTrips += walkTrips;
-            }
-            dataSet.getZone(zoneId).setHbRecreationWalkTrips(totalWalkTrips);
-        }
+    @Override
+    protected float calculateHouseholdRelatedUtility(int hhSize, int worker, int income, int age, int car, int kid) {
+        float utilityHousehold = 0.288f + -4.377f + 0.191f*(hhSize==2?1:0) + -0.242f*(age==3?1:0)+ 0.208f*(worker==1?1:0)+ 0.301f*(worker==2?1:0) +
+                1.089f*(car==0?1:0) + -0.463f*(car==2?1:0) + -0.690f*(car==3?1:0)+ 0.295f*(kid==1?1:0) + 0.455f*(kid==2?1:0) + 0.479f*(kid==3?1:0);
+        return utilityHousehold;
     }
 }
+
