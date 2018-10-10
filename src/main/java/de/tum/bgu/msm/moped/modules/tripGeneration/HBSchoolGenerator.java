@@ -67,6 +67,8 @@ public final class HBSchoolGenerator extends TripGenerator{
         for (Zone zone : dataSet.getZones().values()){
             householdSum += zone.getTotalHH();
         }
+        System.out.println(householdSum);
+        System.out.println(productionSum);
         float householdGrowth = householdSum / HOUSEHOLD_PARAM;
         float schoolTarget = householdGrowth * 392005;
         float calibrationParameter = schoolTarget / productionSum;

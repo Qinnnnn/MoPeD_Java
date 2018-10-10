@@ -1,13 +1,7 @@
 package de.tum.bgu.msm.moped.modules.walkModeChoice;
 
-import com.google.common.collect.ArrayTable;
-import com.google.common.collect.Table;
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
-import org.apache.log4j.Logger;
-
-import java.util.Collection;
 
 public final class HBShopWalk extends WalkTripGenerator{
 

@@ -98,6 +98,9 @@ public class HBCollegeGenerator extends TripGenerator {
         for (Zone zone : dataSet.getZones().values()){
             collegeTripSum += zone.getCollegeVehicleTrip();
         }
+
+        System.out.println(collegeTripSum);
+        System.out.println(productionSum);
         float balanceParameter = productionSum/collegeTripSum;
         production = production.muli(balanceParameter);
     }

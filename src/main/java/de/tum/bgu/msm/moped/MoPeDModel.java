@@ -1,6 +1,7 @@
 package de.tum.bgu.msm.moped;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.MopedTrip;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 
@@ -13,6 +14,7 @@ import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
 
 import java.io.FileNotFoundException;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MoPeDModel {
@@ -26,6 +28,21 @@ public class MoPeDModel {
         this.dataSet = new DataSet();
         this.manager = new InputManager(dataSet);
         Resources.INSTANCE.setResources(resources);
+    }
+
+    public MoPeDModel() {
+        this.dataSet = new DataSet();
+        this.manager = new InputManager(dataSet);
+    }
+
+    public static MoPeDModel createModelWithMITOFeed(String propertiesFile, Map<Integer, MopedTrip> mopedTrip) {
+        // Read data from MITO
+        logger.info("  Reading input data for MoPeD from MITO");
+        ResourceBundle rb = MoPeDUtil.createResourceBundle(propertiesFile);
+        MoPeDModel model = new MoPeDModel(rb);
+        model.manager.readFromMITO(mopedTrip);
+        model.manager.readAdditionalData();
+        return model;
     }
 
     public void initializeStandAlone() {
@@ -49,12 +66,15 @@ public class MoPeDModel {
         long modeChoiceTime = System.currentTimeMillis()- t1;
         System.out.println(modeChoiceTime);
 
-        manager.readAsStandAlone2();
+        //manager.readAsStandAlone2();
         long t2 = System.currentTimeMillis();
         TripDistribution distribution = new TripDistribution(dataSet);
         distribution.run(purpose);
         long distributionTime = System.currentTimeMillis()- t2;
         System.out.println(distributionTime);
+
+        long total = generationTime+modeChoiceTime+distributionTime;
+        System.out.println("total:" + total);
 
         try {
             writeOut(purpose);

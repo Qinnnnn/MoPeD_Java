@@ -1,6 +1,9 @@
 package de.tum.bgu.msm.moped.util;
 
+import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import com.pb.common.util.ResourceUtil;
+import omx.OmxMatrix;
+import omx.hdf5.OmxHdf5Datatype;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -35,5 +38,45 @@ public class MoPeDUtil {
 
     public static void setBaseDirectory(String baseDirectoryInput) {
         baseDirectory = baseDirectoryInput;
+    }
+
+    public static SparseFloatMatrix2D convertOmxToMatrix(OmxMatrix omxMatrix) {
+        // convert OMX matrix into java matrix
+
+        OmxHdf5Datatype.OmxJavaType type = omxMatrix.getOmxJavaType();
+        String name = omxMatrix.getName();
+        int[] dimensions = omxMatrix.getShape();
+        if (type.equals(OmxHdf5Datatype.OmxJavaType.FLOAT)) {
+            float[][] fArray = (float[][]) omxMatrix.getData();
+            SparseFloatMatrix2D mat = new SparseFloatMatrix2D(dimensions[0], dimensions[1],157756*120, 0.8f,0.9f);
+            for (int i = 0; i < dimensions[0]; i++) {
+                for (int j = 0; j < dimensions[1]; j++) {
+                   // mat.setQuick(i + 1, j + 1, fArray[i][j]);
+                    if ((i < j) || (fArray[i][j] == 0.f)) {
+                        break;
+                    }
+                    if (i == j) {
+
+                    } else {
+
+                    }
+
+                }
+            }
+            return mat;
+        } else if (type.equals(OmxHdf5Datatype.OmxJavaType.DOUBLE)) {
+            double[][] dArray = (double[][]) omxMatrix.getData();
+            SparseFloatMatrix2D mat = new SparseFloatMatrix2D(dimensions[0], dimensions[1],157756*120, 0.8f,0.9f);
+            for (int i = 0; i < dimensions[0]; i++) {
+                for (int j = 0; j < dimensions[1]; j++) {
+                   // mat.setQuick(i + 1, j + 1, (float) dArray[i][j]);
+                }
+            }
+            return mat;
+        } else {
+            logger.info("OMX Matrix type " + type.toString() + " not yet implemented. Program exits.");
+            System.exit(1);
+            return null;
+        }
     }
 }

@@ -27,10 +27,14 @@ public class Zone {
     private float stfwy;
     private Map<Purpose, Float> totalWalkTripsByPurpose = new HashMap<>();
 
-    public Zone(int id, int superPAZ, float totalHH){
+    private int test;
+
+
+    public Zone(int id, int superPAZ, float totalHH, int test){
         this.zoneId = id;
         this.superPAZId = superPAZ;
         this.totalHH = totalHH;
+        this.test = test;
     }
 
     public int getIndex() {
@@ -173,5 +177,9 @@ public class Zone {
 
     public void addTotalWalkTrips(float totalWalkTrips, Purpose purpose) {
         this.totalWalkTripsByPurpose.put(purpose, totalWalkTrips);
+    }
+
+    public int getTest() {
+        return test;
     }
 }

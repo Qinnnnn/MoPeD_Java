@@ -4,9 +4,6 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.Zone;
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.OpenMapRealMatrix;
-import org.apache.commons.math3.linear.RealMatrix;
 import org.jblas.FloatMatrix;
 
 public abstract class WalkTripGenerator {
@@ -23,6 +20,17 @@ public abstract class WalkTripGenerator {
     }
 
     public void run () {
+        int zoneSize = dataSet.getOriginPAZs().size();
+        int hhTypeSize = dataSet.getHOUSEHOLDTYPESIZE();
+        WalkTrip = new FloatMatrix(zoneSize, hhTypeSize);
+        //WalkExpUtility = new FloatMatrix(zoneSize, hhTypeSize);
+        calculateWalkUtilities();
+        calculateVehicleUtilities();
+        calculateWalkTrips();
+        dataSet.addWalkTrips(WalkTrip, purpose);
+    }
+
+    public void runForMito () {
         int zoneSize = dataSet.getOriginPAZs().size();
         int hhTypeSize = dataSet.getHOUSEHOLDTYPESIZE();
         WalkTrip = new FloatMatrix(zoneSize, hhTypeSize);

@@ -4,10 +4,6 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.Zone;
-import de.tum.bgu.msm.moped.resources.Properties;
-import de.tum.bgu.msm.moped.resources.Resources;
-
-import java.io.FileNotFoundException;
 
 public final class HBWorkGenerator extends TripGenerator{
 
@@ -38,13 +34,17 @@ public final class HBWorkGenerator extends TripGenerator{
     @Override
     protected void scaleProductions() {
         double attractionSum = 0;
+        double test = 0;
         for (Zone zone : dataSet.getZones().values()){
             double shopEmpl = zone.getShoppingArea()/1000*3;
             double retailEmpl = Math.max(shopEmpl,zone.getRetail());
             double totalEmpl = zone.getAgriculture()+zone.getConstruction()+zone.getFinancial()+zone.getGovernment()+zone.getManufacturing()+retailEmpl+zone.getService()+zone.getTransportation()+zone.getWholesale();
             attractionSum += totalEmpl * 1.48;
+            test += retailEmpl;
         }
+        System.out.println(test);
         float factor = (float) attractionSum/(float)productionSum;
+        System.out.println(attractionSum + "," + productionSum);
         production = production.muli(factor);
     }
 }

@@ -7,7 +7,7 @@ public class SuperPAZ {
 
     private final int superPAZId;
     private final String type;
-    private int index;
+    private int index = 99999999;
     private float household;
     private float totalEmpl;
     private float financial;
@@ -19,7 +19,7 @@ public class SuperPAZ {
     private int freeway;
     private int park;
     private Map<Integer, Zone> pazList= new HashMap<>();
-    private Map<Integer, Float> impedanceToSuperPAZs = new HashMap<>();
+    private Map<Integer, Short> impedanceToSuperPAZs = new HashMap<>();
 
     public SuperPAZ(int superPAZId, String type) {
         this.superPAZId = superPAZId;
@@ -120,7 +120,7 @@ public class SuperPAZ {
 
     public Map<Integer, Zone> getPazs() { return pazList; }
 
-    public Map<Integer, Float> getImpedanceToSuperPAZs() {
+    public Map<Integer, Short> getImpedanceToSuperPAZs() {
         return impedanceToSuperPAZs;
     }
 

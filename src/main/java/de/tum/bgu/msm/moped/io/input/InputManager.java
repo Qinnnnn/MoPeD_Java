@@ -1,17 +1,13 @@
 package de.tum.bgu.msm.moped.io.input;
 
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.SuperPAZ;
+import de.tum.bgu.msm.moped.data.MopedTrip;
 import de.tum.bgu.msm.moped.io.input.readers.*;
-import de.tum.bgu.msm.moped.resources.Properties;
-import de.tum.bgu.msm.moped.resources.Resources;
 import org.apache.log4j.Logger;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 
 public class InputManager {
     private static final Logger logger = Logger.getLogger(InputManager.class);
@@ -37,21 +33,30 @@ public class InputManager {
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
         new SuperPAZAttributesReader(dataSet).read();
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new SuperPAZImpedanceReader(dataSet).read();
+        new DistanceOMXReader(dataSet).read();
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
     }
 
 
 
+    public void readFromMITO(Map<Integer, MopedTrip> mopedTrip) {
 
-    public void readAsStandAlone2() {
+    }
 
+
+    public void readAdditionalData() {
+        new ZonesReader(dataSet).read();
+        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        new ZoneAttributesReader(dataSet).read();
+        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        new PIEReader(dataSet).read();
+        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        new TransportReader(dataSet).read();
+        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
         new SuperPAZAttributesReader(dataSet).read();
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new SuperPAZImpedanceReader(dataSet).read();
+        new DistanceOMXReader(dataSet).read();
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-
     }
-
 
 }

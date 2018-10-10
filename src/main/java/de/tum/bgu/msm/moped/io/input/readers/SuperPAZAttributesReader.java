@@ -20,6 +20,7 @@ public class SuperPAZAttributesReader extends CSVReader {
     private int freewayIndex;
     private int parkIndex;
     private int index = 0;
+    private int count = 0;
 
 
     public SuperPAZAttributesReader(DataSet dataSet) {
@@ -48,6 +49,7 @@ public class SuperPAZAttributesReader extends CSVReader {
 
     @Override
     protected void processRecord(String[] record) {
+        //System.out.println(count++);
         int superPAZId = Integer.parseInt(record[idIndex]);
 
         SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZId);

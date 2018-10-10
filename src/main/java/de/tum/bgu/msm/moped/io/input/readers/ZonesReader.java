@@ -12,6 +12,7 @@ public class ZonesReader extends CSVReader {
     private int idIndex;
     private int superPAZIndex;
     private int totalHouseholdIndex;
+    private int testIndex;
     private int index = 0;
 
     public ZonesReader(DataSet dataSet) {
@@ -28,6 +29,7 @@ public class ZonesReader extends CSVReader {
         idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
         superPAZIndex = MoPeDUtil.findPositionInArray("superPAZID", header);
         totalHouseholdIndex = MoPeDUtil.findPositionInArray("totalHH", header);
+        testIndex = MoPeDUtil.findPositionInArray("test", header);
     }
 
     @Override
@@ -35,15 +37,17 @@ public class ZonesReader extends CSVReader {
         int zoneId = Integer.parseInt(record[idIndex]);
         int superPAZID = Integer.parseInt(record[superPAZIndex]);
         float totalHH = Float.parseFloat(record[totalHouseholdIndex]);
-        Zone zone = new Zone(zoneId, superPAZID, totalHH);
+        int test = Integer.parseInt(record[testIndex]);
+
+        Zone zone = new Zone(zoneId, superPAZID, totalHH, test);
         dataSet.addZone(zone);
 
-        if (totalHH != 0){
-            SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
-            if (superPAZ == null){
-                superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
-                dataSet.addSuperPAZ(superPAZ);
-            }
+        if (totalHH != 0.0){
+//            SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
+//            if (superPAZ == null){
+//                superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
+//                dataSet.addSuperPAZ(superPAZ);
+//            }
             //superPAZ.getPazs().put(zoneId,zone);
             zone.setIndex(index);
             dataSet.addOriginPAZ(index, zone);

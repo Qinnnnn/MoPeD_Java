@@ -1,7 +1,7 @@
 package de.tum.bgu.msm.moped.data;
 
-import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
 import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
+import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import org.apache.log4j.Logger;
 import org.jblas.FloatMatrix;
 
@@ -18,7 +18,7 @@ public class DataSet {
     private Map<Integer, Zone> originPAZs = new HashMap<>();
     private Map<Integer, SuperPAZ> destinationSuperPAZs = new HashMap<>();
     private FloatMatrix distribution;
-    private FloatMatrix impedance;
+    private SparseFloatMatrix2D impedance;
 
     private Map<Purpose, FloatMatrix> productionsByPurpose = new HashMap<>();
     private  Map<Purpose, FloatMatrix> walkTripsByPurpose = new HashMap<>();
@@ -143,11 +143,11 @@ public class DataSet {
         return distribution;
     }
 
-    public void setImpedance(FloatMatrix impedance) {
+    public void setImpedance(SparseFloatMatrix2D impedance) {
         this.impedance = impedance;
     }
 
-    public FloatMatrix getImpedance() {
+    public SparseFloatMatrix2D getImpedance() {
         return impedance;
     }
 

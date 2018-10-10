@@ -6,8 +6,6 @@ import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
-import org.apache.commons.math3.linear.OpenMapRealMatrix;
-import org.apache.commons.math3.linear.RealMatrix;
 import org.jblas.FloatMatrix;
 
 public class SuperPAZImpedanceReader extends CSVReader{
@@ -25,7 +23,7 @@ public class SuperPAZImpedanceReader extends CSVReader{
         //impedance = new OpenMapRealMatrix(dataSet.getSuperPAZs().size(), dataSet.getDestinationSuperPAZs().size());
         impedance = new FloatMatrix(60110, dataSet.getDestinationSuperPAZs().size());
         super.read(Resources.INSTANCE.getString(Properties.SUPERPAZIMPEDANCE), ",");
-        dataSet.setImpedance(impedance);
+        //dataSet.setImpedance(impedance);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class SuperPAZImpedanceReader extends CSVReader{
         if ((originSuperPAZ.getHousehold() != 0.0) & (destinationSuperPAZ.getTotalEmpl() != 0.0)&(distanceInMile <= 3.0)) {
             distanceInMile = Math.max(440.0f / 5280.0f,distanceInMile);
             impedance.put(origin, destinationSuperPAZ.getIndex(), distanceInMile);
-            originSuperPAZ.getImpedanceToSuperPAZs().put(destinationSuperPAZ.getIndex(), distanceInMile);
+            //originSuperPAZ.getImpedanceToSuperPAZs().put(destinationSuperPAZ.getIndex(), distanceInMile);
         }
     }
 }

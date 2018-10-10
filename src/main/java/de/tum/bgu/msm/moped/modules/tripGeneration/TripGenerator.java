@@ -1,17 +1,9 @@
 package de.tum.bgu.msm.moped.modules.tripGeneration;
 
-import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
-import de.tum.bgu.msm.moped.resources.Properties;
-import de.tum.bgu.msm.moped.resources.Resources;
-import org.jblas.DoubleMatrix;
 import org.jblas.FloatMatrix;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 
 public abstract class TripGenerator {
 
