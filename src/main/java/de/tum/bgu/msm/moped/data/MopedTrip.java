@@ -4,10 +4,10 @@ public class MopedTrip {
 
     private final int tripId;
     private final Purpose tripPurpose;
-    private Zone tripOrigin;
-    private Zone tripDestination;
+    private MopedZone tripOrigin;
+    private MopedZone tripDestination;
     private boolean walkMode;
-    private int personAge;
+    private MopedPerson person;
 
     public MopedTrip(int tripId, Purpose tripPurpose) {
         this.tripId = tripId;
@@ -18,11 +18,11 @@ public class MopedTrip {
         return tripId;
     }
 
-    public Zone getTripOrigin() {
+    public MopedZone getTripOrigin() {
         return tripOrigin;
     }
 
-    public void setTripOrigin(Zone origin) {
+    public void setTripOrigin(MopedZone origin) {
         this.tripOrigin = origin;
     }
 
@@ -30,11 +30,11 @@ public class MopedTrip {
         return tripPurpose;
     }
 
-    public Zone getTripDestination() {
+    public MopedZone getTripDestination() {
         return this.tripDestination;
     }
 
-    public void setTripDestination(Zone destination) {
+    public void setTripDestination(MopedZone destination) {
         this.tripDestination = destination;
     }
 

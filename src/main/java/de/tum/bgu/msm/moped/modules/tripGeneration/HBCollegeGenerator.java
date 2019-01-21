@@ -3,7 +3,7 @@ package de.tum.bgu.msm.moped.modules.tripGeneration;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 
 public class HBCollegeGenerator extends TripGenerator {
 
@@ -95,7 +95,7 @@ public class HBCollegeGenerator extends TripGenerator {
     @Override
     protected void scaleProductions() {
         float collegeTripSum = 0.0f;
-        for (Zone zone : dataSet.getZones().values()){
+        for (MopedZone zone : dataSet.getZones().values()){
             collegeTripSum += zone.getCollegeVehicleTrip();
         }
 

@@ -18,7 +18,7 @@ public class SuperPAZ {
     private float slope;
     private int freeway;
     private int park;
-    private Map<Integer, Zone> pazList= new HashMap<>();
+    private Map<Integer, MopedZone> pazList= new HashMap<>();
     private Map<Integer, Short> impedanceToSuperPAZs = new HashMap<>();
 
     public SuperPAZ(int superPAZId, String type) {
@@ -118,7 +118,7 @@ public class SuperPAZ {
         this.park = park;
     }
 
-    public Map<Integer, Zone> getPazs() { return pazList; }
+    public Map<Integer, MopedZone> getPazs() { return pazList; }
 
     public Map<Integer, Short> getImpedanceToSuperPAZs() {
         return impedanceToSuperPAZs;

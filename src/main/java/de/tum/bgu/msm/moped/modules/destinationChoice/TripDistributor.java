@@ -4,7 +4,7 @@ import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +62,7 @@ public abstract class TripDistributor {
 //    }
 
     private void calculateUtilityCalculator(double coef) {
-        for (Zone origin : dataSet.getOriginPAZs().values()) {
+        for (MopedZone origin : dataSet.getOriginPAZs().values()) {
             double sumExpUtility = 0.0;
             float expUtility;
             for (SuperPAZ destination : dataSet.getDestinationSuperPAZs().values()){
@@ -107,7 +107,7 @@ public abstract class TripDistributor {
         float distributions;
         double probability;
 
-        for (Zone origin: dataSet.getOriginPAZs().values()) {
+        for (MopedZone origin: dataSet.getOriginPAZs().values()) {
             for (SuperPAZ destination : dataSet.getDestinationSuperPAZs().values()){
                 float distance = dataSet.getImpedance().get(origin.getSuperPAZId(),destination.getSuperPAZId());
                 if ( distance == 0.f){

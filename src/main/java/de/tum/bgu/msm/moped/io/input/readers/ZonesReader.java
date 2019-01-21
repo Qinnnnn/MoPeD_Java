@@ -1,18 +1,17 @@
 package de.tum.bgu.msm.moped.io.input.readers;
 
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.SuperPAZ;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
+import org.opengis.feature.simple.SimpleFeature;
 
 public class ZonesReader extends CSVReader {
     private int idIndex;
     private int superPAZIndex;
     private int totalHouseholdIndex;
-    private int testIndex;
     private int index = 0;
 
     public ZonesReader(DataSet dataSet) {
@@ -22,6 +21,7 @@ public class ZonesReader extends CSVReader {
     @Override
     public void read() {
         super.read(Resources.INSTANCE.getString(Properties.ZONES), ",");
+        mapFeaturesToZones(dataSet);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ZonesReader extends CSVReader {
         idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
         superPAZIndex = MoPeDUtil.findPositionInArray("superPAZID", header);
         totalHouseholdIndex = MoPeDUtil.findPositionInArray("totalHH", header);
-        testIndex = MoPeDUtil.findPositionInArray("test", header);
+
     }
 
     @Override
@@ -37,9 +37,8 @@ public class ZonesReader extends CSVReader {
         int zoneId = Integer.parseInt(record[idIndex]);
         int superPAZID = Integer.parseInt(record[superPAZIndex]);
         float totalHH = Float.parseFloat(record[totalHouseholdIndex]);
-        int test = Integer.parseInt(record[testIndex]);
 
-        Zone zone = new Zone(zoneId, superPAZID, totalHH, test);
+        MopedZone zone = new MopedZone(zoneId, superPAZID, totalHH);
         dataSet.addZone(zone);
 
         if (totalHH != 0.0){
@@ -53,5 +52,11 @@ public class ZonesReader extends CSVReader {
             dataSet.addOriginPAZ(index, zone);
             index++;
         }
+    }
+
+
+    //TODO: like the one in MITO
+    public static void mapFeaturesToZones(DataSet dataSet) {
+
     }
 }

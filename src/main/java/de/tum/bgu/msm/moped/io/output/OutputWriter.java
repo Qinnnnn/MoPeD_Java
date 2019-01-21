@@ -3,7 +3,7 @@ package de.tum.bgu.msm.moped.io.output;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 
@@ -51,8 +51,8 @@ public class OutputWriter {
         tripGen.append('\n');
 
         //write data
-        for (Zone zone : dataSet.getOriginPAZs().values()){
-            if (zone.getTest() == 1) {
+        for (MopedZone zone : dataSet.getOriginPAZs().values()){
+
                 float sumTripGen = 0.0f;
                 float sumWalkTrip = 0.0f;
                 double sumDistribution = 0.0;
@@ -105,7 +105,7 @@ public class OutputWriter {
                 }
 
                 tripGen.append('\n');
-            }
+
         }
 
         writeToFile(outputTripGen,tripGen.toString());
@@ -121,7 +121,7 @@ public class OutputWriter {
         tripGen.append('\n');
 
         //write data
-        for (Zone zone : dataSet.getOriginPAZs().values()){
+        for (MopedZone zone : dataSet.getOriginPAZs().values()){
             float sumTripGen = 0.0f;
             tripGen.append(zone.getZoneId());
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
@@ -150,7 +150,7 @@ public class OutputWriter {
 
         //write data
 
-        for (Zone zone : dataSet.getOriginPAZs().values()){
+        for (MopedZone zone : dataSet.getOriginPAZs().values()){
             float sumWalkTrip = 0.0f;
             walkMode.append(zone.getZoneId());
             for (int hhTypeId : dataSet.getHhTypes().keySet()){
@@ -177,7 +177,7 @@ public class OutputWriter {
         distribution.append('\n');
 
         //write data
-        for (Zone zone : dataSet.getOriginPAZs().values()){
+        for (MopedZone zone : dataSet.getOriginPAZs().values()){
             int superPAZ = zone.getSuperPAZId();
             double sumDistribution = 0.0;
             double sumTrips = 0.0;
@@ -251,7 +251,7 @@ public class OutputWriter {
         distribution.append("zoneId, InnerZoneTrip");
         distribution.append('\n');
 
-        for (Zone zone : dataSet.getOriginPAZs().values()){
+        for (MopedZone zone : dataSet.getOriginPAZs().values()){
             distribution.append(zone.getZoneId());
             for (SuperPAZ superPAZ : dataSet.getDestinationSuperPAZs().values()){
                 int originSuperPAZ = zone.getSuperPAZId();

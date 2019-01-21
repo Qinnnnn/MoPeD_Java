@@ -1,7 +1,7 @@
 package de.tum.bgu.msm.moped.io.input.readers;
 
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
@@ -34,7 +34,7 @@ public class HouseholdTypeDistributionReader extends CSVReader{
     @Override
     protected void processRecord(String[] record) {
         int zoneId = Integer.parseInt(record[zoneIndex]);
-        Zone zone = dataSet.getZone(zoneId);
+        MopedZone zone = dataSet.getZone(zoneId);
 
         if (zone != null) {
             if (zone.getTotalHH() != 0.0){

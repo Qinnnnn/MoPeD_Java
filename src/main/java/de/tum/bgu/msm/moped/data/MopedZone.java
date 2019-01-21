@@ -1,9 +1,12 @@
 package de.tum.bgu.msm.moped.data;
 
+import com.vividsolutions.jts.geom.Geometry;
+import org.opengis.feature.simple.SimpleFeature;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class Zone {
+public class MopedZone {
 
     private int index;
     private final int zoneId;
@@ -26,15 +29,14 @@ public class Zone {
     private int wa;
     private float stfwy;
     private Map<Purpose, Float> totalWalkTripsByPurpose = new HashMap<>();
+    private SimpleFeature shapeFeature;
 
-    private int test;
 
 
-    public Zone(int id, int superPAZ, float totalHH, int test){
+    public MopedZone(int id, int superPAZ, float totalHH){
         this.zoneId = id;
         this.superPAZId = superPAZ;
         this.totalHH = totalHH;
-        this.test = test;
     }
 
     public int getIndex() {
@@ -179,7 +181,11 @@ public class Zone {
         this.totalWalkTripsByPurpose.put(purpose, totalWalkTrips);
     }
 
-    public int getTest() {
-        return test;
+    public SimpleFeature getShapeFeature() {
+        return shapeFeature;
+    }
+
+    public void setShapeFeature(SimpleFeature shapeFeature) {
+        this.shapeFeature = shapeFeature;
     }
 }

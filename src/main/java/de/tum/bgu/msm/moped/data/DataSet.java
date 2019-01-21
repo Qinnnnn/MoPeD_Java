@@ -2,9 +2,17 @@ package de.tum.bgu.msm.moped.data;
 
 import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
 import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
+import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
 import org.apache.log4j.Logger;
+import org.geotools.data.FileDataStore;
+import org.geotools.data.FileDataStoreFinder;
+import org.geotools.data.simple.SimpleFeatureSource;
 import org.jblas.FloatMatrix;
+import org.opengis.feature.simple.SimpleFeature;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,10 +20,10 @@ public class DataSet {
 
     private static final Logger logger = Logger.getLogger(DataSet.class);
     private final int HOUSEHOLDTYPESIZE = 4097;
-    private Map<Integer, Zone> zones = new HashMap<>();
+    private Map<Integer, MopedZone> zones = new HashMap<>();
     private Map<Integer, SuperPAZ> superPAZs = new HashMap<>();
     private Map<Integer, HouseholdType> hhTypes = new HashMap<>();
-    private Map<Integer, Zone> originPAZs = new HashMap<>();
+    private Map<Integer, MopedZone> originPAZs = new HashMap<>();
     private Map<Integer, SuperPAZ> destinationSuperPAZs = new HashMap<>();
     private FloatMatrix distribution;
     private SparseFloatMatrix2D impedance;
@@ -24,8 +32,13 @@ public class DataSet {
     private  Map<Purpose, FloatMatrix> walkTripsByPurpose = new HashMap<>();
     private Map<Purpose, DenseLargeFloatMatrix2D> distributionsByPurpose = new HashMap<>();
 
-    public void addZone( Zone zone) {
-        Zone test = this.zones.get(zone.getZoneId());
+
+    private Map<Integer, SimpleFeature> zoneFeatureMap = new HashMap<>();
+    private SimpleFeatureSource ozMapSource;
+
+
+    public void addZone( MopedZone zone) {
+        MopedZone test = this.zones.get(zone.getZoneId());
         if (test != null) {
             if (test.equals(zone)) {
                 logger.warn("Zone " + zone.getZoneId() + " was already added to data set.");
@@ -59,8 +72,8 @@ public class DataSet {
         hhTypes.put(householdType.getHhTypeId(), householdType);
     }
 
-    public void addOriginPAZ(int index, Zone zone) {
-        Zone test = this.originPAZs.get(index);
+    public void addOriginPAZ(int index, MopedZone zone) {
+        MopedZone test = this.originPAZs.get(index);
         if (test != null) {
             if (test.equals(zone)) {
                 logger.warn("originPAZs " + zone.getZoneId() + " was already added to data set.");
@@ -97,7 +110,7 @@ public class DataSet {
     }
 
 
-    public Map<Integer, Zone> getZones() {
+    public Map<Integer, MopedZone> getZones() {
         return zones;
     }
 
@@ -105,7 +118,7 @@ public class DataSet {
         return hhTypes;
     }
 
-    public Map<Integer, Zone> getOriginPAZs() {
+    public Map<Integer, MopedZone> getOriginPAZs() {
         return originPAZs;
     }
 
@@ -115,7 +128,7 @@ public class DataSet {
         return destinationSuperPAZs;
     }
 
-    public Zone getZone(int id) {
+    public MopedZone getZone(int id) {
         return zones.get(id);
     }
 
@@ -127,7 +140,7 @@ public class DataSet {
         return hhTypes.get(id);
     }
 
-    public Zone getOriginPAZ(int id) {
+    public MopedZone getOriginPAZ(int id) {
         return originPAZs.get(id);
     }
 
@@ -165,5 +178,23 @@ public class DataSet {
 
     public int getHOUSEHOLDTYPESIZE() {
         return HOUSEHOLDTYPESIZE;
+    }
+
+    public Map<Integer, SimpleFeature> getZoneFeatureMap() {
+        return zoneFeatureMap;
+    }
+
+    public void setZoneFeatureMap(Map<Integer, SimpleFeature> zoneFeatureMap) {
+        this.zoneFeatureMap = zoneFeatureMap;
+    }
+
+    public SimpleFeatureSource getOzMapSource() {
+        return ozMapSource;
+    }
+
+    public void setOzMapSource() throws IOException {
+        File zoneShapeFile = new File(Resources.INSTANCE.getString(Properties.PIE), ",");
+        FileDataStore dataStore = FileDataStoreFinder.getDataStore(zoneShapeFile);
+        this.ozMapSource = dataStore.getFeatureSource();
     }
 }

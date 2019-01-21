@@ -3,7 +3,7 @@ package de.tum.bgu.msm.moped.modules.tripGeneration;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 
 public final class HBWorkGenerator extends TripGenerator{
 
@@ -35,7 +35,7 @@ public final class HBWorkGenerator extends TripGenerator{
     protected void scaleProductions() {
         double attractionSum = 0;
         double test = 0;
-        for (Zone zone : dataSet.getZones().values()){
+        for (MopedZone zone : dataSet.getZones().values()){
             double shopEmpl = zone.getShoppingArea()/1000*3;
             double retailEmpl = Math.max(shopEmpl,zone.getRetail());
             double totalEmpl = zone.getAgriculture()+zone.getConstruction()+zone.getFinancial()+zone.getGovernment()+zone.getManufacturing()+retailEmpl+zone.getService()+zone.getTransportation()+zone.getWholesale();

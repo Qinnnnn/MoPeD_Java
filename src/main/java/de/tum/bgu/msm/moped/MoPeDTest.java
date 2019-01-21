@@ -26,7 +26,7 @@ class MoPeDTest {
         MoPeDModel model = new MoPeDModel(resources);
         model.initializeStandAlone();
         //run several times
-        model.runModel(purpose);
+        model.runAggregatedModel(purpose);
 
     }
 

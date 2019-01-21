@@ -3,7 +3,7 @@ package de.tum.bgu.msm.moped.modules.walkModeChoice;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.HouseholdType;
 import de.tum.bgu.msm.moped.data.Purpose;
-import de.tum.bgu.msm.moped.data.Zone;
+import de.tum.bgu.msm.moped.data.MopedZone;
 import org.jblas.FloatMatrix;
 
 public abstract class WalkTripGenerator {
@@ -42,7 +42,7 @@ public abstract class WalkTripGenerator {
     }
 
     public void calculateWalkUtilities(){
-        for (Zone originZone : dataSet.getOriginPAZs().values()) {
+        for (MopedZone originZone : dataSet.getOriginPAZs().values()) {
             for (HouseholdType hhType : dataSet.getHhTypes().values()) {
                 float pie = originZone.getPie();
                 int pieFlag = originZone.getPieFlag();

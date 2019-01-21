@@ -1,10 +1,9 @@
 package de.tum.bgu.msm.moped;
 
-import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.MopedTrip;
-import de.tum.bgu.msm.moped.data.Purpose;
+import de.tum.bgu.msm.moped.data.*;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 
+import de.tum.bgu.msm.moped.io.input.readers.ZonesReader;
 import de.tum.bgu.msm.moped.io.output.*;
 import de.tum.bgu.msm.moped.modules.destinationChoice.TripDistribution;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
@@ -30,20 +29,29 @@ public class MoPeDModel {
         Resources.INSTANCE.setResources(resources);
     }
 
-    public MoPeDModel() {
-        this.dataSet = new DataSet();
-        this.manager = new InputManager(dataSet);
-    }
-
-    public static MoPeDModel createModelWithMITOFeed(String propertiesFile, Map<Integer, MopedTrip> mopedTrip) {
-        // Read data from MITO
-        logger.info("  Reading input data for MoPeD from MITO");
+    public static MoPeDModel initializeModelFromMito(String propertiesFile) {
+        logger.info("  Initializing MoPeD from MITO");
         ResourceBundle rb = MoPeDUtil.createResourceBundle(propertiesFile);
         MoPeDModel model = new MoPeDModel(rb);
-        model.manager.readFromMITO(mopedTrip);
-        model.manager.readAdditionalData();
         return model;
     }
+
+
+
+    public void feedDataFromMITO(InputManager.InputFeed feed) {
+        // Read data from MITO
+        logger.info("  Reading input data for MoPeD");
+        manager.readFromMITO(feed);
+        manager.readAdditionalData();
+    }
+
+    public void runAgentBasedModel(){
+
+        //TODO
+
+
+    }
+
 
     public void initializeStandAlone() {
         // Read data if MoPeD is used as a stand-alone program and data are not fed from other program
@@ -51,7 +59,7 @@ public class MoPeDModel {
         manager.readAsStandAlone();
     }
 
-    public void runModel(Purpose purpose) {
+    public void runAggregatedModel(Purpose purpose) {
         long startTime = System.currentTimeMillis();
         logger.info("Started the Model of Pedestrian Demand (MoPeD)");
 
@@ -95,5 +103,13 @@ public class MoPeDModel {
     private void writeOut(Purpose purpose)throws FileNotFoundException {
         OutputWriter writer = new OutputWriter(dataSet,purpose);
         writer.run();
+    }
+
+    public DataSet getDataSet() {
+        return dataSet;
+    }
+
+    public InputManager getManager() {
+        return manager;
     }
 }
