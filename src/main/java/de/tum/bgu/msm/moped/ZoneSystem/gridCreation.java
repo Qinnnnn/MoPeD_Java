@@ -9,7 +9,7 @@ import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.grid.Grids;
-import org.geotools.util.URLs;
+//import org.geotools.util.URLs;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -41,8 +41,6 @@ public class gridCreation {
         //ReferencedEnvelope gridBounds = Envelopes.expandToInclude(ozMapSource.getBounds(), 0);
 
         ReferencedEnvelope gridBounds = new ReferencedEnvelope(ozMapSource.getBounds().getMinX(), ozMapSource.getBounds().getMaxX()+450,ozMapSource.getBounds().getMinY(), ozMapSource.getBounds().getMaxY()+1,ozMapSource.getBounds().getCoordinateReferenceSystem());
-
-
 
 //        ReferencedEnvelope gridBounds = new ReferencedEnvelope(ozMapSource.getBounds());
 //        gridBounds.expandToInclude(ozMapSource.getBounds().getMinX(), ozMapSource.getBounds().getMaxX());
@@ -164,7 +162,7 @@ public class gridCreation {
         File file = new File(directory, fileName + ".shp");
 
         Map<String, Serializable> creationParams = new HashMap<>();
-        creationParams.put("url", URLs.fileToUrl(file));
+        //creationParams.put("url", URLs.fileToUrl(file));
 
         FileDataStoreFactorySpi factory = FileDataStoreFinder.getDataStoreFactory("shp");
         DataStore dataStore = factory.createNewDataStore(creationParams);
