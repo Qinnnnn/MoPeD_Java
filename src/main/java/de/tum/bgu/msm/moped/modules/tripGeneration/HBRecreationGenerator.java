@@ -20,28 +20,28 @@ public final class HBRecreationGenerator extends TripGenerator{
         if (workers < hhSize){
             switch (hhSize){
                 case 1:
-                    tripGenRate = 0.47897259f;
+                    tripGenRate = 0.2772414f;//0.47897259f;
                     break;
                 case 2:
-                    tripGenRate = 0.88111840f;
+                    tripGenRate = 0.5582865f;//0.88111840f;
                     break;
                 case 3:
-                    tripGenRate = 1.21373370f;
+                    tripGenRate = 0.7933884f;//1.21373370f;
                     break;
                 case 4:
-                    tripGenRate = 2.24007530f;
+                    tripGenRate = 1.43126f;//2.24007530f;
                     break;
             }
         }else if (workers == hhSize){
             switch (hhSize){
                 case 1:
-                    tripGenRate = 0.50317472f;
+                    tripGenRate = 0.1783567f;//0.50317472f;
                     break;
                 case 2:
-                    tripGenRate = 0.57970395f;
+                    tripGenRate = 0.4122894f;//0.57970395f;
                     break;
                 case 3:
-                    tripGenRate = 1.16564740f;
+                    tripGenRate = 0.5462963f;//1.16564740f;
                     break;
             }
         } else{
@@ -50,7 +50,7 @@ public final class HBRecreationGenerator extends TripGenerator{
 
         float tripGen;
         if (tripGenRate != 0){
-            tripGen = tripGenRate * distribution * 1.2f;
+            tripGen = tripGenRate * distribution * 1.025f;//1.2f;
 
         }else{
             tripGen = 0.0f;

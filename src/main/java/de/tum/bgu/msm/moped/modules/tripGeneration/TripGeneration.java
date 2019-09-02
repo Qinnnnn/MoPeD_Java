@@ -35,8 +35,24 @@ public class TripGeneration extends Module {
             case HBCOLL:
                 hbCollegeGenerator();
                 break;
+            case NHBW:
+                nhbWorkGenerator();
+                break;
+            case NHBNW:
+                nhbnWorkGenerator();
+                break;
         }
         logger.info("  Completed trip generation model.");
+    }
+
+    private void nhbnWorkGenerator() {
+        NHBNWorkGenerator nhbnWorkGenerator = new NHBNWorkGenerator(dataSet);
+        nhbnWorkGenerator.run();
+    }
+
+    private void nhbWorkGenerator() {
+        NHBWorkGenerator nhbWorkGenerator = new NHBWorkGenerator(dataSet);
+        nhbWorkGenerator.run();
     }
 
     private void hbOtherGenerator() {

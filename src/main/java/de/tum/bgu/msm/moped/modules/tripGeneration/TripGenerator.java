@@ -19,9 +19,7 @@ public abstract class TripGenerator {
     public void run () {
         production = new FloatMatrix(dataSet.getOriginPAZs().size(), dataSet.getHOUSEHOLDTYPESIZE());
         calculateProductions();
-        System.out.println("finish production");
         scaleProductions();
-        System.out.println("finish scalar");
         dataSet.addProduction(production, purpose);
     }
 

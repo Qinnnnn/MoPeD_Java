@@ -16,10 +16,13 @@ public class Properties {
     public static final String HOUSEHOLDTYPEDISTRIBUTION4 = "distributionCLACK.data.file";
     public static final String PIE = "pie.data.file";
     public static final String TRANSPORT = "transport.data.file";
+    public static final String OUTPUT_ALL = "output.all";
+    public static final String OUTPUT_OD = "output.odMatrix";
     public static final String OUTPUT_TG = "output.tripGeneration";
     public static final String OUTPUT_WM = "output.modeSplit";
     public static final String OUTPUT_TRIPLENGTH = "output.tripLength";
     public static final String OUTPUT_INTRAZONAL = "output.intrazonalTrip";
     public static final String SUPERPAZATTRIBUTE = "superPAZAttributes.data.file";
     public static final String SUPERPAZIMPEDANCE = "superPAZImpedance.data.file";
+    public static final String PAZIMPEDANCE = "pazImpedance.data.file";
 }

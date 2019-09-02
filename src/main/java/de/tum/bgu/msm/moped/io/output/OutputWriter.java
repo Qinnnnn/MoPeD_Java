@@ -26,10 +26,6 @@ public class OutputWriter {
     }
 
     public void run () throws FileNotFoundException {
-        if (purpose.equals(Purpose.HBSCH)||purpose.equals(Purpose.HBCOLL)){
-            writeOutTG();
-            writeOutWM();
-        }else{
             writeOut();
 //            writeOutTG();
 //            writeOutWM();
@@ -38,17 +34,23 @@ public class OutputWriter {
             System.out.println(totalTrip + "," + totalWalk + "," + totalWalk/totalTrip);
             System.out.println(totalLenghth + "," + totalWalk + "," + totalLenghth/totalWalk);
             System.out.println(totalIntrazonal + "," + totalWalk + "," + totalIntrazonal/totalWalk);
-        }
     }
 
 
     public void writeOut () throws FileNotFoundException  {
-        String outputTripGen = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_TG);
+        String outputTripGen = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_ALL);
         StringBuilder tripGen = new StringBuilder();
 
         //write header
-        tripGen.append("zoneId,tripGen,walkShare,averageTripLength,intrazonalTripShare");
+        tripGen.append("zoneId,tripGen,walkTrips,walkShare,tripLength,averageTripLengthSuperPAZ,intrazonalTripShare,averageTripLengthPAZ");
         tripGen.append('\n');
+
+        String testpath = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_OD);
+        StringBuilder test = new StringBuilder();
+
+        //write header
+        test.append("origin,destination,trips,impedence");
+        test.append('\n');
 
         //write data
         for (MopedZone zone : dataSet.getOriginPAZs().values()){
@@ -56,6 +58,7 @@ public class OutputWriter {
                 float sumTripGen = 0.0f;
                 float sumWalkTrip = 0.0f;
                 double sumDistribution = 0.0;
+                double sumDistributionPAZ = 0.0;
 
                 tripGen.append(zone.getZoneId());
 
@@ -69,25 +72,41 @@ public class OutputWriter {
                 tripGen.append(',');
                 tripGen.append(sumTripGen);
                 tripGen.append(',');
+                tripGen.append(sumWalkTrip);
+                tripGen.append(',');
                 tripGen.append(sumWalkTrip/sumTripGen);
-                //tripGen.append(sumWalkTrip);
 
                 totalTrip += sumTripGen;
                 totalWalk += sumWalkTrip;
 
                 for (SuperPAZ destination : dataSet.getDestinationSuperPAZs().values()){
-                    double trips = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
-                    float impedance = dataSet.getImpedance().get(zone.getSuperPAZId(),destination.getSuperPAZId());
-                    if ( (impedance == 0.f) || (trips == 0.0)){
+                    double tripsNoCar = dataSet.getDistributionsNoCarByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
+                    double tripsHasCar = dataSet.getDistributionsHasCarByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
+                    float impedance = dataSet.getImpedance().get(zone.getSuperPAZId(),destination.getIndex());
+                    if ( (impedance == 0.f)){
                         continue;
                     }
-                    double distance = trips * impedance;
+
+                    if(tripsNoCar == 0 && tripsHasCar == 0){
+                        continue;
+                    }
+
+                    double distance = tripsNoCar * impedance + tripsHasCar * impedance;
+
+                    test.append(zone.getZoneId());
+                    test.append(',');
+                    test.append(destination.getSuperPAZId());
+                    test.append(',');
+                    test.append(tripsNoCar+tripsHasCar);
+                    test.append(',');
+                    test.append(impedance);
+                    test.append('\n');
                     sumDistribution += distance;
                 }
-
+                tripGen.append(',');
+                tripGen.append(sumDistribution);
                 tripGen.append(',');
                 tripGen.append(sumDistribution/sumWalkTrip);
-                //tripGen.append(sumDistribution);
 
                 totalLenghth += sumDistribution;
 
@@ -95,10 +114,11 @@ public class OutputWriter {
                 for (SuperPAZ superPAZ : dataSet.getDestinationSuperPAZs().values()){
                     int originSuperPAZ = zone.getSuperPAZId();
                     if (originSuperPAZ == superPAZ.getSuperPAZId()){
-                        float intrazonal = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
+                        float intrazonalNoCar = dataSet.getDistributionsNoCarByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
+                        float intrazonalHasCar = dataSet.getDistributionsHasCarByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
+                        float intrazonal = intrazonalNoCar+intrazonalHasCar;
                         tripGen.append(",");
                         tripGen.append(intrazonal/sumWalkTrip);
-                        //tripGen.append(intrazonal);
                         totalIntrazonal += intrazonal;
                         break;
                     }
@@ -109,6 +129,7 @@ public class OutputWriter {
         }
 
         writeToFile(outputTripGen,tripGen.toString());
+        writeToFile(testpath,test.toString());
 
     }
 
@@ -167,45 +188,45 @@ public class OutputWriter {
 
     }
 
-    public void writeOutTripLength () throws FileNotFoundException  {
-        String outputDistribution = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_TRIPLENGTH);
-        StringBuilder distribution = new StringBuilder();
-
-        //write header
-
-        distribution.append("zoneId,TripLength,WalkTrip,AverageTripLength");
-        distribution.append('\n');
-
-        //write data
-        for (MopedZone zone : dataSet.getOriginPAZs().values()){
-            int superPAZ = zone.getSuperPAZId();
-            double sumDistribution = 0.0;
-            double sumTrips = 0.0;
-            distribution.append(zone.getZoneId());
-            for (SuperPAZ destination : dataSet.getDestinationSuperPAZs().values()){
-                double trips = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
-                float impedance = dataSet.getImpedance().get(zone.getSuperPAZId(),destination.getSuperPAZId());
-                if ( (impedance == 0.f) || (trips == 0.0)){
-                    continue;
-                }
-                double distance = trips * impedance;
-                sumDistribution += distance;
-                sumTrips += trips;
-            }
-
-            distribution.append(",");
-            distribution.append(sumDistribution);
-            distribution.append(",");
-            distribution.append(sumTrips);
-            distribution.append(",");
-            distribution.append(sumDistribution/sumTrips);
-            distribution.append('\n');
-            totalLenghth += sumDistribution;
-        }
-
-        writeToFile(outputDistribution,distribution.toString());
-
-    }
+//    public void writeOutTripLength () throws FileNotFoundException  {
+//        String outputDistribution = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_TRIPLENGTH);
+//        StringBuilder distribution = new StringBuilder();
+//
+//        //write header
+//
+//        distribution.append("zoneId,TripLength,WalkTrip,AverageTripLength");
+//        distribution.append('\n');
+//
+//        //write data
+//        for (MopedZone zone : dataSet.getOriginPAZs().values()){
+//            int superPAZ = zone.getSuperPAZId();
+//            double sumDistribution = 0.0;
+//            double sumTrips = 0.0;
+//            distribution.append(zone.getZoneId());
+//            for (SuperPAZ destination : dataSet.getDestinationSuperPAZs().values()){
+//                double trips = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
+//                float impedance = dataSet.getImpedance().get(zone.getSuperPAZId(),destination.getIndex());
+//                if ( (impedance == 0.f) || (trips == 0.0)){
+//                    continue;
+//                }
+//                double distance = trips * impedance;
+//                sumDistribution += distance;
+//                sumTrips += trips;
+//            }
+//
+//            distribution.append(",");
+//            distribution.append(sumDistribution);
+//            distribution.append(",");
+//            distribution.append(sumTrips);
+//            distribution.append(",");
+//            distribution.append(sumDistribution/sumTrips);
+//            distribution.append('\n');
+//            totalLenghth += sumDistribution;
+//        }
+//
+//        writeToFile(outputDistribution,distribution.toString());
+//
+//    }
 
 
 
@@ -244,31 +265,31 @@ public class OutputWriter {
 //
 //    }
 
-    public void writeOutIntrazonalTrip () throws FileNotFoundException  {
-        String outputDistribution = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_INTRAZONAL);
-        StringBuilder distribution = new StringBuilder();
-
-        distribution.append("zoneId, InnerZoneTrip");
-        distribution.append('\n');
-
-        for (MopedZone zone : dataSet.getOriginPAZs().values()){
-            distribution.append(zone.getZoneId());
-            for (SuperPAZ superPAZ : dataSet.getDestinationSuperPAZs().values()){
-                int originSuperPAZ = zone.getSuperPAZId();
-                if (originSuperPAZ == superPAZ.getSuperPAZId()){
-                    float intrazonal = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
-                    distribution.append(",");
-                    distribution.append(intrazonal);
-                    totalIntrazonal += intrazonal;
-                    break;
-                }
-            }
-            distribution.append('\n');
-        }
-
-        writeToFile(outputDistribution,distribution.toString());
-
-    }
+//    public void writeOutIntrazonalTrip () throws FileNotFoundException  {
+//        String outputDistribution = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_INTRAZONAL);
+//        StringBuilder distribution = new StringBuilder();
+//
+//        distribution.append("zoneId, InnerZoneTrip");
+//        distribution.append('\n');
+//
+//        for (MopedZone zone : dataSet.getOriginPAZs().values()){
+//            distribution.append(zone.getZoneId());
+//            for (SuperPAZ superPAZ : dataSet.getDestinationSuperPAZs().values()){
+//                int originSuperPAZ = zone.getSuperPAZId();
+//                if (originSuperPAZ == superPAZ.getSuperPAZId()){
+//                    float intrazonal = dataSet.getDistributionsByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
+//                    distribution.append(",");
+//                    distribution.append(intrazonal);
+//                    totalIntrazonal += intrazonal;
+//                    break;
+//                }
+//            }
+//            distribution.append('\n');
+//        }
+//
+//        writeToFile(outputDistribution,distribution.toString());
+//
+//    }
 
 
     public static void writeToFile(String path, String building) throws FileNotFoundException {

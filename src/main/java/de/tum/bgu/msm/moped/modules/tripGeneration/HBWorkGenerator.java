@@ -7,7 +7,9 @@ import de.tum.bgu.msm.moped.data.MopedZone;
 
 public final class HBWorkGenerator extends TripGenerator{
 
+    private static final double SCENARIO_JOB = 0;
     private double productionSum = 0;
+    private double totalWorkers = 0;
 
     public HBWorkGenerator(DataSet dataSet) {
         super(dataSet, Purpose.HBW);
@@ -19,13 +21,14 @@ public final class HBWorkGenerator extends TripGenerator{
         int workers = hhType.getWorkers();
         float tripGenRate = 0;
         if (workers == 1){
-            tripGenRate = 1.38325222f;
+            tripGenRate = 1.386047f;//1.38325222f;
         }else if (workers == 2){
-            tripGenRate = 2.39110122f;
+            tripGenRate = 2.462282f;//2.39110122f;
         } else if (workers == 3){
-            tripGenRate = 3.88667372f;
+            tripGenRate = 3.578358f;//3.88667372f;
         }
         float tripGen = tripGenRate * distribution;
+        totalWorkers += (workers* distribution);
         productionSum += tripGen;
         return tripGen;
     }
@@ -34,17 +37,15 @@ public final class HBWorkGenerator extends TripGenerator{
     @Override
     protected void scaleProductions() {
         double attractionSum = 0;
-        double test = 0;
         for (MopedZone zone : dataSet.getZones().values()){
             double shopEmpl = zone.getShoppingArea()/1000*3;
             double retailEmpl = Math.max(shopEmpl,zone.getRetail());
             double totalEmpl = zone.getAgriculture()+zone.getConstruction()+zone.getFinancial()+zone.getGovernment()+zone.getManufacturing()+retailEmpl+zone.getService()+zone.getTransportation()+zone.getWholesale();
-            attractionSum += totalEmpl * 1.48;
-            test += retailEmpl;
+            attractionSum += totalEmpl;
         }
-        System.out.println(test);
-        float factor = (float) attractionSum/(float)productionSum;
-        System.out.println(attractionSum + "," + productionSum);
+
+        float factor = (float) ((attractionSum+SCENARIO_JOB)*1.36)/(float)productionSum;
+        System.out.println(attractionSum + "," + productionSum + "," + totalWorkers);
         production = production.muli(factor);
     }
 }

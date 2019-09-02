@@ -7,6 +7,7 @@ import omx.hdf5.OmxHdf5Datatype;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 
@@ -14,6 +15,7 @@ public class MoPeDUtil {
 
     private static final Logger logger = Logger.getLogger(MoPeDUtil.class);
     private static String baseDirectory = "";
+    private static Random rand;
 
 
     public static int findPositionInArray(String element, String[] arr) {
@@ -78,5 +80,9 @@ public class MoPeDUtil {
             System.exit(1);
             return null;
         }
+    }
+
+    public static Random getRandomObject() {
+        return rand;
     }
 }

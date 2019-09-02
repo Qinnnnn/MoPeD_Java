@@ -30,7 +30,7 @@ public class OHASTripReader extends CSVReader {
     @Override
     public void read() {
 
-        super.read("F:/Qin/MoPeD/NewPIE/data/LINKEDTRIP_6559_filter_noAP.csv", ",");
+        super.read("/F:/Qin/01_Dissertation/01_MoPeD/NewPIE/data/LINKEDTRIP_6559_filter_noAP.csv", ",");
 
     }
 

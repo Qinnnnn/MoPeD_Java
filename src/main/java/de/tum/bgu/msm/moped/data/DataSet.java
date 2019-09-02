@@ -14,6 +14,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DataSet {
@@ -26,15 +27,25 @@ public class DataSet {
     private Map<Integer, MopedZone> originPAZs = new HashMap<>();
     private Map<Integer, SuperPAZ> destinationSuperPAZs = new HashMap<>();
     private FloatMatrix distribution;
-    private SparseFloatMatrix2D impedance;
+    private FloatMatrix impedance;
 
     private Map<Purpose, FloatMatrix> productionsByPurpose = new HashMap<>();
     private  Map<Purpose, FloatMatrix> walkTripsByPurpose = new HashMap<>();
-    private Map<Purpose, DenseLargeFloatMatrix2D> distributionsByPurpose = new HashMap<>();
+    private Map<Purpose, DenseLargeFloatMatrix2D> distributionsNoCarByPurpose = new HashMap<>();
+    private Map<Purpose, DenseLargeFloatMatrix2D> distributionsHasCarByPurpose = new HashMap<>();
+    private Map<Purpose, DenseLargeFloatMatrix2D> distributionsByPAZByPurpose = new HashMap<>();
 
 
     private Map<Integer, SimpleFeature> zoneFeatureMap = new HashMap<>();
     private SimpleFeatureSource ozMapSource;
+
+
+    private int year;
+    private final Map<Integer, MopedHousehold> households = new LinkedHashMap<>();
+    private final Map<Integer, MopedPerson> persons = new LinkedHashMap<>();
+    private final Map<Integer, MopedTrip> trips = new LinkedHashMap<>();
+    private SparseFloatMatrix2D PAZImpedance;
+    private final float totalPop = 592234.327f;
 
 
     public void addZone( MopedZone zone) {
@@ -105,10 +116,21 @@ public class DataSet {
         this.walkTripsByPurpose.put(purpose, production);
     }
 
-    public void addDistribution(DenseLargeFloatMatrix2D production, Purpose purpose) {
-        this.distributionsByPurpose.put(purpose, production);
+    public void addDistributionNoCar(DenseLargeFloatMatrix2D distributionNoCar, Purpose purpose) {
+        this.distributionsNoCarByPurpose.put(purpose, distributionNoCar);
     }
 
+    public void addDistributionHasCar(DenseLargeFloatMatrix2D distributionHasCar, Purpose purpose) {
+        this.distributionsHasCarByPurpose.put(purpose, distributionHasCar);
+    }
+
+    public void addDistributionPAZ(DenseLargeFloatMatrix2D distribution, Purpose purpose) {
+        this.distributionsByPAZByPurpose.put(purpose, distribution);
+    }
+
+    public Map<Purpose, DenseLargeFloatMatrix2D> getDistributionsByPAZByPurpose() {
+        return distributionsByPAZByPurpose;
+    }
 
     public Map<Integer, MopedZone> getZones() {
         return zones;
@@ -156,11 +178,11 @@ public class DataSet {
         return distribution;
     }
 
-    public void setImpedance(SparseFloatMatrix2D impedance) {
+    public void setImpedance(FloatMatrix impedance) {
         this.impedance = impedance;
     }
 
-    public SparseFloatMatrix2D getImpedance() {
+    public FloatMatrix getImpedance() {
         return impedance;
     }
 
@@ -172,8 +194,12 @@ public class DataSet {
         return walkTripsByPurpose;
     }
 
-    public Map<Purpose, DenseLargeFloatMatrix2D> getDistributionsByPurpose() {
-        return distributionsByPurpose;
+    public Map<Purpose, DenseLargeFloatMatrix2D> getDistributionsNoCarByPurpose() {
+        return distributionsNoCarByPurpose;
+    }
+
+    public Map<Purpose, DenseLargeFloatMatrix2D> getDistributionsHasCarByPurpose() {
+        return distributionsHasCarByPurpose;
     }
 
     public int getHOUSEHOLDTYPESIZE() {
@@ -196,5 +222,58 @@ public class DataSet {
         File zoneShapeFile = new File(Resources.INSTANCE.getString(Properties.PIE), ",");
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(zoneShapeFile);
         this.ozMapSource = dataStore.getFeatureSource();
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void addHousehold(MopedHousehold household) {
+        MopedHousehold test = households.putIfAbsent(household.getId(), household);
+        if(test != null) {
+            throw new IllegalArgumentException("MopedHousehold id " + household.getId() + " already exists!");
+        }
+    }
+
+    public void addPerson(MopedPerson person) {
+        MopedPerson test = persons.putIfAbsent(person.getId(), person);
+        if(test != null) {
+            throw new IllegalArgumentException("MopedPerson id " + person.getId() + " already exists!");
+        }
+    }
+
+    public void addTrip(MopedTrip trip) {
+        MopedTrip test = trips.putIfAbsent(trip.getId(), trip);
+        if(test != null) {
+            throw new IllegalArgumentException("MopedTrip id " + trip.getId() + " already exists!");
+        }
+    }
+
+    public Map<Integer, MopedHousehold> getHouseholds() {
+        return households;
+    }
+
+    public Map<Integer, MopedPerson> getPersons() {
+        return persons;
+    }
+
+    public Map<Integer, MopedTrip> getTrips() {
+        return trips;
+    }
+
+    public void setPAZImpedance(SparseFloatMatrix2D PAZImpedance) {
+        this.PAZImpedance = PAZImpedance;
+    }
+
+    public SparseFloatMatrix2D getPAZImpedance() {
+        return PAZImpedance;
+    }
+
+    public float getTotalPop() {
+        return totalPop;
     }
 }

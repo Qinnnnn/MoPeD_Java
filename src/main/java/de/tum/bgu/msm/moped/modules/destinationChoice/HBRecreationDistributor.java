@@ -4,6 +4,8 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 
+import java.util.Map;
+
 public final class HBRecreationDistributor extends TripDistributor{
 
     public HBRecreationDistributor(DataSet dataSet) {
@@ -37,5 +39,11 @@ public final class HBRecreationDistributor extends TripDistributor{
             double utility = (size * Math.log(sizeVariable) + supportVariable + barrierVariable);
             destinationUtility.put(superPAZ.getIndex(),utility);
         }
+    }
+
+    @Override
+    protected Map<Integer, Double> calculateDestinationUtilityPAZ(SuperPAZ superPAZ) {
+
+        return null;
     }
 }

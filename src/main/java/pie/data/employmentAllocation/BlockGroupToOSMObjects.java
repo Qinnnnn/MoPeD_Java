@@ -82,11 +82,11 @@ public class BlockGroupToOSMObjects {
     }
 
     private static void writeOutTrips() {
-        String outputPath = "/F:/Qin/MoPeD/NewPIE/data/LinkedTrips_withBE.csv";
+        String outputPath = "/F:/Qin/01_Dissertation/01_MoPeD/NewPIE/data/LinkedTrips_withBE.csv";
         StringBuilder pop = new StringBuilder();
 
         //write header
-        pop.append("tripid,pazid,MODE,INCOME,GENDER,AGE,hh,uliJob,activity,hhDensity,uliJobDensity,activityDensity,intersectionDensity,weight,PURPOSE1,distance,disable,drivingLicense,transitPass");
+        pop.append("tripid,pazid,MODE,INCOME,GENDER,AGE,hh,uliJob,activity,hhDensity,uliJobDensity,totalJobDensity,activityDensity,activityDensityTotal,intersectionDensity,weight,PURPOSE1,distance,disable,drivingLicense,transitPass");
         pop.append('\n');
 
         //write data
@@ -116,7 +116,11 @@ public class BlockGroupToOSMObjects {
             pop.append(',');
             pop.append(paz.getUliJobWithinBuffer()/area);
             pop.append(',');
+            pop.append(paz.getTotalJobWithinBuffer()/area);
+            pop.append(',');
             pop.append((paz.getHouseholdWithinBuffer()+paz.getUliJobWithinBuffer())/area);
+            pop.append(',');
+            pop.append((paz.getHouseholdWithinBuffer()+paz.getTotalJobWithinBuffer())/area);
             pop.append(',');
             pop.append(paz.getIntersectionWithinBuffer());
             pop.append(',');
@@ -145,7 +149,7 @@ public class BlockGroupToOSMObjects {
 
     @Deprecated
     private static void writeOut() {
-        String outputPath = "/F:/Qin/MoPeD/NewPIE/data/test.csv";
+        String outputPath = "/F:/Qin/01_Dissertation/01_MoPeD/NewPIE/data/test.csv";
         StringBuilder pop = new StringBuilder();
 
         //write header
@@ -423,7 +427,7 @@ public class BlockGroupToOSMObjects {
 
 
     public static void writeOutOSMObject(){
-        String outputPath = "/F:/Qin/MoPeD/NewPIE/data/osmObjectJobAllocationResult.csv";
+        String outputPath = "/F:/Qin/01_Dissertation/01_MoPeD/NewPIE/data/osmObjectJobAllocationResult.csv";
         StringBuilder pop = new StringBuilder();
 
         //write header
@@ -454,11 +458,11 @@ public class BlockGroupToOSMObjects {
     }
 
     public static void writeOutPAZ(){
-        String outputPath = "/F:/Qin/MoPeD/NewPIE/data/pazJobAllocationResult.csv";
+        String outputPath = "/F:/Qin/01_Dissertation/01_MoPeD/NewPIE/data/pazJobAllocationResult.csv";
         StringBuilder pop = new StringBuilder();
         double area = Math.PI * 0.8 * 0.8;
         //write header
-        pop.append("id,job1,job2,job3,job4,job5,job6,job7,job8,hh,ulijob,activity,hhDensity,uliJobDensity,activityDensity,fourWayIntersection");
+        pop.append("id,job1,job2,job3,job4,job5,job6,job7,job8,hh,ulijob,activity,hhDensity,uliJobDensity,activityDensity,fourWayIntersection,totalJobDensity,activityDensityTotal");
         pop.append('\n');
 
         //write data
@@ -489,6 +493,10 @@ public class BlockGroupToOSMObjects {
             pop.append((paz.getHouseholdWithinBuffer()+paz.getUliJobWithinBuffer())/area);
             pop.append(',');
             pop.append(paz.getIntersectionWithinBuffer());
+            pop.append(',');
+            pop.append(paz.getTotalJobWithinBuffer()/area);
+            pop.append(',');
+            pop.append((paz.getHouseholdWithinBuffer()+paz.getTotalJobWithinBuffer())/area);
             pop.append('\n');
         }
 
@@ -501,7 +509,7 @@ public class BlockGroupToOSMObjects {
 
     private static org.opengis.geometry.Envelope loadEnvelope() {
 
-        String urlAsString = "file:/F:/Qin/MoPeD/newPIE/shapefiles/blockGroup.shp";
+        String urlAsString = "file:/F:/Qin/01_Dissertation/01_MoPeD/NewPIE/shapefiles/blockGroup.shp";
         URL url = null;
         try {
             url = new URL(urlAsString);

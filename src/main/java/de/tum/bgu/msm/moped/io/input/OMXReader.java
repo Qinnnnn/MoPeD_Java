@@ -35,7 +35,7 @@ public abstract class OMXReader extends AbstractInputReader {
         put(2400, 0.7456454304f);
     }};
 
-    private final int PAZ = 320;
+    private final int PAZ = 80;
 
     protected void readAndConvertToMatrix(String fileName, String matrixName) {
         OmxFile distanceOmx = new OmxFile(fileName);
@@ -78,7 +78,7 @@ public abstract class OMXReader extends AbstractInputReader {
                         distanceInMile = coefByScale.get(PAZ);
                         //distanceInMile = fArray[i][j]*3/5280.0f;
                         //dataSet.getSuperPAZ(i + 1).getImpedanceToSuperPAZs().put(j + 1,(short) distanceInMile);
-                        dataSet.getImpedance().setQuick(i + 1, j + 1, distanceInMile);
+                        dataSet.getPAZImpedance().setQuick(i + 1, j + 1, distanceInMile);
                     } else {
                         //distanceInMile = fArray[i][j] *0.0006213f;
                         //                  if (((i+1)==6775) && ((j+1) == 6547)){
@@ -87,8 +87,8 @@ public abstract class OMXReader extends AbstractInputReader {
                         //                System.out.println("2");
                         //          }
                         distanceInMile = fArray[i][j] / 5280.0f;
-                        dataSet.getImpedance().setQuick(i + 1, j + 1, Math.max(coefByScale.get(PAZ), distanceInMile));
-                        dataSet.getImpedance().setQuick(j + 1, i + 1, Math.max(coefByScale.get(PAZ), distanceInMile));
+                        dataSet.getPAZImpedance().setQuick(i + 1, j + 1, Math.max(coefByScale.get(PAZ), distanceInMile));
+                        dataSet.getPAZImpedance().setQuick(j + 1, i + 1, Math.max(coefByScale.get(PAZ), distanceInMile));
                         //dataSet.getSuperPAZ(i + 1).getImpedanceToSuperPAZs().put(j + 1, (short) distanceInMile);
                         //dataSet.getSuperPAZ(j + 1).getImpedanceToSuperPAZs().put(i + 1, (short) distanceInMile);
 

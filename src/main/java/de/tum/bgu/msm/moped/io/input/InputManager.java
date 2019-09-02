@@ -1,5 +1,6 @@
 package de.tum.bgu.msm.moped.io.input;
 
+import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.MopedHousehold;
 import de.tum.bgu.msm.moped.data.MopedPerson;
@@ -36,41 +37,42 @@ public class InputManager {
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
         new SuperPAZAttributesReader(dataSet).read();
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new DistanceOMXReader(dataSet).read();
+//        new DistanceOMXReader(dataSet).read();
+//        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        new SuperPAZImpedanceReader(dataSet).read();
         System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
     }
 
 
 
     public void readFromMITO(InputFeed feed) {
-
+        setHouseholdsFromFeed(feed.households);
+        dataSet.setYear(feed.year);
     }
 
-
-    public void readAdditionalData() {
-        new ZoneAttributesReader(dataSet).read();
-        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new PIEReader(dataSet).read();
-        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new TransportReader(dataSet).read();
-        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new SuperPAZAttributesReader(dataSet).read();
-        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new DistanceOMXReader(dataSet).read();
-        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+    private void setHouseholdsFromFeed(Map<Integer, MopedHousehold> households) {
+        for (MopedHousehold household : households.values()) {
+            if (!dataSet.getZones().containsKey(household.getHomeZone().getZoneId())) {
+                throw new RuntimeException("Feed household " + household.getId() + " refers to non-existing home zone "
+                        + household.getHomeZone());
+            }
+            dataSet.addHousehold(household);
+            for (MopedPerson person : household.getPersons().values()) {
+                dataSet.addPerson(person);
+                for (MopedTrip trip : person.getTrips()){
+                    dataSet.addTrip(trip);
+                }
+            }
+        }
     }
 
     public final static class InputFeed {
 
         private final Map<Integer, MopedHousehold> households;
-        private final Map<Integer, MopedPerson> persons;
-        private final Map<Integer, MopedTrip> trips;
         private final int year;
 
-        public InputFeed(Map<Integer, MopedHousehold> households, Map<Integer, MopedPerson> persons,Map<Integer, MopedTrip> trips,int year) {
+        public InputFeed(Map<Integer, MopedHousehold> households, int year) {
             this.households = households;
-            this.persons = persons;
-            this.trips = trips;
             this.year = year;
         }
     }

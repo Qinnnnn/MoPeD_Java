@@ -5,11 +5,13 @@ import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
+import org.apache.log4j.Logger;
 
 public class TransportReader extends CSVReader {
     private int idIndex;
     private int waIndex;
     private int stfwyIndex;
+    private static final Logger logger = Logger.getLogger(TransportReader.class);
 
     public TransportReader(DataSet dataSet) {
         super(dataSet);
@@ -17,6 +19,7 @@ public class TransportReader extends CSVReader {
 
     @Override
     public void read() {
+        logger.info("  Reading transport attributes from transport file");
         super.read(Resources.INSTANCE.getString(Properties.TRANSPORT), ",");
     }
 

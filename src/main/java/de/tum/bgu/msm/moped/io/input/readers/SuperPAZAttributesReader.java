@@ -6,6 +6,7 @@ import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
+import org.apache.log4j.Logger;
 
 public class SuperPAZAttributesReader extends CSVReader {
     private int idIndex;
@@ -18,9 +19,12 @@ public class SuperPAZAttributesReader extends CSVReader {
     private int pieIndex;
     private int slopeIndex;
     private int freewayIndex;
+    private int industrialIndex;
     private int parkIndex;
     private int index = 0;
     private int count = 0;
+    private static final Logger logger = Logger.getLogger(SuperPAZAttributesReader.class);
+
 
 
     public SuperPAZAttributesReader(DataSet dataSet) {
@@ -29,6 +33,7 @@ public class SuperPAZAttributesReader extends CSVReader {
 
     @Override
     public void read() {
+        logger.info("reading superPAZ attributes");
         super.read(Resources.INSTANCE.getString(Properties.SUPERPAZATTRIBUTE), ",");
     }
 
@@ -45,6 +50,7 @@ public class SuperPAZAttributesReader extends CSVReader {
         slopeIndex = MoPeDUtil.findPositionInArray("SLP_MEAN", header);
         freewayIndex = MoPeDUtil.findPositionInArray("FWY_IN_ZONE", header);
         parkIndex = MoPeDUtil.findPositionInArray("PRK", header);
+        industrialIndex = MoPeDUtil.findPositionInArray("EMP_INDUSTRIAL", header);
     }
 
     @Override
@@ -68,6 +74,7 @@ public class SuperPAZAttributesReader extends CSVReader {
         float slope = Float.parseFloat(record[slopeIndex]);
         int freeway = Integer.parseInt(record[freewayIndex]);
         int park = Integer.parseInt(record[parkIndex]);
+        float industrial = Float.parseFloat(record[industrialIndex]);
 
         dataSet.getSuperPAZ(superPAZId).setHousehold(household);
         dataSet.getSuperPAZ(superPAZId).setTotalEmpl(totalEmpl);
@@ -79,6 +86,7 @@ public class SuperPAZAttributesReader extends CSVReader {
         dataSet.getSuperPAZ(superPAZId).setSlope(slope);
         dataSet.getSuperPAZ(superPAZId).setFreeway(freeway);
         dataSet.getSuperPAZ(superPAZId).setPark(park);
+        dataSet.getSuperPAZ(superPAZId).setIndustrial(industrial);
 
         if (totalEmpl != 0){
             dataSet.addDestinationSuperPAZ(index, superPAZ);

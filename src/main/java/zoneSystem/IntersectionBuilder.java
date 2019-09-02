@@ -1,13 +1,12 @@
-package de.tum.bgu.msm.moped.ZoneSystem;
+package zoneSystem;
 
 import org.geotools.data.simple.SimpleFeatureSource;
-import java.io.IOException;
+
 import java.util.Map;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.grid.GridElement;
 import org.geotools.grid.GridFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
 

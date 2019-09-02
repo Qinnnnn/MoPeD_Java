@@ -5,6 +5,7 @@ import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
+import org.apache.log4j.Logger;
 import org.jblas.FloatMatrix;
 
 public class HouseholdTypeDistributionReader extends CSVReader{
@@ -15,14 +16,18 @@ public class HouseholdTypeDistributionReader extends CSVReader{
 
     private int zoneIndex;
 
+    private static final Logger logger = Logger.getLogger(HouseholdTypeDistributionReader.class);
+
+
     @Override
     public void read() {
+        logger.info(" Reading household distribution.");
         distribution = new FloatMatrix(dataSet.getOriginPAZs().size(), dataSet.getHOUSEHOLDTYPESIZE());
-        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION1), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION2), ",");
-////        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION3), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION4), ",");
+//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
+        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION1), ",");
+        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION2), ",");
+//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION3), ",");
+        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION4), ",");
         dataSet.setDistribution(distribution);
     }
 
@@ -40,7 +45,10 @@ public class HouseholdTypeDistributionReader extends CSVReader{
             if (zone.getTotalHH() != 0.0){
                 for (int id = 1; id < record.length; id++) {
                     if (dataSet.getHouseholdType(id) != null) {
-                        distribution.put(zone.getIndex(), id, Float.parseFloat(record[id]));
+                        float hh = Float.parseFloat(record[id]);
+                        //float scenariohh = hh*(1+hh/dataSet.getTotalPop()*20000);
+                        float scenariohh = (float) (Float.parseFloat(record[id])*(1+0.02));
+                        distribution.put(zone.getIndex(), id, hh);
                     }
                 }
             }

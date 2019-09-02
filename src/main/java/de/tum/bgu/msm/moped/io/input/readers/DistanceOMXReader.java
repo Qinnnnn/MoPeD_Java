@@ -18,16 +18,17 @@ public class DistanceOMXReader extends OMXReader {
 
     @Override
     public void read() {
-        logger.info("  Reading network distance");
+        logger.info("  Reading paz distance");
         readWalkingDistance();
     }
 
     private void readWalkingDistance() {
-        System.out.println(dataSet.getSuperPAZs().size());
-        impedance = new SparseFloatMatrix2D(dataSet.getSuperPAZs().size()+1, dataSet.getSuperPAZs().size()+1);
+        System.out.println(dataSet.getOriginPAZs().size());
+        System.out.println(dataSet.getDestinationSuperPAZs().size());
+        impedance = new SparseFloatMatrix2D(dataSet.getOriginPAZs().size()+1, (dataSet.getDestinationSuperPAZs().size()+1)*25);
         //impedance = new SparseFloatMatrix2D(1814, 1814);
-        dataSet.setImpedance(impedance);
-        super.readAndConvertToMatrix(Resources.INSTANCE.getString(Properties.SUPERPAZIMPEDANCE), "mat1");
+        dataSet.setPAZImpedance(impedance);
+        super.readAndConvertToMatrix(Resources.INSTANCE.getString(Properties.PAZIMPEDANCE), "mat1");
 
     }
 

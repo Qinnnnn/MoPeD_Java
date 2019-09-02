@@ -22,30 +22,30 @@ public final class HBSchoolGenerator extends TripGenerator{
         if (kids == 1){
             switch (hhSize){
                 case 2:
-                    tripGenRate = 1.0000000f;
+                    tripGenRate = 1.978448f;//1.0000000f;
                     break;
                 case 3:
-                    tripGenRate = 1.3933333f;
+                    tripGenRate = 1.84793f;//1.3933333f;
                     break;
                 case 4:
-                    tripGenRate = 1.3132530f;
+                    tripGenRate = 2.248879f;//1.3132530f;
                     break;
             }
         }else if (kids == 2){
             switch (hhSize){
                 case 2:
-                    tripGenRate = 0.8000000f;
+                    tripGenRate = 0.0f;//0.8000000f;
                     break;
                 case 3:
-                    tripGenRate = 2.5000000f;
+                    tripGenRate = 3.326389f;//2.5000000f;
                     break;
                 case 4:
-                    tripGenRate = 2.9808102f;
+                    tripGenRate = 3.441193f;//2.9808102f;
                     break;
             }
         } else if (kids == 3){
             if (hhSize == 4){
-                tripGenRate = 4.8750000f;
+                tripGenRate = 5.103783f;//4.8750000f;
             }
         }
 

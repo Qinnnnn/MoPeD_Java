@@ -1,4 +1,4 @@
-package de.tum.bgu.msm.moped.ZoneSystem;
+package zoneSystem;
 
 import com.vividsolutions.jts.geom.*;
 import org.geotools.data.*;
@@ -12,6 +12,7 @@ import org.geotools.grid.Grids;
 //import org.geotools.util.URLs;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.osgeo.proj4j.CoordinateReferenceSystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,16 +31,17 @@ public class gridCreation {
     public void createGrid() throws IOException {
 
         // Load the outline of Australia from a shapefile
-        String urlAsString = "file:/C:/Users/Qin/Documents/GitHub/Qin/MoPeD_Java/boundtest.shp";
+        String urlAsString = "file:/F:/Qin/MoPeD/MunichPIE/shapefiles/boundary.shp";
         URL url = new URL(urlAsString);
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(url);
         SimpleFeatureSource ozMapSource = dataStore.getFeatureSource();
 
         // Set the grid size (1 degree) and create a bounding envelope
         // that is neatly aligned with the grid size
-        double sideLen = 402.336804674938/5*60;
+        double sideLen = 100;
+        //double sideLen = 402.336804674938/5*60;
         //ReferencedEnvelope gridBounds = Envelopes.expandToInclude(ozMapSource.getBounds(), 0);
-
+        //org.opengis.referencing.crs.CoordinateReferenceSystem crs = ozMapSource.getBounds().getCoordinateReferenceSystem();
         ReferencedEnvelope gridBounds = new ReferencedEnvelope(ozMapSource.getBounds().getMinX(), ozMapSource.getBounds().getMaxX()+450,ozMapSource.getBounds().getMinY(), ozMapSource.getBounds().getMaxY()+1,ozMapSource.getBounds().getCoordinateReferenceSystem());
 
 //        ReferencedEnvelope gridBounds = new ReferencedEnvelope(ozMapSource.getBounds());
@@ -65,7 +67,7 @@ public class gridCreation {
         // GridFeatureBuilder builder = new IntersectionBuilder(TYPE, ozMapSource);
         SimpleFeatureSource grid = Grids.createSquareGrid(gridBounds, sideLen,-1);
 
-        String output = "file:/C:/Users/Qin/Documents/GitHub/Qin/MoPeD_Java";
+        String output = "file:/F:/Qin/MoPeD/MunichPIE/shapefiles";
         URL urlOutput = new URL(output);
         File file = null;
         try {

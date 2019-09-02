@@ -2,8 +2,6 @@ package de.tum.bgu.msm.moped;
 
 import de.tum.bgu.msm.moped.data.*;
 import de.tum.bgu.msm.moped.io.input.InputManager;
-
-import de.tum.bgu.msm.moped.io.input.readers.ZonesReader;
 import de.tum.bgu.msm.moped.io.output.*;
 import de.tum.bgu.msm.moped.modules.destinationChoice.TripDistribution;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
@@ -11,9 +9,7 @@ import de.tum.bgu.msm.moped.modules.walkModeChoice.WalkModeChoice;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
-
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MoPeDModel {
@@ -36,20 +32,17 @@ public class MoPeDModel {
         return model;
     }
 
-
-
     public void feedDataFromMITO(InputManager.InputFeed feed) {
         // Read data from MITO
-        logger.info("  Reading input data for MoPeD");
+        logger.info("  Reading input data from MITO");
         manager.readFromMITO(feed);
-        manager.readAdditionalData();
     }
 
+    //TODO: create new mode choice and trip distribution model for agent based
     public void runAgentBasedModel(){
-
-        //TODO
-
-
+        logger.info("Started the Model of Pedestrian Demand (MoPeD)");
+        WalkModeChoice walkMode = new WalkModeChoice(dataSet);
+        TripDistribution distribution = new TripDistribution(dataSet);
     }
 
 
@@ -66,23 +59,23 @@ public class MoPeDModel {
         TripGeneration tripGen = new TripGeneration(dataSet);
         tripGen.run(purpose);
         long generationTime = System.currentTimeMillis()- startTime;
-        System.out.println(generationTime);
+        System.out.println("Trip generation run time:" + generationTime);
 
         long t1 = System.currentTimeMillis();
         WalkModeChoice walkMode = new WalkModeChoice(dataSet);
         walkMode.run(purpose);
         long modeChoiceTime = System.currentTimeMillis()- t1;
-        System.out.println(modeChoiceTime);
+        System.out.println("Mode choice run time:" + modeChoiceTime);
 
         //manager.readAsStandAlone2();
         long t2 = System.currentTimeMillis();
         TripDistribution distribution = new TripDistribution(dataSet);
         distribution.run(purpose);
         long distributionTime = System.currentTimeMillis()- t2;
-        System.out.println(distributionTime);
+        System.out.println("Destination choice run time:" + distributionTime);
 
         long total = generationTime+modeChoiceTime+distributionTime;
-        System.out.println("total:" + total);
+        System.out.println("total run time:" + total);
 
         try {
             writeOut(purpose);

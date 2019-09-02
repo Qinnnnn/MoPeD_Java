@@ -5,6 +5,7 @@ import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
+import org.apache.log4j.Logger;
 
 public class ZoneAttributesReader extends CSVReader {
     private int idIndex;
@@ -19,6 +20,7 @@ public class ZoneAttributesReader extends CSVReader {
     private int wholesaleIndex;
     private int shoppingAreaIndex;
     private int collegeVehicleTripIndex;
+    private static final Logger logger = Logger.getLogger(ZoneAttributesReader.class);
 
 
     public ZoneAttributesReader(DataSet dataSet) {
@@ -27,6 +29,7 @@ public class ZoneAttributesReader extends CSVReader {
 
     @Override
     public void read() {
+        logger.info("  Reading zones attributes from zone file");
         super.read(Resources.INSTANCE.getString(Properties.ZONESATTRIBUTE), ",");
     }
 
@@ -73,6 +76,9 @@ public class ZoneAttributesReader extends CSVReader {
             dataSet.getZone(zoneId).setWholesale(wholesale);
             dataSet.getZone(zoneId).setShoppingArea(shoppingArea);
             dataSet.getZone(zoneId).setCollegeVehicleTrip(collegeVehicleTrip);
+            dataSet.getZone(zoneId).setSlope(0);
+            dataSet.getZone(zoneId).setFreeway(0);
+            dataSet.getZone(zoneId).setTotalEmpl();
         }
     }
 }

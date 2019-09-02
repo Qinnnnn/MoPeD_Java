@@ -6,6 +6,7 @@ public class MopedTrip {
     private final Purpose tripPurpose;
     private MopedZone tripOrigin;
     private MopedZone tripDestination;
+    private double tripDistance;
     private boolean walkMode;
     private MopedPerson person;
 
@@ -51,6 +52,21 @@ public class MopedTrip {
         return tripId;
     }
 
+    public MopedPerson getPerson() {
+        return person;
+    }
+
+    public void setPerson(MopedPerson person) {
+        this.person = person;
+    }
+
+    public double getTripDistance() {
+        return tripDistance;
+    }
+
+    public void setTripDistance(double tripDistance) {
+        this.tripDistance = tripDistance;
+    }
 
     @Override
     public String toString() {

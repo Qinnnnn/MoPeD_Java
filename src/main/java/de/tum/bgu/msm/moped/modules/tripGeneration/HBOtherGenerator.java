@@ -18,28 +18,28 @@ public final class HBOtherGenerator extends TripGenerator{
         if (workers < hhSize){
             switch (hhSize){
                 case 1:
-                    tripGenRate = 0.89368165f;
+                    tripGenRate = 1.187586f;//0.89368165f;
                     break;
                 case 2:
-                    tripGenRate = 1.62810500f;
+                    tripGenRate = 2.076545f;//1.62810500f;
                     break;
                 case 3:
-                    tripGenRate = 2.22561020f;
+                    tripGenRate = 2.613932f;//2.22561020f;
                     break;
                 case 4:
-                    tripGenRate = 3.48763360f;
+                    tripGenRate = 4.027823f;//3.48763360f;
                     break;
             }
         }else if (workers == hhSize){
             switch (hhSize){
                 case 1:
-                    tripGenRate = 0.54391065f;
+                    tripGenRate = 0.6723447f;//0.54391065f;
                     break;
                 case 2:
-                    tripGenRate = 1.24163040f;
+                    tripGenRate = 1.421209f;//1.24163040f;
                     break;
                 case 3:
-                    tripGenRate = 1.44898570f;
+                    tripGenRate = 1.916667f;//1.44898570f;
                     break;
             }
         } else{
@@ -49,7 +49,7 @@ public final class HBOtherGenerator extends TripGenerator{
         float tripGen;
 
         if (tripGenRate != 0){
-            tripGen = tripGenRate * distribution * 1.2f;
+            tripGen = tripGenRate * distribution * 1.025f;//1.2f;
         }else{
             tripGen = 0.0f;
         }

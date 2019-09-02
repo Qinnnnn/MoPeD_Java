@@ -10,8 +10,8 @@ public class MopedZone {
 
     private int index;
     private final int zoneId;
-    private final int superPAZId;
-    private final float totalHH;
+    private int superPAZId;
+    private float totalHH;
     private float agriculture;
     private float construction;
     private float financial;
@@ -29,14 +29,54 @@ public class MopedZone {
     private int wa;
     private float stfwy;
     private Map<Purpose, Float> totalWalkTripsByPurpose = new HashMap<>();
+    private Map<Purpose, Float> totalWalkTripsNoCarByPurpose = new HashMap<>();
+    private Map<Purpose, Float> totalWalkTripsHasCarByPurpose = new HashMap<>();
     private SimpleFeature shapeFeature;
 
+    private double activityDensity;
+    private double intersectionDensity;
+    private float slope;
+    private int freeway;
+    private float totalEmpl;
+    private float piePop;
+    private float pieEmpl;
+    private float pieArea;
+    private float pieActivity;
 
+    private Map<Integer, Float> distribution = new HashMap<>();
+
+    public float getTotalEmpl() {
+        return totalEmpl;
+    }
+
+    public void setTotalEmpl() {
+        this.totalEmpl = agriculture+construction+financial+government+manufacturing+retail+service+transportation+wholesale;
+    }
+
+    public float getSlope() {
+        return slope;
+    }
+
+    public void setSlope(float slope) {
+        this.slope = slope;
+    }
+
+    public int getFreeway() {
+        return freeway;
+    }
+
+    public void setFreeway(int freeway) {
+        this.freeway = freeway;
+    }
 
     public MopedZone(int id, int superPAZ, float totalHH){
         this.zoneId = id;
         this.superPAZId = superPAZ;
         this.totalHH = totalHH;
+    }
+
+    public MopedZone(int id){
+        this.zoneId = id;
     }
 
     public int getIndex() {
@@ -177,8 +217,24 @@ public class MopedZone {
         return totalWalkTripsByPurpose;
     }
 
+    public Map<Purpose, Float> getTotalWalkTripsNoCarByPurpose() {
+        return totalWalkTripsNoCarByPurpose;
+    }
+
+    public Map<Purpose, Float> getTotalWalkTripsHasCarByPurpose() {
+        return totalWalkTripsHasCarByPurpose;
+    }
+
     public void addTotalWalkTrips(float totalWalkTrips, Purpose purpose) {
         this.totalWalkTripsByPurpose.put(purpose, totalWalkTrips);
+    }
+
+    public void addTotalWalkTripsNoCar(float totalWalkTripsNoCar, Purpose purpose) {
+        this.totalWalkTripsNoCarByPurpose.put(purpose, totalWalkTripsNoCar);
+    }
+
+    public void addTotalWalkTripsHasCar(float totalWalkTripsHasCar, Purpose purpose) {
+        this.totalWalkTripsHasCarByPurpose.put(purpose, totalWalkTripsHasCar);
     }
 
     public SimpleFeature getShapeFeature() {
@@ -187,5 +243,62 @@ public class MopedZone {
 
     public void setShapeFeature(SimpleFeature shapeFeature) {
         this.shapeFeature = shapeFeature;
+    }
+
+    public double getActivityDensity() {
+        return activityDensity;
+    }
+
+    public void setActivityDensity(double activityDensity) {
+        this.activityDensity = activityDensity;
+    }
+
+
+    public double getIntersectionDensity() {
+        return intersectionDensity;
+    }
+
+    public void setIntersectionDensity(double intersectionDensity) {
+        this.intersectionDensity = intersectionDensity;
+    }
+
+    public Map<Integer, Float> getDistribution() {
+        return distribution;
+    }
+
+    public void setDistribution(Map<Integer, Float> distribution) {
+        this.distribution = distribution;
+    }
+
+    public float getPieEmpl() {
+        return pieEmpl;
+    }
+
+    public void setPieEmpl(float pieEmpl) {
+        this.pieEmpl = pieEmpl;
+    }
+
+    public float getPieArea() {
+        return pieArea;
+    }
+
+    public void setPieArea(float pieArea) {
+        this.pieArea = pieArea;
+    }
+
+    public float getPieActivity() {
+        return pieActivity;
+    }
+
+    public void setPieActivity(float pieActivity) {
+        this.pieActivity = pieActivity;
+    }
+
+    public float getPiePop() {
+        return piePop;
+    }
+
+    public void setPiePop(float piePop) {
+        this.piePop = piePop;
     }
 }

@@ -10,7 +10,6 @@ public abstract class WalkTripGenerator {
 
     protected final DataSet dataSet;
     protected FloatMatrix WalkTrip;
-    //protected FloatMatrix WalkExpUtility;
     protected FloatMatrix VehicleExpUtility;
     protected final Purpose purpose;
 
@@ -23,7 +22,6 @@ public abstract class WalkTripGenerator {
         int zoneSize = dataSet.getOriginPAZs().size();
         int hhTypeSize = dataSet.getHOUSEHOLDTYPESIZE();
         WalkTrip = new FloatMatrix(zoneSize, hhTypeSize);
-        //WalkExpUtility = new FloatMatrix(zoneSize, hhTypeSize);
         calculateWalkUtilities();
         calculateVehicleUtilities();
         calculateWalkTrips();
@@ -34,7 +32,6 @@ public abstract class WalkTripGenerator {
         int zoneSize = dataSet.getOriginPAZs().size();
         int hhTypeSize = dataSet.getHOUSEHOLDTYPESIZE();
         WalkTrip = new FloatMatrix(zoneSize, hhTypeSize);
-        //WalkExpUtility = new FloatMatrix(zoneSize, hhTypeSize);
         calculateWalkUtilities();
         calculateVehicleUtilities();
         calculateWalkTrips();
@@ -54,7 +51,14 @@ public abstract class WalkTripGenerator {
                 int age = hhType.getAge();
                 int car = hhType.getCars();
                 int kid = hhType.getKids();
-                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy);
+                float pieActivity = originZone.getPieActivity();
+                float pieEmpl = originZone.getPieEmpl();
+                float pieArea = originZone.getPieArea();
+                float piePop = originZone.getPiePop();
+//                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, piePop);
+//                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, pieArea);
+                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieActivity, pieArea);
+//                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy);
                 float utilityHousehold = calculateHouseholdRelatedUtility(hhSize, worker, income, age, car, kid);
                 float utilitySum = utilityZone + utilityHousehold;
                 float expUtility = (float) Math.exp(utilitySum);
@@ -73,11 +77,26 @@ public abstract class WalkTripGenerator {
         WalkTrip = WalkTrip.mul(dataSet.getProductionsByPurpose().get(purpose));
         for (int index : dataSet.getOriginPAZs().keySet()) {
             float totalWalkTrips = WalkTrip.getRow(index).sum();
-            dataSet.getOriginPAZ(index).addTotalWalkTrips(totalWalkTrips,purpose);
+            float totalWalkTripsNoCars = 0.0f;
+            float totalWalkTripsHasCars = 0.0f;
+            for (HouseholdType hhType : dataSet.getHhTypes().values()) {
+                if (hhType.getCars() == 0) {
+                    totalWalkTripsNoCars += WalkTrip.get(index, hhType.getHhTypeId());
+                }else{
+                    totalWalkTripsHasCars += WalkTrip.get(index, hhType.getHhTypeId());
+                }
+            }
+
+            if((totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips)>0.000001){
+                System.out.println("mistake!");
+            }
+
+            dataSet.getOriginPAZ(index).addTotalWalkTripsNoCar(totalWalkTripsNoCars,purpose);
+            dataSet.getOriginPAZ(index).addTotalWalkTripsHasCar(totalWalkTripsHasCars,purpose);
         }
     }
 
-    protected abstract float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy);
+    protected abstract float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy, float pieEmpl, float pieArea);
     protected abstract float calculateHouseholdRelatedUtility(int hhSize, int worker, int income, int age, int car, int kid);
-
+    protected abstract float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy);
 }

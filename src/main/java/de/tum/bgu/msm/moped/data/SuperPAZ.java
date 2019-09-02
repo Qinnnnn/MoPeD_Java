@@ -18,6 +18,7 @@ public class SuperPAZ {
     private float slope;
     private int freeway;
     private int park;
+    private float industrial;
     private Map<Integer, MopedZone> pazList= new HashMap<>();
     private Map<Integer, Short> impedanceToSuperPAZs = new HashMap<>();
 
@@ -124,4 +125,11 @@ public class SuperPAZ {
         return impedanceToSuperPAZs;
     }
 
+    public float getIndustrial() {
+        return industrial;
+    }
+
+    public void setIndustrial(float industrial) {
+        this.industrial = industrial;
+    }
 }
