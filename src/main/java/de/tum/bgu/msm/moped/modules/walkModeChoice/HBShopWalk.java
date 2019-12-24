@@ -7,7 +7,7 @@ public final class HBShopWalk extends WalkTripGenerator{
 
 
     public HBShopWalk(DataSet dataSet) {
-        super(dataSet, Purpose.HBSHOP);
+        super(dataSet, Purpose.HBO);
     }
 
 

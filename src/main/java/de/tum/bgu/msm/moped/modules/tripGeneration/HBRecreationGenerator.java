@@ -8,7 +8,7 @@ public final class HBRecreationGenerator extends TripGenerator{
 
 
     public HBRecreationGenerator(DataSet dataSet) {
-        super(dataSet, Purpose.HBREC);
+        super(dataSet, Purpose.HBO);
     }
 
 

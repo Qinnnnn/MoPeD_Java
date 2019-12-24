@@ -3,6 +3,8 @@ package de.tum.bgu.msm.moped;
 import de.tum.bgu.msm.moped.data.*;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 import de.tum.bgu.msm.moped.io.output.*;
+import de.tum.bgu.msm.moped.modules.agentBased.destinationChoice.AgentTripDistribution;
+import de.tum.bgu.msm.moped.modules.agentBased.walkModeChoice.ModeChoice;
 import de.tum.bgu.msm.moped.modules.destinationChoice.TripDistribution;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
 import de.tum.bgu.msm.moped.modules.walkModeChoice.WalkModeChoice;
@@ -23,6 +25,7 @@ public class MoPeDModel {
         this.dataSet = new DataSet();
         this.manager = new InputManager(dataSet);
         Resources.INSTANCE.setResources(resources);
+        MoPeDUtil.initializeRandomNumber();
     }
 
     public static MoPeDModel initializeModelFromMito(String propertiesFile) {
@@ -41,8 +44,10 @@ public class MoPeDModel {
     //TODO: create new mode choice and trip distribution model for agent based
     public void runAgentBasedModel(){
         logger.info("Started the Model of Pedestrian Demand (MoPeD)");
-        WalkModeChoice walkMode = new WalkModeChoice(dataSet);
-        TripDistribution distribution = new TripDistribution(dataSet);
+        ModeChoice walkMode = new ModeChoice(dataSet);
+        walkMode.run();
+        AgentTripDistribution distribution = new AgentTripDistribution(dataSet);
+        distribution.run();
     }
 
 

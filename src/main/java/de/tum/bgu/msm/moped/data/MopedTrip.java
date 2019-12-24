@@ -7,7 +7,7 @@ public class MopedTrip {
     private MopedZone tripOrigin;
     private MopedZone tripDestination;
     private double tripDistance;
-    private boolean walkMode;
+    private boolean walkMode = false;
     private MopedPerson person;
 
     public MopedTrip(int tripId, Purpose tripPurpose) {

@@ -23,12 +23,14 @@ public class DistanceOMXReader extends OMXReader {
     }
 
     private void readWalkingDistance() {
-        System.out.println(dataSet.getOriginPAZs().size());
-        System.out.println(dataSet.getDestinationSuperPAZs().size());
-        impedance = new SparseFloatMatrix2D(dataSet.getOriginPAZs().size()+1, (dataSet.getDestinationSuperPAZs().size()+1)*25);
-        //impedance = new SparseFloatMatrix2D(1814, 1814);
+        impedance = new SparseFloatMatrix2D(dataSet.getZones().size()+1, dataSet.getZones().size()+1);
         dataSet.setPAZImpedance(impedance);
         super.readAndConvertToMatrix(Resources.INSTANCE.getString(Properties.PAZIMPEDANCE), "mat1");
+        System.out.println(dataSet.getPAZImpedance().get(0,0));
+        System.out.println(dataSet.getPAZImpedance().get(1,1));
+        System.out.println(dataSet.getPAZImpedance().get(2,1));
+        System.out.println(dataSet.getPAZImpedance().get(1,2));
+        System.out.println(1);
 
     }
 

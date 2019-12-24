@@ -21,17 +21,17 @@ public abstract class TripDistributor {
     protected Map<Integer, Double> destinationUtility = new HashMap<>();
     private Map<Integer, Double> sumExpUtilityList;
     private final Map<Purpose, Double> coefNoCarByPurpose = new HashMap<Purpose, Double>(){{
-        put(Purpose.HBW, -1.496);
-        put(Purpose.HBSHOP, -2.25591);
-        put(Purpose.HBREC, -1.74957);
-        put(Purpose.HBOTH, -1.94038);
+//        put(Purpose.HBW, -1.496);
+//        put(Purpose.HBSHOP, -2.25591);
+//        put(Purpose.HBREC, -1.74957);
+//        put(Purpose.HBOTH, -1.94038);
     }};
 
     private final Map<Purpose, Double> coefHasCarByPurpose = new HashMap<Purpose, Double>(){{
-        put(Purpose.HBW, -1.54);
-        put(Purpose.HBSHOP, -2.25591);
-        put(Purpose.HBREC, -1.74957);
-        put(Purpose.HBOTH, -1.94038);
+//        put(Purpose.HBW, -1.54);
+//        put(Purpose.HBSHOP, -2.25591);
+//        put(Purpose.HBREC, -1.74957);
+//        put(Purpose.HBOTH, -1.94038);
     }};
 
     private final double intercept = -0.761;//-0.261;

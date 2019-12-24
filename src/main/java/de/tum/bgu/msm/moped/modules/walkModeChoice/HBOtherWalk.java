@@ -6,7 +6,7 @@ import de.tum.bgu.msm.moped.data.Purpose;
 public final class HBOtherWalk extends WalkTripGenerator{
 
     public HBOtherWalk(DataSet dataSet) {
-        super(dataSet, Purpose.HBOTH);
+        super(dataSet, Purpose.HBO);
     }
 
     @Override

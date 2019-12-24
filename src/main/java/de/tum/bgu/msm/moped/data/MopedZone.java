@@ -34,6 +34,8 @@ public class MopedZone {
     private SimpleFeature shapeFeature;
 
     private double activityDensity;
+    private double totalJobDensity;
+    private double industrialJobDensity;
     private double intersectionDensity;
     private float slope;
     private int freeway;
@@ -42,6 +44,8 @@ public class MopedZone {
     private float pieEmpl;
     private float pieArea;
     private float pieActivity;
+
+    private int mitoZoneId;
 
     private Map<Integer, Float> distribution = new HashMap<>();
 
@@ -300,5 +304,29 @@ public class MopedZone {
 
     public void setPiePop(float piePop) {
         this.piePop = piePop;
+    }
+
+    public int getMitoZoneId() {
+        return mitoZoneId;
+    }
+
+    public void setMitoZoneId(int mitoZoneId) {
+        this.mitoZoneId = mitoZoneId;
+    }
+
+    public double getTotalJobDensity() {
+        return totalJobDensity;
+    }
+
+    public void setTotalJobDensity(double totalJobDensity) {
+        this.totalJobDensity = totalJobDensity;
+    }
+
+    public double getIndustrialJobDensity() {
+        return industrialJobDensity;
+    }
+
+    public void setIndustrialJobDensity(double industrialJobDensity) {
+        this.industrialJobDensity = industrialJobDensity;
     }
 }

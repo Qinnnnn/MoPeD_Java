@@ -134,21 +134,21 @@
             <artifactId>jts</artifactId>
             <version>1.13</version>
         </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-opengis</artifactId>
-            <version>13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-shapefile</artifactId>
-            <version>13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-grid</artifactId>
-            <version>13.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.geotools</groupId>-->
+            <!--<artifactId>gt-opengis</artifactId>-->
+            <!--<version>13.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.geotools</groupId>-->
+            <!--<artifactId>gt-shapefile</artifactId>-->
+            <!--<version>13.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.geotools</groupId>-->
+            <!--<artifactId>gt-grid</artifactId>-->
+            <!--<version>13.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>common-base</groupId>
             <artifactId>common-base</artifactId>
@@ -167,21 +167,21 @@
         <dependency>
             <groupId>org.matsim</groupId>
             <artifactId>matsim</artifactId>
-            <version>0.9.0</version>
+            <version>${matsimVersion}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.geotools/geotools -->
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>geotools</artifactId>
-            <version>16.1</version>
-            <type>pom</type>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.geotools</groupId>-->
+            <!--<artifactId>geotools</artifactId>-->
+            <!--<version>16.1</version>-->
+            <!--<type>pom</type>-->
+        <!--</dependency>-->
 
 
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <geotools.version>13.0</geotools.version>
+        <matsimVersion>11.0</matsimVersion>
     </properties>
 
 </project>

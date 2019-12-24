@@ -20,27 +20,27 @@ public class TripGeneration extends Module {
             case HBW:
                 hbWorkGenerator();
                 break;
-            case HBSHOP:
-                hbShopGenerator();
-                break;
-            case HBREC:
-                hbRecreationGenerator();
-                break;
-            case HBOTH:
-                hbOtherGenerator();
-                break;
-            case HBSCH:
-                hbSchoolGenerator();
-                break;
-            case HBCOLL:
-                hbCollegeGenerator();
-                break;
-            case NHBW:
-                nhbWorkGenerator();
-                break;
-            case NHBNW:
-                nhbnWorkGenerator();
-                break;
+//            case HBSHOP:
+//                hbShopGenerator();
+//                break;
+//            case HBREC:
+//                hbRecreationGenerator();
+//                break;
+//            case HBOTH:
+//                hbOtherGenerator();
+//                break;
+//            case HBSCH:
+//                hbSchoolGenerator();
+//                break;
+//            case HBCOLL:
+//                hbCollegeGenerator();
+//                break;
+//            case NHBW:
+//                nhbWorkGenerator();
+//                break;
+//            case NHBNW:
+//                nhbnWorkGenerator();
+//                break;
         }
         logger.info("  Completed trip generation model.");
     }

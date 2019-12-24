@@ -2,13 +2,14 @@ package de.tum.bgu.msm.moped.util;
 
 import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import com.pb.common.util.ResourceUtil;
+import de.tum.bgu.msm.moped.resources.Properties;
+import de.tum.bgu.msm.moped.resources.Resources;
 import omx.OmxMatrix;
 import omx.hdf5.OmxHdf5Datatype;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class MoPeDUtil {
@@ -84,5 +85,156 @@ public class MoPeDUtil {
 
     public static Random getRandomObject() {
         return rand;
+    }
+
+    public static int select(List<Double> probabilities, Random random) {
+        // select item based on probabilities (for zero-based double array)
+        double selPos = getSum(probabilities) * random.nextDouble();
+        double sum = 0;
+        for (ListIterator<Double> it = probabilities.listIterator(); it.hasNext();) {
+            sum += it.next();
+            if (sum > selPos) {
+                return it.previousIndex();
+            }
+        }
+        return -1;
+    }
+
+    public static int select(double[] probabilities, Random random) {
+        // select item based on probabilities (for zero-based double array)
+        return select(probabilities, random, getSum(probabilities));
+    }
+
+    public static int select(double[] probabilities, Random random, double probabilitySum) {
+        // select item based on probabilities (for zero-based double array)
+        double selPos =probabilitySum * random.nextDouble();
+        double sum = 0;
+        for (int i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+            if (sum > selPos) {
+                return i;
+            }
+        }
+        return probabilities.length - 1;
+    }
+
+    public static int select(float[] probabilities, Random random, float probabilitySum) {
+        // select item based on probabilities (for zero-based double array)
+        double selPos =probabilitySum * random.nextDouble();
+        double sum = 0;
+        for (int i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+            if (sum > selPos) {
+                return i;
+            }
+        }
+        return probabilities.length - 1;
+    }
+
+    public static int select(double[] probabilities, double sum) {
+        double selPos = sum * rand.nextDouble();
+        double tempSum = 0;
+        for (int i = 0; i < probabilities.length; i++) {
+            tempSum += probabilities[i];
+            if (tempSum > selPos) {
+                return i;
+            }
+        }
+        return probabilities.length - 1;
+    }
+
+    public static int select(double[] probabilities) {
+        // select item based on probabilities (for zero-based double array)
+        return select(probabilities, getSum(probabilities));
+    }
+
+    public static int select(float[] probabilities, Random random) {
+        double selPos = getSum(probabilities) * random.nextDouble();
+        double sum = 0;
+        for (int i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+            if (sum > selPos) {
+                return i;
+            }
+        }
+        return probabilities.length - 1;
+    }
+
+    public static <T> T select(Map<T, Double> mappedProbabilities) {
+        // select item based on probabilities (for mapped double probabilities)
+        return select(mappedProbabilities, getSum(mappedProbabilities.values()));
+    }
+
+    public static <T> T select(Map<T, Double> mappedProbabilities, double sum) {
+        return select(mappedProbabilities, rand, sum);
+    }
+
+    public static <T> T select(Map<T, Double> mappedProbabilities, Random random) {
+        return select(mappedProbabilities, random, getSum(mappedProbabilities.values()));
+    }
+
+    public static <T> T select(Map<T, Double> probabilities, Random random, double sum) {
+        // select item based on probabilities (for mapped double probabilities)
+        double selectedWeight = random.nextDouble() * sum;
+        double select = 0;
+        for (Map.Entry<T, Double> entry : probabilities.entrySet()) {
+            select += entry.getValue();
+            if (select > selectedWeight) {
+                return entry.getKey();
+            }
+        }
+        throw new RuntimeException("Error selecting item from weighted probabilities");
+    }
+
+
+
+    public static <T> T select(Random rand, T... objects) {
+        return objects[rand.nextInt(objects.length)];
+    }
+
+    public static <T> T select(List<T> objects) {
+        return objects.get(rand.nextInt(objects.size()));
+    }
+
+    public static <T> T select(Random rand, List<T> objects) {
+        return objects.get(rand.nextInt(objects.size()));
+    }
+
+    public static Integer getSum(Integer[] array) {
+        Integer sm = 0;
+        for (Integer value : array) {
+            sm += value;
+        }
+        return sm;
+    }
+
+    public static float getSum(float[] array) {
+        float sm = 0;
+        for (float value : array) {
+            sm += value;
+        }
+        return sm;
+    }
+
+    public static double getSum(double[] array) {
+        double sum = 0;
+        for (double val : array) {
+            sum += val;
+        }
+        return sum;
+    }
+
+
+    private static double getSum(Collection<Double> values) {
+        double sm = 0;
+        for (Double value : values) {
+            sm += value;
+        }
+        return sm;
+    }
+
+    public static void initializeRandomNumber() {
+        int seed = Resources.INSTANCE.getInt(Properties.RANDOM_SEED);
+        rand = new Random(seed);
     }
 }

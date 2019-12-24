@@ -22,15 +22,15 @@ public class TripDistribution extends Module {
             case HBW:
                 hbWorkDistributor();
                 break;
-            case HBSHOP:
-                hbShopDistributor();
-                break;
-            case HBREC:
-                hbRecreationDistributor();
-                break;
-            case HBOTH:
-                hbOtherDistributor();
-                break;
+//            case HBSHOP:
+//                hbShopDistributor();
+//                break;
+//            case HBREC:
+//                hbRecreationDistributor();
+//                break;
+//            case HBOTH:
+//                hbOtherDistributor();
+//                break;
         }
         logger.info("  Completed trip distribution model.");
     }

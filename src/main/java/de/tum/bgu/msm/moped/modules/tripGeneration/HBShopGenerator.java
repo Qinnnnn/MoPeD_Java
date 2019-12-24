@@ -7,7 +7,7 @@ import de.tum.bgu.msm.moped.data.Purpose;
 public class HBShopGenerator extends TripGenerator{
 
     public HBShopGenerator(DataSet dataSet) {
-        super(dataSet, Purpose.HBSHOP);
+        super(dataSet, Purpose.HBO);
     }
 
     @Override

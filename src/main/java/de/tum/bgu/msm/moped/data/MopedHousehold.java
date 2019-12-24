@@ -3,8 +3,7 @@ package de.tum.bgu.msm.moped.data;
 
 import org.apache.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MopedHousehold {
     private static final Logger logger = Logger.getLogger(MopedHousehold.class);
@@ -14,6 +13,7 @@ public class MopedHousehold {
     private final MopedZone homeZone;
     private final int kids;
     private Map<Integer, MopedPerson> persons  = new HashMap<>();
+    private final EnumMap<Purpose, List<MopedTrip>> tripsByPurpose = new EnumMap<>(Purpose.class);
 
 
     public MopedHousehold(int id, int income, int autos, int kids, MopedZone homeZone) {
@@ -55,7 +55,17 @@ public class MopedHousehold {
     public int getKids() {
         return kids;
     }
+    public synchronized void setTripsByPurpose(List<MopedTrip> trips, Purpose purpose) {
+        tripsByPurpose.put(purpose, trips);
+    }
 
+    public List<MopedTrip> getTripsForPurpose(Purpose purpose) {
+        if(tripsByPurpose.get(purpose) != null) {
+            return tripsByPurpose.get(purpose);
+        } else {
+            return Collections.emptyList();
+        }
+    }
     public Map<Integer, MopedPerson> getPersons() {
         return persons;
     }

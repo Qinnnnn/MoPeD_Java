@@ -9,7 +9,7 @@ import java.util.Map;
 public final class HBRecreationDistributor extends TripDistributor{
 
     public HBRecreationDistributor(DataSet dataSet) {
-        super(dataSet, Purpose.HBREC);
+        super(dataSet, Purpose.HBO);
     }
 
     @Override

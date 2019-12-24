@@ -46,53 +46,21 @@ public abstract class OMXReader extends AbstractInputReader {
         int[] dimensions = omxMatrix.getShape();
         if (type.equals(OmxHdf5Datatype.OmxJavaType.FLOAT)) {
             float[][] fArray = (float[][]) omxMatrix.getData();
-            //new SparseFloatMatrix2D(fArray).assign(argument -> argument / 5280.0f * 1609.344f);
 
             for (int i = 0; i < dimensions[0]; i++) {
 
-                if (dataSet.getSuperPAZ(i + 1) == null) {
-                    continue;
-                }
-
                 for (int j = 0; j < dimensions[1]; j++) {
 
-                    if (i < j) {
-                        break;
-                    }
-
-                    if (dataSet.getSuperPAZ(j + 1) == null) {
-                        continue;
-                    }
-                    // mat.setQuick(i + 1, j + 1, fArray[i][j]);
-
-                    if (fArray[i][j] == 0.0f) {
-                        continue;
-                    }
-
-                    if (fArray[i][j] > 15840.0f) {
+                    if (i < j||fArray[i][j] == 0.0f||fArray[i][j] > 4800.0f) {
                         continue;
                     }
 
                     if (i == j) {
-
-                        distanceInMile = coefByScale.get(PAZ);
-                        //distanceInMile = fArray[i][j]*3/5280.0f;
-                        //dataSet.getSuperPAZ(i + 1).getImpedanceToSuperPAZs().put(j + 1,(short) distanceInMile);
-                        dataSet.getPAZImpedance().setQuick(i + 1, j + 1, distanceInMile);
+                        dataSet.getPAZImpedance().setQuick(i, j, 141);
                     } else {
-                        //distanceInMile = fArray[i][j] *0.0006213f;
-                        //                  if (((i+1)==6775) && ((j+1) == 6547)){
-                        //                    distanceInMile = fArray[i][j] / 5280.0f;
-                        //                  System.out.println("1");
-                        //                System.out.println("2");
-                        //          }
-                        distanceInMile = fArray[i][j] / 5280.0f;
-                        dataSet.getPAZImpedance().setQuick(i + 1, j + 1, Math.max(coefByScale.get(PAZ), distanceInMile));
-                        dataSet.getPAZImpedance().setQuick(j + 1, i + 1, Math.max(coefByScale.get(PAZ), distanceInMile));
-                        //dataSet.getSuperPAZ(i + 1).getImpedanceToSuperPAZs().put(j + 1, (short) distanceInMile);
-                        //dataSet.getSuperPAZ(j + 1).getImpedanceToSuperPAZs().put(i + 1, (short) distanceInMile);
-
-
+                        float distanceInMeter = fArray[i][j];
+                        dataSet.getPAZImpedance().setQuick(i, j, Math.max(141, distanceInMeter));
+                        dataSet.getPAZImpedance().setQuick(j, i , Math.max(141, distanceInMeter));
                     }
 
                 }

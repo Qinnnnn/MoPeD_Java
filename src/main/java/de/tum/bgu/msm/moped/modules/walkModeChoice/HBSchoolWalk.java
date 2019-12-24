@@ -6,7 +6,7 @@ import de.tum.bgu.msm.moped.data.Purpose;
 public final class HBSchoolWalk extends WalkTripGenerator{
 
     public HBSchoolWalk(DataSet dataSet) {
-        super(dataSet, Purpose.HBSCH);
+        super(dataSet, Purpose.HBE);
     }
 
     @Override

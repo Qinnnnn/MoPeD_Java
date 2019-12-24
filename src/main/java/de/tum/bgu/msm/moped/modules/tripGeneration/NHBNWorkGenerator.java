@@ -10,7 +10,7 @@ public final class NHBNWorkGenerator extends TripGenerator{
     private double productionSum = 0;
 
     public NHBNWorkGenerator(DataSet dataSet) {
-        super(dataSet, Purpose.NHBNW);
+        super(dataSet, Purpose.NHBO);
     }
 
 

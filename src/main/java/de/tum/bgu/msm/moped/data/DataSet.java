@@ -1,5 +1,6 @@
 package de.tum.bgu.msm.moped.data;
 
+import cern.colt.map.tint.AbstractIntIntMap;
 import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
 import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import de.tum.bgu.msm.moped.resources.Properties;
@@ -47,6 +48,8 @@ public class DataSet {
     private SparseFloatMatrix2D PAZImpedance;
     private final float totalPop = 592234.327f;
 
+    private final Map<Integer, Integer> external2Internal = new HashMap<>();
+    private final Map<Integer, Integer> internal2External = new HashMap<>();
 
     public void addZone( MopedZone zone) {
         MopedZone test = this.zones.get(zone.getZoneId());
@@ -275,5 +278,21 @@ public class DataSet {
 
     public float getTotalPop() {
         return totalPop;
+    }
+
+    public Map<Integer, Integer> getInternal2External() {
+        return internal2External;
+    }
+
+    public Map<Integer, Integer> getExternal2Internal() {
+        return external2Internal;
+    }
+
+    public int getInternalForExternal(Integer external) {
+        return external2Internal.get(external);
+    }
+
+    public int getExternalForInternal(Integer internal) {
+        return internal2External.get(internal);
     }
 }

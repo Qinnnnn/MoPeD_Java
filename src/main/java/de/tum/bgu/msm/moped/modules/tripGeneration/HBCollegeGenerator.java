@@ -10,7 +10,7 @@ public class HBCollegeGenerator extends TripGenerator {
     private float productionSum = 0.0f;
 
     public HBCollegeGenerator(DataSet dataSet) {
-        super(dataSet, Purpose.HBCOLL);
+        super(dataSet, Purpose.HBE);
     }
 
     @Override

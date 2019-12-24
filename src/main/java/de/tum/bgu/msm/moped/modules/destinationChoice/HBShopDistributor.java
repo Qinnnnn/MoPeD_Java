@@ -12,7 +12,7 @@ public final class HBShopDistributor extends TripDistributor{
 
     private Map<Integer, Double> destinationUtilityPAZ = new HashMap<>();
     public HBShopDistributor(DataSet dataSet) {
-        super(dataSet, Purpose.HBSHOP);
+        super(dataSet, Purpose.HBO);
     }
 
     @Override

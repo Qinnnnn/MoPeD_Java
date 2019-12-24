@@ -52,6 +52,10 @@ public class InputManager {
 
     private void setHouseholdsFromFeed(Map<Integer, MopedHousehold> households) {
         for (MopedHousehold household : households.values()) {
+            if(household.getHomeZone()==null){
+                logger.info("household " +household.getId()+ " is outside study area");
+                continue;
+            }
             if (!dataSet.getZones().containsKey(household.getHomeZone().getZoneId())) {
                 throw new RuntimeException("Feed household " + household.getId() + " refers to non-existing home zone "
                         + household.getHomeZone());
@@ -80,7 +84,12 @@ public class InputManager {
     //TODO:read and set zone features
     public void readZoneData() {
         new ZonesReader(dataSet).read();
-        System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        //System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+    }
+
+    public void readDistanceData() {
+        new DistanceOMXReader(dataSet).read();
+        //System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
     }
 
 

@@ -6,7 +6,7 @@ import de.tum.bgu.msm.moped.data.Purpose;
 public final class HBCollegeWalk extends WalkTripGenerator {
 
     public HBCollegeWalk(DataSet dataSet) {
-        super(dataSet, Purpose.HBCOLL);
+        super(dataSet, Purpose.HBE);
     }
 
     @Override
