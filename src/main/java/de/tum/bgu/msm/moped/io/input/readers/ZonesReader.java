@@ -16,10 +16,11 @@ public class ZonesReader extends CSVReader {
     private static final Logger logger = Logger.getLogger(ZonesReader.class);
 
     private int idIndex;
-    private int mitoZoneIndex;
+    //private int mitoZoneIndex;
     private int superPAZIndex;
     private int totalHouseholdIndex;
     private int index = 0;
+    private int growthRateIndex;
 
     public ZonesReader(DataSet dataSet) {
         super(dataSet);
@@ -29,31 +30,35 @@ public class ZonesReader extends CSVReader {
     public void read() {
         logger.info("  Reading zones from zone file");
         super.read(Resources.INSTANCE.getString(Properties.ZONES), ",");
-        mapFeaturesToZones(dataSet);
+        //mapFeaturesToZones(dataSet);
     }
 
     @Override
     protected void processHeader(String[] header) {
         idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
-        mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZone", header);
+        //mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZone", header);
         superPAZIndex = MoPeDUtil.findPositionInArray("superPAZID", header);
         totalHouseholdIndex = MoPeDUtil.findPositionInArray("totalHH", header);
+        growthRateIndex = MoPeDUtil.findPositionInArray("Hhgrowth", header);
+
     }
 
     @Override
     protected void processRecord(String[] record) {
         int zoneId = Integer.parseInt(record[idIndex]);
-        int mitoZoneId = Integer.parseInt(record[mitoZoneIndex]);
+        //int mitoZoneId = Integer.parseInt(record[mitoZoneIndex]);
         int superPAZID = Integer.parseInt(record[superPAZIndex]);//internalIndex
         float totalHH = Float.parseFloat(record[totalHouseholdIndex]);
+        float growthRate = Float.parseFloat(record[growthRateIndex]);
 
         MopedZone zone = new MopedZone(zoneId, superPAZID, totalHH);
-        zone.setMitoZoneId(mitoZoneId);
+        //zone.setMitoZoneId(mitoZoneId);
         dataSet.addZone(zone);
-        dataSet.getInternal2External().put(superPAZID,zoneId);
-        dataSet.getExternal2Internal().put(zoneId,superPAZID);
+        //dataSet.getInternal2External().put(superPAZID,zoneId);
+        //dataSet.getExternal2Internal().put(zoneId,superPAZID);
+        zone.setGrowthRate(growthRate);
 
-        if (totalHH != 0.0){
+        //if (totalHH != 0.0){
             SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
             if (superPAZ == null){
                 superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
@@ -63,7 +68,7 @@ public class ZonesReader extends CSVReader {
             zone.setIndex(index);
             dataSet.addOriginPAZ(index, zone);
             index++;
-        }
+        //}
     }
 
 

@@ -38,14 +38,14 @@ public class OutputWriter {
 
 
     public void writeOut () throws FileNotFoundException  {
-        String outputTripGen = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_ALL);
+        String outputTripGen = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_ALL)+"_"+purpose.toString()+".csv";
         StringBuilder tripGen = new StringBuilder();
 
         //write header
         tripGen.append("zoneId,tripGen,walkTrips,walkShare,tripLength,averageTripLengthSuperPAZ,intrazonalTripShare,averageTripLengthPAZ");
         tripGen.append('\n');
 
-        String testpath = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_OD);
+        String testpath = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_OD)+"_"+purpose.toString()+".csv";
         StringBuilder test = new StringBuilder();
 
         //write header

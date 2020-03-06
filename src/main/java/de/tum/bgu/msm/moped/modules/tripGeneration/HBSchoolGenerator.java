@@ -11,7 +11,7 @@ public final class HBSchoolGenerator extends TripGenerator{
     private final float HOUSEHOLD_PARAM = 501701.0f;
 
     public HBSchoolGenerator(DataSet dataSet) {
-        super(dataSet, Purpose.HBE);
+        super(dataSet, Purpose.HBSCH);
     }
 
     @Override

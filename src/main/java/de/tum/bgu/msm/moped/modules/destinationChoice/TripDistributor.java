@@ -21,20 +21,33 @@ public abstract class TripDistributor {
     protected Map<Integer, Double> destinationUtility = new HashMap<>();
     private Map<Integer, Double> sumExpUtilityList;
     private final Map<Purpose, Double> coefNoCarByPurpose = new HashMap<Purpose, Double>(){{
-//        put(Purpose.HBW, -1.496);
-//        put(Purpose.HBSHOP, -2.25591);
-//        put(Purpose.HBREC, -1.74957);
-//        put(Purpose.HBOTH, -1.94038);
+        put(Purpose.HBW, -1.588032);
+        put(Purpose.HBSHOP, -1.586985);
+        put(Purpose.HBREC, -2.232597);
+        put(Purpose.HBOTH, -2.616255);
+        put(Purpose.NHBW, -2.540999);
+        put(Purpose.NHBNW, -2.639274);
     }};
 
     private final Map<Purpose, Double> coefHasCarByPurpose = new HashMap<Purpose, Double>(){{
-//        put(Purpose.HBW, -1.54);
-//        put(Purpose.HBSHOP, -2.25591);
-//        put(Purpose.HBREC, -1.74957);
-//        put(Purpose.HBOTH, -1.94038);
+        put(Purpose.HBW, -1.857719);
+        put(Purpose.HBSHOP, -1.586985);
+        put(Purpose.HBREC, -2.232597);
+        put(Purpose.HBOTH, -2.616255);
+        put(Purpose.NHBW, -2.540999);
+        put(Purpose.NHBNW, -2.639274);
     }};
 
-    private final double intercept = -0.761;//-0.261;
+    private final Map<Purpose, Double> coefInteractionByPurpose = new HashMap<Purpose, Double>(){{
+        put(Purpose.HBW, 0.0);
+        put(Purpose.HBSHOP, -0.152136);
+        put(Purpose.HBREC, 0.0);
+        put(Purpose.HBOTH, 0.0);
+        put(Purpose.NHBW, 0.0);
+        put(Purpose.NHBNW, 0.0);
+    }};
+
+    //private final double intercept = -0.761;//-0.261;
 
     public TripDistributor(DataSet dataSet, Purpose purpose) {
         this.dataSet = dataSet;
@@ -47,13 +60,13 @@ public abstract class TripDistributor {
         calculateDestinationUtility();
         tripDistribution = new DenseLargeFloatMatrix2D(origins, destinations);
         sumExpUtilityList = new HashMap<>();
-        calculateUtilityCalculator(coefNoCarByPurpose.get(purpose));
+        calculateUtilityCalculator(coefNoCarByPurpose.get(purpose),coefInteractionByPurpose.get(purpose));
         distributeNoCarTrips();
         dataSet.addDistributionNoCar(tripDistribution, purpose);
 
         tripDistribution = new DenseLargeFloatMatrix2D(origins, destinations);
         sumExpUtilityList = new HashMap<>();
-        calculateUtilityCalculator(coefHasCarByPurpose.get(purpose));
+        calculateUtilityCalculator(coefHasCarByPurpose.get(purpose),coefInteractionByPurpose.get(purpose));
         distributeHasCarTrips();
         dataSet.addDistributionHasCar(tripDistribution, purpose);
         //distributeTripsToPAZ(coefByPurpose.get(purpose));
@@ -61,7 +74,7 @@ public abstract class TripDistributor {
 
 
     //Read impedance from csv file
-    private void calculateUtilityCalculator(double coef) {
+    private void calculateUtilityCalculator(double coef, double interaction) {
         for (MopedZone origin : dataSet.getOriginPAZs().values()) {
             double sumExpUtility = 0.0;
             float expUtility;
@@ -71,12 +84,7 @@ public abstract class TripDistributor {
                     continue;
                 }
 
-                double utilitySum = 0.0;
-                if(origin.getSuperPAZId() == (destination.getSuperPAZId())){
-                    utilitySum = coef * distance+ destinationUtility.get(destination.getIndex());
-                } else {
-                    utilitySum = intercept + coef * distance + destinationUtility.get(destination.getIndex());
-                }
+                double utilitySum = coef * distance + destinationUtility.get(destination.getIndex())+interaction*distance*destination.getRetail();
 
                 expUtility = (float) Math.exp(utilitySum);
                 tripDistribution.setQuick(origin.getIndex(), destination.getIndex(), expUtility);

@@ -49,7 +49,7 @@ public class TransitReader extends CSVReader {
         ProjCoordinate targetCoordinate = transform(x,y);
         Transit transit = new Transit(id, new Coordinate(targetCoordinate.x,targetCoordinate.y),weightedTransitStop);
 
-        MucPIECaculator.transitTree.put(transit.getCoord().x,transit.getCoord().y,transit);
+        //MucPIECaculator.transitTree.put(transit.getCoord().x,transit.getCoord().y,transit);
 
 
     }

@@ -7,7 +7,7 @@ import de.tum.bgu.msm.moped.data.Purpose;
 public final class HBOtherGenerator extends TripGenerator{
 
     public HBOtherGenerator(DataSet dataSet) {
-        super(dataSet, Purpose.HBO);
+        super(dataSet, Purpose.HBOTH);
     }
 
     @Override

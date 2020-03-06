@@ -63,10 +63,10 @@ public final class NHBWorkGenerator extends TripGenerator{
             zoneWeightList.put(zone.getZoneId(),zoneWeight);
         }
 
-        FloatMatrix attraction = new FloatMatrix(dataSet.getOriginPAZs().size(), dataSet.getHOUSEHOLDTYPESIZE());;
+        FloatMatrix attraction = new FloatMatrix(dataSet.getZones().size(), dataSet.getHOUSEHOLDTYPESIZE());;
         for (int hhTypeId : dataSet.getHhTypes().keySet()){
             float sumTripsByhhType = production.getColumn(hhTypeId).sum();
-            for(MopedZone zone : dataSet.getOriginPAZs().values()){
+            for(MopedZone zone : dataSet.getZones().values()){
                 float tripGen = sumTripsByhhType * (zoneWeightList.get(zone.getZoneId())/sumWeight);
                 attraction.put(zone.getIndex(),hhTypeId,tripGen);
             }

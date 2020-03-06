@@ -6,28 +6,28 @@ import de.tum.bgu.msm.moped.data.SuperPAZ;
 
 import java.util.Map;
 
-public final class HBRecreationDistributor extends TripDistributor{
+public final class NHBWorkDistributor extends TripDistributor {
 
-    public HBRecreationDistributor(DataSet dataSet) {
-        super(dataSet, Purpose.HBREC);
+    public NHBWorkDistributor(DataSet dataSet) {
+        super(dataSet, Purpose.NHBW);
     }
 
     //WSTLUR paper
     @Override
     protected void calculateDestinationUtility() {
-        double sizeRETSERCoef = 0.097886;
-        double sizeHHCoef = 0.038993;
-        double slopeCoef = -0.119083;
-        double freewayCoef = -0.422316;
-        double industrialPropCoef = -0.098139;
-        double parkCoef = 0.714835;
+        double sizeOTHERCoef = 0.619808;
+        double sizeHHCoef = 0.063177;
+        double slopeCoef = -0.227121;
+        double freewayCoef = -0.218996;
+        double industrialPropCoef = -0.994483;
+        double parkCoef = 0.0;
 
         for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
-            double sizeRETSER =  superPAZ.getRetail()+superPAZ.getService();
+            double sizeOTHER =  superPAZ.getTotalEmpl()-superPAZ.getIndustrial();
             double sizeHH = superPAZ.getHousehold();
-            if(sizeRETSER <= 1){
-                sizeRETSER = sizeRETSER+1;
+            if(sizeOTHER <= 1){
+                sizeOTHER = sizeOTHER+1;
             }
 
             if(sizeHH <= 1){
@@ -36,36 +36,34 @@ public final class HBRecreationDistributor extends TripDistributor{
 
             double supportVariable = parkCoef*superPAZ.getPark();
             double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
-            double utility =  sizeRETSERCoef * Math.log(sizeRETSER) + sizeHHCoef * Math.log(sizeHH) + supportVariable + barrierVariable;
+            double utility =  sizeOTHERCoef * Math.log(sizeOTHER) + sizeHHCoef * Math.log(sizeHH) + supportVariable + barrierVariable;
             destinationUtility.put(superPAZ.getIndex(),utility);
         }
     }
 
 //    @Override
 //    protected void calculateDestinationUtility() {
-//        double size = 0.0517537f;
-//        double park = 0.460169f;
-//        double empRET = 6.50648f;
-//        double empGOV = 17.1087f;
-//        double household = -3.16331f;
-//        double pie = 0.0110469f;
-//        double slope = -0.0529455f;
-//        double freeway = -0.16851f;
-//        double empAllOthPropotion = -0.0898361f;
+//        double size = 0.399613f;
+//        double park = 0.115274f;
+//        double empRETGOV = 3.82922f;
+//        double household = -1.96896f;
+//        double pie = 0.0247138f;
+//        double slope = -0.426383f;
+//        double freeway = 0.10023f;
+//        double empAllOthPropotion = -0.398784f;
 //
 //        for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
-//            double employmentRET = superPAZ.getRetail();
-//            double employmentGOV = superPAZ.getGovernment();
+//            double employmentRETGOV = superPAZ.getRetail() + superPAZ.getGovernment();
 //            double empOtherPropotion;
 //            if (superPAZ.getTotalEmpl() == 0.0){
 //                empOtherPropotion = 0.0f;
 //            }else {
-//                empOtherPropotion = (superPAZ.getTotalEmpl() - employmentRET-employmentGOV)/superPAZ.getTotalEmpl();
+//                empOtherPropotion = (superPAZ.getTotalEmpl() - employmentRETGOV)/superPAZ.getTotalEmpl();
 //            }
-//            double sizeVariable = (Math.exp(empRET)* employmentRET + Math.exp(empGOV)* employmentGOV + Math.exp(household)* superPAZ.getHousehold());
+//            double sizeVariable =  (Math.exp(empRETGOV)* employmentRETGOV + Math.exp(household)* superPAZ.getHousehold());
 //            double supportVariable = pie * superPAZ.getPie() + park * superPAZ.getPark();
 //            double barrierVariable = slope*superPAZ.getSlope() + freeway*superPAZ.getFreeway() + empAllOthPropotion*empOtherPropotion;
-//            double utility = (size * Math.log(sizeVariable) + supportVariable + barrierVariable);
+//            double utility =  (size * Math.log(sizeVariable) + supportVariable + barrierVariable);
 //            destinationUtility.put(superPAZ.getIndex(),utility);
 //        }
 //    }

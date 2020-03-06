@@ -51,13 +51,13 @@ public abstract class WalkTripGenerator {
                 int age = hhType.getAge();
                 int car = hhType.getCars();
                 int kid = hhType.getKids();
-                float pieActivity = originZone.getPieActivity();
+//                float pieActivity = originZone.getPieActivity();
                 float pieEmpl = originZone.getPieEmpl();
-                float pieArea = originZone.getPieArea();
+//                float pieArea = originZone.getPieArea();
                 float piePop = originZone.getPiePop();
 //                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, piePop);
 //                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, pieArea);
-                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieActivity, pieArea);
+                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, piePop);
 //                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy);
                 float utilityHousehold = calculateHouseholdRelatedUtility(hhSize, worker, income, age, car, kid);
                 float utilitySum = utilityZone + utilityHousehold;
@@ -87,7 +87,8 @@ public abstract class WalkTripGenerator {
                 }
             }
 
-            if((totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips)>0.000001){
+            if((totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips)>0.00001){
+                System.out.println(totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips);
                 System.out.println("mistake!");
             }
 

@@ -25,7 +25,7 @@ public class MoPeDModel {
         this.dataSet = new DataSet();
         this.manager = new InputManager(dataSet);
         Resources.INSTANCE.setResources(resources);
-        MoPeDUtil.initializeRandomNumber();
+        //MoPeDUtil.initializeRandomNumber();
     }
 
     public static MoPeDModel initializeModelFromMito(String propertiesFile) {
@@ -64,23 +64,23 @@ public class MoPeDModel {
         TripGeneration tripGen = new TripGeneration(dataSet);
         tripGen.run(purpose);
         long generationTime = System.currentTimeMillis()- startTime;
-        System.out.println("Trip generation run time:" + generationTime);
+        logger.info("Trip generation run time:" + generationTime);
 
         long t1 = System.currentTimeMillis();
         WalkModeChoice walkMode = new WalkModeChoice(dataSet);
         walkMode.run(purpose);
         long modeChoiceTime = System.currentTimeMillis()- t1;
-        System.out.println("Mode choice run time:" + modeChoiceTime);
+        logger.info("Mode choice run time:" + modeChoiceTime);
 
         //manager.readAsStandAlone2();
         long t2 = System.currentTimeMillis();
         TripDistribution distribution = new TripDistribution(dataSet);
         distribution.run(purpose);
         long distributionTime = System.currentTimeMillis()- t2;
-        System.out.println("Destination choice run time:" + distributionTime);
+        logger.info("Destination choice run time:" + distributionTime);
 
         long total = generationTime+modeChoiceTime+distributionTime;
-        System.out.println("total run time:" + total);
+        logger.info("total run time:" + total);
 
         try {
             writeOut(purpose);

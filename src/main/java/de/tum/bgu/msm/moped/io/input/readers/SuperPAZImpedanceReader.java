@@ -35,21 +35,21 @@ public class SuperPAZImpedanceReader extends CSVReader{
     protected void processHeader(String[] header) {
         originIndex = MoPeDUtil.findPositionInArray("superPAZ_o", header);
         destinationIndex = MoPeDUtil.findPositionInArray("superPAZ_d", header);
-        distanceIndex = MoPeDUtil.findPositionInArray("dist", header);
+        distanceIndex = MoPeDUtil.findPositionInArray("distInKM", header);
     }
 
     @Override
     protected void processRecord(String[] record) {
         int origin = Integer.parseInt(record[originIndex]);
         int destination = Integer.parseInt(record[destinationIndex]);
-        double distance = Double.parseDouble(record[distanceIndex]);
+        float distance = Float.parseFloat(record[distanceIndex]);
         //float distanceInMile = (float)distance / 5280.0f;
-        float distanceInKM = (float)distance /3280.84f;
+        //float distanceInKM = (float)distance /3280.84f;
         SuperPAZ originSuperPAZ = dataSet.getSuperPAZ(origin);
         SuperPAZ destinationSuperPAZ = dataSet.getSuperPAZ(destination);
-        if ((originSuperPAZ.getHousehold() != 0.0) & (destinationSuperPAZ.getTotalEmpl() != 0.0)&(distanceInKM <= 4.8)) {
+        if ((originSuperPAZ.getHousehold() != 0.0) & (destinationSuperPAZ.getTotalEmpl() != 0.0)&(distance <= 4.8)) {
             //distanceInMile = Math.max(440.0f / 5280.0f,distanceInMile);
-            distanceInKM = Math.max(440.0f / 3280.84f,distanceInKM);
+            float distanceInKM = Math.max(0.134f,distance);
             impedance.put(origin, destinationSuperPAZ.getIndex(), distanceInKM);
             //originSuperPAZ.getImpedanceToSuperPAZs().put(destinationSuperPAZ.getIndex(), distanceInMile);
         }

@@ -47,6 +47,8 @@ public class MopedZone {
 
     private int mitoZoneId;
 
+    private float growthRate;
+
     private Map<Integer, Float> distribution = new HashMap<>();
 
     public float getTotalEmpl() {
@@ -328,5 +330,13 @@ public class MopedZone {
 
     public void setIndustrialJobDensity(double industrialJobDensity) {
         this.industrialJobDensity = industrialJobDensity;
+    }
+
+    public float getGrowthRate() {
+        return growthRate;
+    }
+
+    public void setGrowthRate(float growthRate) {
+        this.growthRate = growthRate;
     }
 }

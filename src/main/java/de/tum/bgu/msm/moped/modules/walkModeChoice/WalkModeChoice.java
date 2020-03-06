@@ -21,23 +21,39 @@ public class WalkModeChoice extends Module {
             case HBW:
                 hbWorkWalk();
                 break;
-//            case HBSHOP:
-//                hbShopWalk();
-//                break;
-//            case HBREC:
-//                hbRecreationWalk();
-//                break;
-//            case HBOTH:
-//                hbOtherWalk();
-//                break;
-//            case HBSCH:
-//                hbSchoolWalk();
-//                break;
-//            case HBCOLL:
-//                hbCollegeWalk();
-//                break;
+            case HBSHOP:
+                hbShopWalk();
+                break;
+            case HBREC:
+                hbRecreationWalk();
+                break;
+            case HBOTH:
+                hbOtherWalk();
+                break;
+            case HBSCH:
+                hbSchoolWalk();
+                break;
+            case HBCOLL:
+                hbCollegeWalk();
+                break;
+            case NHBW:
+                nhbWorkWalk();
+                break;
+            case NHBNW:
+                nhbOtherWalk();
+                break;
         }
         logger.info("  Completed walk mode choice model.");
+    }
+
+    private void nhbOtherWalk() {
+        NHBOtherWalk nhbOtherWalk = new NHBOtherWalk(dataSet);
+        nhbOtherWalk.run();
+    }
+
+    private void nhbWorkWalk() {
+        NHBWorkWalk nhbWorkWalk = new NHBWorkWalk(dataSet);
+        nhbWorkWalk.run();
     }
 
     private void hbWorkWalk() {

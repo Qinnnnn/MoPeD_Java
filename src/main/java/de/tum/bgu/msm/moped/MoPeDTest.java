@@ -12,7 +12,7 @@ class MoPeDTest {
 
     public static void main(String[] args) {
         // main run method
-        Purpose purpose = Purpose.HBW;
+        Purpose purpose = Purpose.HBSHOP;
         MoPeDTest test = new MoPeDTest();
         ResourceBundle rb = MoPeDUtil.createResourceBundle(args[0]);
         MoPeDUtil.setBaseDirectory(rb.getString("base.directory"));

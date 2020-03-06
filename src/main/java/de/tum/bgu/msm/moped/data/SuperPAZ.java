@@ -14,6 +14,52 @@ public class SuperPAZ {
     private float government;
     private float retail;
     private float service;
+
+    public float getAfm() {
+        return afm;
+    }
+
+    public void setAfm(float afm) {
+        this.afm = afm;
+    }
+
+    public float getConstruction() {
+        return construction;
+    }
+
+    public void setConstruction(float construction) {
+        this.construction = construction;
+    }
+
+    public float getManufacturing() {
+        return manufacturing;
+    }
+
+    public void setManufacturing(float manufacturing) {
+        this.manufacturing = manufacturing;
+    }
+
+    public float getTpu() {
+        return tpu;
+    }
+
+    public void setTpu(float tpu) {
+        this.tpu = tpu;
+    }
+
+    public float getWho() {
+        return who;
+    }
+
+    public void setWho(float who) {
+        this.who = who;
+    }
+
+    private float afm;
+    private float construction;
+    private float manufacturing;
+    private float tpu;
+    private float who;
     private float pie;
     private float slope;
     private int freeway;

@@ -16,10 +16,16 @@ public class SuperPAZAttributesReader extends CSVReader {
     private int governmentIndex;
     private int retailIndex;
     private int serviceIndex;
+    private int afmIndex;
+    private int conIndex;
+    private int mfgIndex;
+    private int tpuIndex;
+    private int whoIndex;
+
     private int pieIndex;
     private int slopeIndex;
     private int freewayIndex;
-    private int industrialIndex;
+    //private int industrialIndex;
     private int parkIndex;
     private int index = 0;
     private int count = 0;
@@ -50,7 +56,14 @@ public class SuperPAZAttributesReader extends CSVReader {
         slopeIndex = MoPeDUtil.findPositionInArray("SLP_MEAN", header);
         freewayIndex = MoPeDUtil.findPositionInArray("FWY_IN_ZONE", header);
         parkIndex = MoPeDUtil.findPositionInArray("PRK", header);
-        industrialIndex = MoPeDUtil.findPositionInArray("EMP_INDUSTRIAL", header);
+        //industrialIndex = MoPeDUtil.findPositionInArray("EMP_INDUSTRIAL", header);
+        afmIndex = MoPeDUtil.findPositionInArray("EMP_AFM", header);
+        conIndex = MoPeDUtil.findPositionInArray("EMP_CON", header);
+        mfgIndex = MoPeDUtil.findPositionInArray("EMP_MFG", header);
+        tpuIndex = MoPeDUtil.findPositionInArray("EMP_TPU", header);
+        whoIndex = MoPeDUtil.findPositionInArray("EMP_WHO", header);
+
+
     }
 
     @Override
@@ -74,7 +87,12 @@ public class SuperPAZAttributesReader extends CSVReader {
         float slope = Float.parseFloat(record[slopeIndex]);
         int freeway = Integer.parseInt(record[freewayIndex]);
         int park = Integer.parseInt(record[parkIndex]);
-        float industrial = Float.parseFloat(record[industrialIndex]);
+        float afm = Float.parseFloat(record[afmIndex]);
+        float con = Float.parseFloat(record[conIndex]);
+        float mfg = Float.parseFloat(record[mfgIndex]);
+        float tpu = Float.parseFloat(record[tpuIndex]);
+        float who = Float.parseFloat(record[whoIndex]);
+        //float industrial = Float.parseFloat(record[industrialIndex]);
 
         dataSet.getSuperPAZ(superPAZId).setHousehold(household);
         dataSet.getSuperPAZ(superPAZId).setTotalEmpl(totalEmpl);
@@ -86,7 +104,12 @@ public class SuperPAZAttributesReader extends CSVReader {
         dataSet.getSuperPAZ(superPAZId).setSlope(slope);
         dataSet.getSuperPAZ(superPAZId).setFreeway(freeway);
         dataSet.getSuperPAZ(superPAZId).setPark(park);
-        dataSet.getSuperPAZ(superPAZId).setIndustrial(industrial);
+        dataSet.getSuperPAZ(superPAZId).setIndustrial(afm+con+mfg);
+        dataSet.getSuperPAZ(superPAZId).setAfm(afm);
+        dataSet.getSuperPAZ(superPAZId).setConstruction(con);
+        dataSet.getSuperPAZ(superPAZId).setManufacturing(mfg);
+        dataSet.getSuperPAZ(superPAZId).setTpu(tpu);
+        dataSet.getSuperPAZ(superPAZId).setWho(who);
 
         if (totalEmpl != 0){
             dataSet.addDestinationSuperPAZ(index, superPAZ);

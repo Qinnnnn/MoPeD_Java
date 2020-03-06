@@ -6,11 +6,11 @@ public enum Purpose {
     HBS,
     HBO,
     NHBO,
-//    HBSHOP,
-//    HBREC,
-//    HBSCH,
-//    HBCOLL,
-//    HBOTH,
-    NHBW;
-//    NHBNW;
+    HBSHOP,
+    HBREC,
+    HBSCH,
+    HBCOLL,
+    HBOTH,
+    NHBW,
+    NHBNW;
 }

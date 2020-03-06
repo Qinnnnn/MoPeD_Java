@@ -23,11 +23,11 @@ public class HouseholdTypeDistributionReader extends CSVReader{
     public void read() {
         logger.info(" Reading household distribution.");
         distribution = new FloatMatrix(dataSet.getOriginPAZs().size(), dataSet.getHOUSEHOLDTYPESIZE());
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
-        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION1), ",");
-        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION2), ",");
+        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
+//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION1), ",");
+//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION2), ",");
 //        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION3), ",");
-        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION4), ",");
+//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION4), ",");
         dataSet.setDistribution(distribution);
     }
 
@@ -47,8 +47,10 @@ public class HouseholdTypeDistributionReader extends CSVReader{
                     if (dataSet.getHouseholdType(id) != null) {
                         float hh = Float.parseFloat(record[id]);
                         //float scenariohh = hh*(1+hh/dataSet.getTotalPop()*20000);
-                        float scenariohh = (float) (Float.parseFloat(record[id])*(1+0.02));
-                        distribution.put(zone.getIndex(), id, hh);
+                        //float scenariohh = (float) (Float.parseFloat(record[id])*(1+0.02));
+                        float scenariohh = Float.parseFloat(record[id])*zone.getGrowthRate();
+                        //distribution.put(zone.getIndex(), id, hh);
+                        distribution.put(zone.getIndex(), id, scenariohh);
                     }
                 }
             }
