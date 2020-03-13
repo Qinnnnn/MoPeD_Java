@@ -6,11 +6,12 @@ public enum Purpose {
     HBS,
     HBO,
     NHBO,
-    HBSHOP,
+    NHBW,
+    //additional purpose for moped standalone
     HBREC,
+    HBSHOP,
+    HBOTH,
     HBSCH,
     HBCOLL,
-    HBOTH,
-    NHBW,
     NHBNW;
 }

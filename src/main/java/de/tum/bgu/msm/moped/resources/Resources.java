@@ -41,4 +41,7 @@ public enum Resources {
         return ResourceUtil.getDoubleProperty(resources, key);
     }
 
+    public ResourceBundle getResources() {
+        return resources;
+    }
 }

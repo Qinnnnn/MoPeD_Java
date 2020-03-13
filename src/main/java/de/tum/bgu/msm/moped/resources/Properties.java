@@ -26,4 +26,6 @@ public class Properties {
     public static final String SUPERPAZATTRIBUTE = "superPAZAttributes.data.file";
     public static final String SUPERPAZIMPEDANCE = "superPAZImpedance.data.file";
     public static final String PAZIMPEDANCE = "pazImpedance.data.file";
+    public static final String DESTSEARCHDISTANCE = "destination.search.distance";
+    public static final String MATSIMNETWORK = "mastsim.network";
 }

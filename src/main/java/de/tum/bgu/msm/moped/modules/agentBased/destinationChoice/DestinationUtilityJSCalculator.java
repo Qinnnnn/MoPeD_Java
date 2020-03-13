@@ -9,7 +9,7 @@ import java.io.Reader;
 
 public class DestinationUtilityJSCalculator extends JavaScriptCalculator<Double> {
 
-    private final String function;
+    private String function;
 
     DestinationUtilityJSCalculator(Reader reader, Purpose purpose) {
         super(reader);
@@ -20,7 +20,19 @@ public class DestinationUtilityJSCalculator extends JavaScriptCalculator<Double>
         }
     }
 
+    public DestinationUtilityJSCalculator(Reader reader) {
+        super(reader);
+    }
+
     Double calculateUtility(double sizeVariable, double barrierVariable, double travelDistance) {
         return super.calculate(function, travelDistance, sizeVariable,barrierVariable);
+    }
+
+    public Double calculateUtility(Purpose purpose, double sizeVariable, double barrierVariable, double travelDistance) {
+        if (purpose.equals(Purpose.HBW)||purpose.equals(Purpose.HBE)) {
+            return super.calculate("calculateHBWHBE", travelDistance, sizeVariable,barrierVariable);
+        }else {
+            return super.calculate("calculateOther", travelDistance, sizeVariable,barrierVariable);
+        }
     }
 }

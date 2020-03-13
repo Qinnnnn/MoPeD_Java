@@ -10,7 +10,7 @@ var calculateHBWProbabilities = function(hh, pp, trip){
     car = hh.getAutos();
     kid = hh.getKids();
     lic = pp.hasDriversLicense();
-    travelDistance = trip.getTripDistance();
+    travelDistance = trip.getTripDistance()/1000;
     activityDensity = hh.getHomeZone().getActivityDensity();
 
     utilityWalk = coefficientsHBW[0]+coefficientsHBW[1]*car+coefficientsHBW[2]*lic +
@@ -25,7 +25,7 @@ var calculateHBWProbabilities = function(hh, pp, trip){
 
 var calculateHBEProbabilities = function(hh, trip){
 
-    travelDistance = trip.getTripDistance();
+    travelDistance = trip.getTripDistance()/1000;
     activityDensity = hh.getHomeZone().getActivityDensity();
 
     utilityWalk = coefficientsHBE[0]+coefficientsHBE[1]*Math.log(activityDensity+1)+coefficientsHBE[2]*travelDistance;

@@ -10,6 +10,7 @@ import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.jblas.FloatMatrix;
+import org.matsim.core.utils.collections.QuadTree;
 import org.opengis.feature.simple.SimpleFeature;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class DataSet {
     private FloatMatrix impedance;
 
     private Map<Purpose, FloatMatrix> productionsByPurpose = new HashMap<>();
-    private  Map<Purpose, FloatMatrix> walkTripsByPurpose = new HashMap<>();
+    private Map<Purpose, FloatMatrix> walkTripsByPurpose = new HashMap<>();
     private Map<Purpose, DenseLargeFloatMatrix2D> distributionsNoCarByPurpose = new HashMap<>();
     private Map<Purpose, DenseLargeFloatMatrix2D> distributionsHasCarByPurpose = new HashMap<>();
     private Map<Purpose, DenseLargeFloatMatrix2D> distributionsByPAZByPurpose = new HashMap<>();
@@ -39,6 +40,7 @@ public class DataSet {
 
     private Map<Integer, SimpleFeature> zoneFeatureMap = new HashMap<>();
     private SimpleFeatureSource ozMapSource;
+    private QuadTree<MopedZone> zoneSearchTree;
 
 
     private int year;
@@ -294,5 +296,13 @@ public class DataSet {
 
     public int getExternalForInternal(Integer internal) {
         return internal2External.get(internal);
+    }
+
+    public QuadTree<MopedZone> getZoneSearchTree() {
+        return zoneSearchTree;
+    }
+
+    public void setZoneSearchTree(QuadTree<MopedZone> zoneSearchTree) {
+        this.zoneSearchTree = zoneSearchTree;
     }
 }

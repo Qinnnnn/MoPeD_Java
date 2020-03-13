@@ -12,7 +12,7 @@ import java.io.Reader;
 
 public class ModeChoiceJSCalculator extends JavaScriptCalculator<Double> {
 
-    protected ModeChoiceJSCalculator(Reader reader) {
+    public ModeChoiceJSCalculator(Reader reader) {
         super(reader);
     }
 

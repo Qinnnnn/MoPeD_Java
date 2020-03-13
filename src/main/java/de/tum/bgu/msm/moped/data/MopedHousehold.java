@@ -4,6 +4,7 @@ package de.tum.bgu.msm.moped.data;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MopedHousehold {
     private static final Logger logger = Logger.getLogger(MopedHousehold.class);
@@ -68,5 +69,19 @@ public class MopedHousehold {
     }
     public Map<Integer, MopedPerson> getPersons() {
         return persons;
+    }
+
+    public List<MopedTrip> getNonHomeBasedTrips() {
+        List<MopedTrip> nonHomeBasedTrips = new ArrayList<>();
+        if(tripsByPurpose.get(Purpose.NHBW)!=null) {
+            nonHomeBasedTrips.addAll(tripsByPurpose.get(Purpose.NHBW));
+        }
+
+        if(tripsByPurpose.get(Purpose.NHBO)!=null) {
+            nonHomeBasedTrips.addAll(tripsByPurpose.get(Purpose.NHBO));
+        }
+
+        return nonHomeBasedTrips;
+
     }
 }

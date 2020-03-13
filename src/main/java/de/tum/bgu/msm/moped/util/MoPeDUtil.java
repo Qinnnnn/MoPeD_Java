@@ -1,6 +1,10 @@
 package de.tum.bgu.msm.moped.util;
 
+import cern.colt.function.tdouble.IntDoubleProcedure;
+import cern.colt.list.tdouble.DoubleArrayList;
+import cern.colt.map.tdouble.OpenIntDoubleHashMap;
 import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
+import cern.jet.stat.tdouble.DoubleDescriptive;
 import com.pb.common.util.ResourceUtil;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
@@ -236,5 +240,20 @@ public class MoPeDUtil {
     public static void initializeRandomNumber() {
         int seed = Resources.INSTANCE.getInt(Properties.RANDOM_SEED);
         rand = new Random(seed);
+    }
+
+    public static int select(OpenIntDoubleHashMap openIntDoubleHashMap, Random rand) {
+        // select item based on probabilities (for mapped double probabilities)
+        double sum = DoubleDescriptive.sum(openIntDoubleHashMap.values());
+
+        double selectedWeight = rand.nextDouble() * sum;
+        double select = 0;
+        for (int i: openIntDoubleHashMap.keys().elements()) {
+            select += openIntDoubleHashMap.get(i);
+            if (select > selectedWeight) {
+                return i;
+            }
+        }
+        throw new RuntimeException("Error selecting item from weighted probabilities");
     }
 }

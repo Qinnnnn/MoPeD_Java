@@ -176,6 +176,13 @@
             <!--<version>16.1</version>-->
             <!--<type>pom</type>-->
         <!--</dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.matsim.contrib/dvrp -->
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>dvrp</artifactId>
+            <version>11.0</version>
+        </dependency>
+
 
 
     </dependencies>

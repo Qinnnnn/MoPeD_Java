@@ -106,7 +106,7 @@ public final class NhbwNhboDistribution extends RandomizableConcurrentFunction<V
             return MoPeDUtil.select(random, possibleBaseZones);
         }
         if (trip.getPerson().getOccupation() == relatedMitoOccupationStatus &&
-            trip.getPerson().getOccupation() != null) {
+            trip.getPerson().getOccupationZone() != null) {
             return trip.getPerson().getOccupationZone();
         }
 
