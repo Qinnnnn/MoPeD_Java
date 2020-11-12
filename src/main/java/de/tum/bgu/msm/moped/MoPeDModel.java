@@ -76,17 +76,25 @@ public class MoPeDModel {
     public void runAggregatedModel(Purpose purpose) {
         long startTime = System.currentTimeMillis();
         logger.info("Started the Model of Pedestrian Demand (MoPeD)");
+        logger.info("total household distribution: " + dataSet.getDistribution().sum());
+        logger.info("total zones: " + dataSet.getZones().size());
+        logger.info("total superPAZs: " + dataSet.getSuperPAZs().size());
+        logger.info("total original PAZ: " + dataSet.getOriginPAZs().size());
+        logger.info("zone search tree: " + dataSet.getZoneSearchTree().size());
+        logger.info("superPAZ search tree: " + dataSet.getSuperPAZSearchTree().size());
 
         TripGeneration tripGen = new TripGeneration(dataSet);
         tripGen.run(purpose);
         long generationTime = System.currentTimeMillis()- startTime;
         logger.info("Trip generation run time:" + generationTime);
+        logger.info("total Production:" + dataSet.getProductionsByPurpose().get(purpose).sum());
 
         long t1 = System.currentTimeMillis();
         WalkModeChoice walkMode = new WalkModeChoice(dataSet);
         walkMode.run(purpose);
         long modeChoiceTime = System.currentTimeMillis()- t1;
         logger.info("Mode choice run time:" + modeChoiceTime);
+        logger.info("total Walk Trip:" + dataSet.getWalkTripsByPurpose().get(purpose).sum());
 
         //manager.readAsStandAlone2();
         long t2 = System.currentTimeMillis();

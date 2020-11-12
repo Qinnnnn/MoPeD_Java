@@ -1,6 +1,11 @@
 package de.tum.bgu.msm.moped.data;
 
+import gnu.trove.list.array.TIntArrayList;
+import org.geotools.util.IntegerList;
+import org.opengis.feature.simple.SimpleFeature;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SuperPAZ {
@@ -14,6 +19,15 @@ public class SuperPAZ {
     private float government;
     private float retail;
     private float service;
+    private SimpleFeature shapeFeature;
+    private boolean isClark;
+    public SimpleFeature getShapeFeature() {
+        return shapeFeature;
+    }
+
+    public void setShapeFeature(SimpleFeature shapeFeature) {
+        this.shapeFeature = shapeFeature;
+    }
 
     public float getAfm() {
         return afm;
@@ -67,6 +81,9 @@ public class SuperPAZ {
     private float industrial;
     private Map<Integer, MopedZone> pazList= new HashMap<>();
     private Map<Integer, Short> impedanceToSuperPAZs = new HashMap<>();
+    private TIntArrayList pazs= new TIntArrayList();
+    private float networkDesnity;
+    private int block;
 
     public SuperPAZ(int superPAZId, String type) {
         this.superPAZId = superPAZId;
@@ -165,7 +182,7 @@ public class SuperPAZ {
         this.park = park;
     }
 
-    public Map<Integer, MopedZone> getPazs() { return pazList; }
+    public Map<Integer, MopedZone> getPazList() { return pazList; }
 
     public Map<Integer, Short> getImpedanceToSuperPAZs() {
         return impedanceToSuperPAZs;
@@ -177,5 +194,35 @@ public class SuperPAZ {
 
     public void setIndustrial(float industrial) {
         this.industrial = industrial;
+    }
+
+    public void setPazs(TIntArrayList pazs) {
+        this.pazs = pazs;
+    }
+
+    public TIntArrayList getPazs() { return pazs; }
+
+    public boolean isClark() {
+        return isClark;
+    }
+
+    public void setClark(boolean clark) {
+        isClark = clark;
+    }
+
+    public float getNetworkDesnity() {
+        return networkDesnity;
+    }
+
+    public void setNetworkDesnity(float networkDesnity) {
+        this.networkDesnity = networkDesnity;
+    }
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
     }
 }

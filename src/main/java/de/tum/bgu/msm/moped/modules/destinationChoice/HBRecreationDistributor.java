@@ -4,8 +4,6 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 
-import java.util.Map;
-
 public final class HBRecreationDistributor extends TripDistributor{
 
     public HBRecreationDistributor(DataSet dataSet) {
@@ -15,14 +13,15 @@ public final class HBRecreationDistributor extends TripDistributor{
     //WSTLUR paper
     @Override
     protected void calculateDestinationUtility() {
-        double sizeRETSERCoef = 0.097886;
-        double sizeHHCoef = 0.038993;
-        double slopeCoef = -0.119083;
-        double freewayCoef = -0.422316;
-        double industrialPropCoef = -0.098139;
-        double parkCoef = 0.714835;
+        double sizeRETSERCoef = 0.133;
+        double sizeHHCoef = 0.054;
+        double slopeCoef = -0.139;
+        double freewayCoef = 0.0;
+        double industrialPropCoef = 0.0;
+        double parkCoef = 0.662;
+        double networkDensityCoef = 0.0;
 
-        for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
+        for (SuperPAZ superPAZ: dataSet.getSuperPAZs().values()){
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
             double sizeRETSER =  superPAZ.getRetail()+superPAZ.getService();
             double sizeHH = superPAZ.getHousehold();
@@ -34,11 +33,15 @@ public final class HBRecreationDistributor extends TripDistributor{
                 sizeHH = sizeHH+1;
             }
 
-            double supportVariable = parkCoef*superPAZ.getPark();
+            double supportVariable = parkCoef*superPAZ.getPark()+networkDensityCoef*superPAZ.getNetworkDesnity();
             double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
             double utility =  sizeRETSERCoef * Math.log(sizeRETSER) + sizeHHCoef * Math.log(sizeHH) + supportVariable + barrierVariable;
-            destinationUtility.put(superPAZ.getIndex(),utility);
+            destinationUtility.put(superPAZ.getIndex(), (float) utility);
         }
+    }
+
+    @Override
+    protected void calculateDestinationUtilityPAZ() {
     }
 
 //    @Override
@@ -69,10 +72,4 @@ public final class HBRecreationDistributor extends TripDistributor{
 //            destinationUtility.put(superPAZ.getIndex(),utility);
 //        }
 //    }
-
-    @Override
-    protected Map<Integer, Double> calculateDestinationUtilityPAZ(SuperPAZ superPAZ) {
-
-        return null;
-    }
 }

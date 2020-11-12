@@ -134,21 +134,21 @@
             <artifactId>jts</artifactId>
             <version>1.13</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.geotools</groupId>-->
-            <!--<artifactId>gt-opengis</artifactId>-->
-            <!--<version>13.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.geotools</groupId>-->
-            <!--<artifactId>gt-shapefile</artifactId>-->
-            <!--<version>13.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.geotools</groupId>-->
-            <!--<artifactId>gt-grid</artifactId>-->
-            <!--<version>13.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-opengis</artifactId>
+            <version>20.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-shapefile</artifactId>
+            <version>20.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-grid</artifactId>
+            <version>20.2</version>
+        </dependency>
         <dependency>
             <groupId>common-base</groupId>
             <artifactId>common-base</artifactId>
@@ -169,19 +169,24 @@
             <artifactId>matsim</artifactId>
             <version>${matsimVersion}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.geotools/geotools -->
-        <!--<dependency>-->
-            <!--<groupId>org.geotools</groupId>-->
-            <!--<artifactId>geotools</artifactId>-->
-            <!--<version>16.1</version>-->
-            <!--<type>pom</type>-->
-        <!--</dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.matsim.contrib/dvrp -->
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>dvrp</artifactId>
             <version>11.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.matsim.contrib/accessibility -->
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>accessibility</artifactId>
+            <version>11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>1.16.1</version>
+        </dependency>
+
 
 
 

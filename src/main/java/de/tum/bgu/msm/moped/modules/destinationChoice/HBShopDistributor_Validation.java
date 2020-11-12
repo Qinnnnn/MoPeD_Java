@@ -1,29 +1,24 @@
 package de.tum.bgu.msm.moped.modules.destinationChoice;
 
-import cern.colt.map.tdouble.OpenIntDoubleHashMap;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 
-import java.util.HashMap;
-import java.util.Map;
+public final class HBShopDistributor_Validation extends TripDistributor_Validation{
 
-public final class HBShopDistributor extends TripDistributor{
-
-    public HBShopDistributor(DataSet dataSet) {
+    public HBShopDistributor_Validation(DataSet dataSet) {
         super(dataSet, Purpose.HBSHOP);
     }
 
     //WSTLUR paper - advance
     @Override
     protected void calculateDestinationUtility() {
-        double sizeRETCoef =  0.977;
-        double slopeCoef = -0.386;
-        double freewayCoef = 0.0;
-        double industrialPropCoef = -1.306;
+        double sizeRETCoef =  0.927;
+        double slopeCoef = -0.36;
+        double freewayCoef = -0.364;
+        double industrialPropCoef = -1.383;
         double parkCoef = 0.0;
-        double networkDensityCoef = 0.049;
 
         for (SuperPAZ superPAZ: dataSet.getSuperPAZs().values()){
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
@@ -37,7 +32,7 @@ public final class HBShopDistributor extends TripDistributor{
                 sizeRET = sizeRET+1;
             }
 
-            double supportVariable = parkCoef*superPAZ.getPark()+networkDensityCoef*superPAZ.getNetworkDesnity();
+            double supportVariable = parkCoef*superPAZ.getPark();
             double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
             float utility = (float) (sizeRETCoef * Math.log(sizeRET) + supportVariable + barrierVariable);
 //            if (Double.isInfinite(utility) || Double.isNaN(utility)) {
@@ -101,10 +96,14 @@ public final class HBShopDistributor extends TripDistributor{
 //    }
 
     //TODO:Method 1 Gravity model
+//    @Override
 //    protected void calculateDestinationUtilityPAZ() {
 //        for (MopedZone mopedZone: dataSet.getZones().values()){
 //            double sizeRET =  mopedZone.getRetail();
-//            float utility = (float) Math.log(sizeRET);
+//            if(sizeRET <= 1){
+//                sizeRET = sizeRET+1;
+//            }
+//            float utility = (float)Math.log(sizeRET);
 //            if (Double.isInfinite(utility) || Double.isNaN(utility)) {
 //                throw new RuntimeException(utility + " utility calculated! Please check calculation!" +
 //                        " sizeRET: " + sizeRET);
@@ -150,28 +149,18 @@ public final class HBShopDistributor extends TripDistributor{
     //TODO:Method 3 apply PAZ allocation model
     @Override
     protected void calculateDestinationUtilityPAZ() {
-        double sizeRETCoef =  0.767;
-        double sizeSERCoef =  0.064;
-        double sizeFINCoef =  0.148;
-        double sizeGOVCoef =  0.098;
-        double householdCoef = -0.185;
-        double parkCoef = -0.703;
+        double sizeRETCoef =  0.836;
 
         for (MopedZone mopedZone: dataSet.getZones().values()){
-            double sizeRET =  Math.max(1,mopedZone.getRetail());
-            double sizeSER =  Math.max(1,mopedZone.getService());
-            double sizeFIN =  Math.max(1,mopedZone.getFinancial());
-            double sizeGOV =  Math.max(1,mopedZone.getGovernment());
-            double sizeHH =  Math.max(1,mopedZone.getTotalHH());
+            double sizeRET =  mopedZone.getRetail();
+            if(sizeRET <= 1){
+                sizeRET = sizeRET+1;
+            }
 
-
-            float utility = (float) (sizeRETCoef * Math.log(sizeRET)+sizeSERCoef * Math.log(sizeSER)+
-                    sizeFINCoef * Math.log(sizeFIN)+sizeGOVCoef * Math.log(sizeGOV) +
-                    householdCoef * Math.log(sizeHH)+parkCoef * mopedZone.getParkArce());
+            float utility = (float) (sizeRETCoef * Math.log(sizeRET));
             if (Double.isInfinite(utility) || Double.isNaN(utility)) {
                 throw new RuntimeException(utility + " utility calculated! Please check calculation!" +
-                        " sizeRET: " + sizeRET + " sizeSER: " + sizeSER + " sizeFIN: " + sizeFIN +
-                        " sizeGOV: " + sizeGOV + " sizeHH: " + sizeHH + " parkAcre: " + mopedZone.getParkArce());
+                        " sizeRET: " + sizeRET);
             }
             destinationUtilityPAZ.put(mopedZone.getZoneId(),utility);
         }

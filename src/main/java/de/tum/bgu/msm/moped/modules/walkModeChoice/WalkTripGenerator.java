@@ -87,13 +87,27 @@ public abstract class WalkTripGenerator {
                 }
             }
 
-            if((totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips)>0.00001){
-                System.out.println(totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips);
-                System.out.println("mistake!");
+            float totalWalkTripsNoChilds = 0.0f;
+            float totalWalkTripsHasChilds = 0.0f;
+            for (HouseholdType hhType : dataSet.getHhTypes().values()) {
+                if (hhType.getKids() == 0) {
+                    totalWalkTripsNoChilds += WalkTrip.get(index, hhType.getHhTypeId());
+                }else{
+                    totalWalkTripsHasChilds += WalkTrip.get(index, hhType.getHhTypeId());
+                }
             }
 
+//            if((totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips)>0.00001){
+//                System.out.println(totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips);
+//                System.out.println("mistake!");
+//            }
+
+            dataSet.getOriginPAZ(index).addTotalWalkTrips(totalWalkTrips,purpose);
             dataSet.getOriginPAZ(index).addTotalWalkTripsNoCar(totalWalkTripsNoCars,purpose);
             dataSet.getOriginPAZ(index).addTotalWalkTripsHasCar(totalWalkTripsHasCars,purpose);
+            dataSet.getOriginPAZ(index).addTotalWalkTripsNoChild(totalWalkTripsNoChilds,purpose);
+            dataSet.getOriginPAZ(index).addTotalWalkTripsHasChild(totalWalkTripsHasChilds,purpose);
+
         }
     }
 

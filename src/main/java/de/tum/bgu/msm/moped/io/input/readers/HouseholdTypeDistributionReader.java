@@ -48,9 +48,9 @@ public class HouseholdTypeDistributionReader extends CSVReader{
                         float hh = Float.parseFloat(record[id]);
                         //float scenariohh = hh*(1+hh/dataSet.getTotalPop()*20000);
                         //float scenariohh = (float) (Float.parseFloat(record[id])*(1+0.02));
-                        float scenariohh = Float.parseFloat(record[id])*zone.getGrowthRate();
-                        //distribution.put(zone.getIndex(), id, hh);
-                        distribution.put(zone.getIndex(), id, scenariohh);
+                        //float scenariohh = Float.parseFloat(record[id])*zone.getGrowthRate();
+                        distribution.put(zone.getIndex(), id, hh);
+                        //distribution.put(zone.getIndex(), id, scenariohh);
                     }
                 }
             }

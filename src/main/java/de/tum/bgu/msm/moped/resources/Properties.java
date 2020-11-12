@@ -8,6 +8,7 @@ public class Properties {
     public static final String BASE= "base.directory";
     public static final String ZONES = "zone.data.file";
     public static final String ZONE_SHAPEFILE = "zone.shapefile.moped";
+    public static final String SUPERPAZ_SHAPEFILE = "superPAZ.shapefile.moped";
     public static final String ZONESATTRIBUTE = "zoneAttributes.data.file";
     public static final String HOUSEHOLDTYPE = "householdType.data.file";
     public static final String HOUSEHOLDTYPEDISTRIBUTION = "distribution.data.file";

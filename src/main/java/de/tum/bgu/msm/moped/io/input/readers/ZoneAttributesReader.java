@@ -21,6 +21,7 @@ public class ZoneAttributesReader extends CSVReader {
     private int shoppingAreaIndex;
     private int collegeVehicleTripIndex;
     private static final Logger logger = Logger.getLogger(ZoneAttributesReader.class);
+    private int parkIndex;
 
 
     public ZoneAttributesReader(DataSet dataSet) {
@@ -47,6 +48,8 @@ public class ZoneAttributesReader extends CSVReader {
         wholesaleIndex = MoPeDUtil.findPositionInArray("wt", header);
         shoppingAreaIndex = MoPeDUtil.findPositionInArray("shsqft", header);
         collegeVehicleTripIndex = MoPeDUtil.findPositionInArray("colveh", header);
+        parkIndex = MoPeDUtil.findPositionInArray("parka", header);
+
     }
 
     @Override
@@ -64,7 +67,7 @@ public class ZoneAttributesReader extends CSVReader {
             float wholesale = Float.parseFloat(record[wholesaleIndex]);
             float shoppingArea = Float.parseFloat(record[shoppingAreaIndex]);
             float collegeVehicleTrip = Float.parseFloat(record[collegeVehicleTripIndex]);
-
+            float park = Float.parseFloat(record[parkIndex]);
             dataSet.getZone(zoneId).setAgriculture(agriculture);
             dataSet.getZone(zoneId).setConstruction(construction);
             dataSet.getZone(zoneId).setFinancial(financial);
@@ -79,6 +82,9 @@ public class ZoneAttributesReader extends CSVReader {
             dataSet.getZone(zoneId).setSlope(0);
             dataSet.getZone(zoneId).setFreeway(0);
             dataSet.getZone(zoneId).setTotalEmpl();
+            dataSet.getZone(zoneId).setIndustrial(agriculture+construction+manufacturing);
+            dataSet.getZone(zoneId).setParkArce(park);
+            dataSet.getZone(zoneId).setPark(0);
         }
     }
 }

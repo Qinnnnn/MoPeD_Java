@@ -31,7 +31,11 @@ public class MopedZone {
     private Map<Purpose, Float> totalWalkTripsByPurpose = new HashMap<>();
     private Map<Purpose, Float> totalWalkTripsNoCarByPurpose = new HashMap<>();
     private Map<Purpose, Float> totalWalkTripsHasCarByPurpose = new HashMap<>();
+    private Map<Purpose, Float> totalWalkTripsNoChildByPurpose = new HashMap<>();
+    private Map<Purpose, Float> totalWalkTripsHasChildByPurpose = new HashMap<>();
+
     private SimpleFeature shapeFeature;
+    private boolean isClark;
 
     private double activityDensity;
     private double totalJobDensity;
@@ -39,16 +43,18 @@ public class MopedZone {
     private double intersectionDensity;
     private float slope;
     private int freeway;
+    private int park;
     private float totalEmpl;
+    private float industrial;
     private float piePop;
     private float pieEmpl;
     private float pieArea;
     private float pieActivity;
-
+    private float parkArce;
     private int mitoZoneId;
 
     private float growthRate;
-
+    private int block;
     private Map<Integer, Float> distribution = new HashMap<>();
 
     public float getTotalEmpl() {
@@ -243,6 +249,14 @@ public class MopedZone {
         this.totalWalkTripsHasCarByPurpose.put(purpose, totalWalkTripsHasCar);
     }
 
+    public void addTotalWalkTripsNoChild(float totalWalkTripsNoChild, Purpose purpose) {
+        this.totalWalkTripsNoChildByPurpose.put(purpose, totalWalkTripsNoChild);
+    }
+
+    public void addTotalWalkTripsHasChild(float totalWalkTripsHasChild, Purpose purpose) {
+        this.totalWalkTripsHasChildByPurpose.put(purpose, totalWalkTripsHasChild);
+    }
+
     public SimpleFeature getShapeFeature() {
         return shapeFeature;
     }
@@ -338,5 +352,61 @@ public class MopedZone {
 
     public void setGrowthRate(float growthRate) {
         this.growthRate = growthRate;
+    }
+
+    public float getIndustrial() {
+        return industrial;
+    }
+
+    public void setIndustrial(float industrial) {
+        this.industrial = industrial;
+    }
+
+    public int getPark() {
+        return park;
+    }
+
+    public void setPark(int park) {
+        this.park = park;
+    }
+
+    public boolean isClark() {
+        return isClark;
+    }
+
+    public void setClark(boolean clark) {
+        isClark = clark;
+    }
+
+    public float getParkArce() {
+        return parkArce;
+    }
+
+    public void setParkArce(float parkArce) {
+        this.parkArce = parkArce;
+    }
+
+    public Map<Purpose, Float> getTotalWalkTripsNoChildByPurpose() {
+        return totalWalkTripsNoChildByPurpose;
+    }
+
+    public void setTotalWalkTripsNoChildByPurpose(Map<Purpose, Float> totalWalkTripsNoChildByPurpose) {
+        this.totalWalkTripsNoChildByPurpose = totalWalkTripsNoChildByPurpose;
+    }
+
+    public Map<Purpose, Float> getTotalWalkTripsHasChildByPurpose() {
+        return totalWalkTripsHasChildByPurpose;
+    }
+
+    public void setTotalWalkTripsHasChildByPurpose(Map<Purpose, Float> totalWalkTripsHasChildByPurpose) {
+        this.totalWalkTripsHasChildByPurpose = totalWalkTripsHasChildByPurpose;
+    }
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
     }
 }

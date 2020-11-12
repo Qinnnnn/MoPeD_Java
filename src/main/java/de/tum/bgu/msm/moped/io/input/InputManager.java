@@ -39,8 +39,8 @@ public class InputManager {
         logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
 //        new DistanceOMXReader(dataSet).read();
 //        logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new SuperPAZImpedanceReader(dataSet).read();
-        logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+//        new SuperPAZImpedanceReader(dataSet).read();
+//        logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
     }
 
 

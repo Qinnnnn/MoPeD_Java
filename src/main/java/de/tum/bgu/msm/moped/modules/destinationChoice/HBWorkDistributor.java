@@ -1,10 +1,9 @@
 package de.tum.bgu.msm.moped.modules.destinationChoice;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
-
-import java.util.Map;
 
 public final class HBWorkDistributor extends TripDistributor {
 
@@ -15,14 +14,15 @@ public final class HBWorkDistributor extends TripDistributor {
     //WSTLUR paper
     @Override
     protected void calculateDestinationUtility() {
-        double sizeRETSERCoef = 0.409906;
-        double sizeOTHERCoef = 0.335296;
-        double slopeCoef = -0.232709;
+        double sizeRETSERCoef = 0.445;
+        double sizeOTHERCoef = 0.352;
+        double slopeCoef = -0.167;
         double freewayCoef = 0.0;
-        double industrialPropCoef = -0.823084;
+        double industrialPropCoef = -1.249;
         double parkCoef = 0.0;
+        double networkDensityCoef = 0.141;
 
-        for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
+        for (SuperPAZ superPAZ: dataSet.getSuperPAZs().values()){
             //double empIndustrial = superPAZ.getTotalEmpl() - superPAZ.getRetail() - superPAZ.getFinancial() - superPAZ.getGovernment() - superPAZ.getService();
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
             double sizeRETSER =  superPAZ.getRetail()+superPAZ.getService();
@@ -35,10 +35,39 @@ public final class HBWorkDistributor extends TripDistributor {
                 sizeOTHER = sizeOTHER+1;
             }
 
-            double supportVariable = parkCoef*superPAZ.getPark();
+            double supportVariable = parkCoef*superPAZ.getPark()+networkDensityCoef*superPAZ.getNetworkDesnity();
             double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
             double utility =  sizeRETSERCoef * Math.log(sizeRETSER) + sizeOTHERCoef * Math.log(sizeOTHER) + supportVariable + barrierVariable;
-            destinationUtility.put(superPAZ.getIndex(),utility);
+            destinationUtility.put(superPAZ.getIndex(), (float) utility);
+        }
+    }
+
+    @Override
+    protected void calculateDestinationUtilityPAZ() {
+        double sizeRETCoef =  0.542;
+        double sizeSERCoef =  0.542;
+        double sizeFINCoef =  0.542;
+        double sizeGOVCoef =  0.542;
+        double householdCoef = -0.433;
+        double parkCoef = 0.;
+
+        for (MopedZone mopedZone: dataSet.getZones().values()){
+            double sizeRET =  Math.max(1,mopedZone.getRetail());
+            double sizeSER =  Math.max(1,mopedZone.getService());
+            double sizeFIN =  Math.max(1,mopedZone.getFinancial());
+            double sizeGOV =  Math.max(1,mopedZone.getGovernment());
+            double sizeHH =  Math.max(1,mopedZone.getTotalHH());
+
+
+            float utility = (float) (sizeRETCoef * Math.log(sizeRET)+sizeSERCoef * Math.log(sizeSER)+
+                    sizeFINCoef * Math.log(sizeFIN)+sizeGOVCoef * Math.log(sizeGOV) +
+                    householdCoef * Math.log(sizeHH)+parkCoef * mopedZone.getParkArce());
+            if (Double.isInfinite(utility) || Double.isNaN(utility)) {
+                throw new RuntimeException(utility + " utility calculated! Please check calculation!" +
+                        " sizeRET: " + sizeRET + " sizeSER: " + sizeSER + " sizeFIN: " + sizeFIN +
+                        " sizeGOV: " + sizeGOV + " sizeHH: " + sizeHH + " parkAcre: " + mopedZone.getParkArce());
+            }
+            destinationUtilityPAZ.put(mopedZone.getZoneId(),utility);
         }
     }
 
@@ -149,8 +178,4 @@ public final class HBWorkDistributor extends TripDistributor {
 //        }
 //    }
 
-    @Override
-    protected Map<Integer, Double> calculateDestinationUtilityPAZ(SuperPAZ superPAZ) {
-        return null;
-    }
 }

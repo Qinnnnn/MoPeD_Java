@@ -4,8 +4,6 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 
-import java.util.Map;
-
 public final class NHBOtherDistributor extends TripDistributor {
 
     public NHBOtherDistributor(DataSet dataSet) {
@@ -15,14 +13,15 @@ public final class NHBOtherDistributor extends TripDistributor {
     //WSTLUR paper
     @Override
     protected void calculateDestinationUtility() {
-        double sizeOTHERCoef = 0.490726;
-        double sizeHHCoef = 0.064912;
-        double slopeCoef = -0.165929;
+        double sizeOTHERCoef = 0.516;
+        double sizeHHCoef = 0.0;
+        double slopeCoef = -0.060;
         double freewayCoef = 0.0;
-        double industrialPropCoef = -0.278927;
+        double industrialPropCoef = 0.0;
         double parkCoef = 0.0;
+        double networkDensityCoef = 0.184;
 
-        for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
+        for (SuperPAZ superPAZ: dataSet.getSuperPAZs().values()){
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
             double sizeOTHER =  superPAZ.getTotalEmpl()-superPAZ.getIndustrial();
             double sizeHH = superPAZ.getHousehold();
@@ -34,11 +33,15 @@ public final class NHBOtherDistributor extends TripDistributor {
                 sizeHH = sizeHH+1;
             }
 
-            double supportVariable = parkCoef*superPAZ.getPark();
+            double supportVariable = parkCoef*superPAZ.getPark()+networkDensityCoef*superPAZ.getNetworkDesnity();
             double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
             double utility =  sizeOTHERCoef * Math.log(sizeOTHER) + sizeHHCoef * Math.log(sizeHH) + supportVariable + barrierVariable;
-            destinationUtility.put(superPAZ.getIndex(),utility);
+            destinationUtility.put(superPAZ.getIndex(), (float) utility);
         }
+    }
+
+    @Override
+    protected void calculateDestinationUtilityPAZ() {
     }
 
 //    @Override
@@ -68,9 +71,4 @@ public final class NHBOtherDistributor extends TripDistributor {
 //        }
 //    }
 
-    @Override
-    protected Map<Integer, Double> calculateDestinationUtilityPAZ(SuperPAZ superPAZ) {
-
-        return null;
-    }
 }

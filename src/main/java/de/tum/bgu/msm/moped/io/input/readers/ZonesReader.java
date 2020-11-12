@@ -1,6 +1,7 @@
 package de.tum.bgu.msm.moped.io.input.readers;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
@@ -11,6 +12,7 @@ import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.matsim.core.utils.collections.QuadTree;
@@ -30,6 +32,9 @@ public class ZonesReader extends CSVReader {
     private int index = 0;
     private int growthRateIndex;
     private QuadTree<MopedZone> zoneSearchTree;
+    private int originIndex;
+    private int clarkIndex;
+    private int blockIndex;
 
     public ZonesReader(DataSet dataSet) {
         super(dataSet);
@@ -45,63 +50,73 @@ public class ZonesReader extends CSVReader {
     @Override
     protected void processHeader(String[] header) {
         idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
-        mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZone", header);
+        //mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZone", header);
         superPAZIndex = MoPeDUtil.findPositionInArray("superPAZID", header);
         totalHouseholdIndex = MoPeDUtil.findPositionInArray("totalHH", header);
-        //growthRateIndex = MoPeDUtil.findPositionInArray("Hhgrowth", header);
-
+        growthRateIndex = MoPeDUtil.findPositionInArray("Hhgrowth", header);
+        //originIndex = MoPeDUtil.findPositionInArray("OHAS", header);
+        //clarkIndex = MoPeDUtil.findPositionInArray("CLARK", header);
+        blockIndex = MoPeDUtil.findPositionInArray("PAZ_block_motorway", header);
     }
 
     @Override
     protected void processRecord(String[] record) {
         int zoneId = Integer.parseInt(record[idIndex]);
-        int mitoZoneId = Integer.parseInt(record[mitoZoneIndex]);
+       //int mitoZoneId = Integer.parseInt(record[mitoZoneIndex]);
         int superPAZID = Integer.parseInt(record[superPAZIndex]);//internalIndex
         float totalHH = Float.parseFloat(record[totalHouseholdIndex]);
-        //float growthRate = Float.parseFloat(record[growthRateIndex]);
+        float growthRate = Float.parseFloat(record[growthRateIndex]);
+        //int origin = Integer.parseInt(record[originIndex]);//internalIndex
+        //int clark = Integer.parseInt(record[clarkIndex]);//internalIndex
+        int block = Integer.parseInt(record[blockIndex]);
 
         MopedZone zone = new MopedZone(zoneId, superPAZID, totalHH);
-        zone.setMitoZoneId(mitoZoneId);
+        //zone.setMitoZoneId(mitoZoneId);
         dataSet.addZone(zone);
         //dataSet.getInternal2External().put(superPAZID,zoneId);
         //dataSet.getExternal2Internal().put(zoneId,superPAZID);
-        //zone.setGrowthRate(growthRate);
-
-        //if (totalHH != 0.0){
-//            SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
-//            if (superPAZ == null){
-//                superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
-//                dataSet.addSuperPAZ(superPAZ);
-//            }
-//            superPAZ.getPazs().put(zoneId,zone);
-//            zone.setIndex(index);
-//            dataSet.addOriginPAZ(index, zone);
-//            index++;
-        //}
+        zone.setGrowthRate(growthRate);
+        //zone.setClark(clark==1?Boolean.TRUE:Boolean.FALSE);
+        zone.setBlock(block);
+        if (totalHH != 0.0){
+            SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
+            if (superPAZ == null){
+                superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
+                dataSet.addSuperPAZ(superPAZ);
+            }
+            superPAZ.getPazs().add(zoneId);
+            zone.setIndex(index);
+            dataSet.addOriginPAZ(index, zone);
+            index++;
+        }
     }
 
 
     //TODO: like the one in MITO
     private void mapFeaturesToZones(DataSet dataSet) {
         setZoneSearchTree();
+        int counter = 0;
         for (SimpleFeature feature: ShapeFileReader.getAllFeatures(Resources.INSTANCE.getString(Properties.ZONE_SHAPEFILE))) {
-            int zoneId = Integer.parseInt(feature.getAttribute("id").toString());
+            int zoneId = (int) Double.parseDouble(feature.getAttribute("OBJECTID").toString());
             MopedZone zone = dataSet.getZones().get(zoneId);
             if (zone != null){
                 zone.setShapeFeature(feature);
-                zone.setActivityDensity(Double.parseDouble(feature.getAttribute("popInBuffe").toString())+Double.parseDouble(feature.getAttribute("totalJobIn").toString()));
-                zone.setTotalJobDensity(Double.parseDouble(feature.getAttribute("totalJobIn").toString()));
-                zone.setIndustrialJobDensity(Double.parseDouble(feature.getAttribute("totalJobIn").toString())-Double.parseDouble(feature.getAttribute("uliJobInBu").toString()));
+                //zone.setActivityDensity(Double.parseDouble(feature.getAttribute("popInBuffe").toString())+Double.parseDouble(feature.getAttribute("totalJobIn").toString()));
+                //zone.setTotalJobDensity(Double.parseDouble(feature.getAttribute("totalJobIn").toString()));
+                //zone.setIndustrialJobDensity(Double.parseDouble(feature.getAttribute("totalJobIn").toString())-Double.parseDouble(feature.getAttribute("uliJobInBu").toString()));
                 zoneSearchTree.put(((Geometry)feature.getDefaultGeometry()).getCentroid().getX(),((Geometry)feature.getDefaultGeometry()).getCentroid().getY(),zone);
             }else{
-                logger.warn("zoneId " + zoneId + " doesn't exist in moped zone system");
+                counter++;
+                //logger.warn("zoneId " + zoneId + " doesn't exist in moped zone system");
             }
         }
+        logger.warn(counter + " zones in shapefile doesn't exist in zone.csv");
+
         dataSet.setZoneSearchTree(zoneSearchTree);
     }
 
     private void setZoneSearchTree() {
-        Envelope bounds = loadEnvelope();
+        ReferencedEnvelope bounds = loadEnvelope();
         double minX = bounds.getMinX()-1;
         double minY = bounds.getMinY()-1;
         double maxX = bounds.getMaxX()+1;
@@ -109,7 +124,7 @@ public class ZonesReader extends CSVReader {
         this.zoneSearchTree = new QuadTree<>(minX,minY,maxX,maxY);
     }
 
-    private Envelope loadEnvelope() {
+    private ReferencedEnvelope loadEnvelope() {
         File zonesShapeFile = new File(Resources.INSTANCE.getString(Properties.ZONE_SHAPEFILE));
 
         try {

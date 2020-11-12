@@ -4,8 +4,6 @@ import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 
-import java.util.Map;
-
 public final class HBOtherDistributor extends TripDistributor {
 
     public HBOtherDistributor(DataSet dataSet) {
@@ -15,14 +13,15 @@ public final class HBOtherDistributor extends TripDistributor {
     //WSTLUR paper
     @Override
     protected void calculateDestinationUtility() {
-        double sizeOTHERCoef = 0.350526;
-        double sizeHHCoef = 0.132071;
-        double slopeCoef = -0.502975;
-        double freewayCoef = -0.108814;
-        double industrialPropCoef = -0.287533;
-        double parkCoef = 0.403829;
+        double sizeOTHERCoef = 0.389;
+        double sizeHHCoef = 0.0;
+        double slopeCoef = -0.381;
+        double freewayCoef = 0.0;
+        double industrialPropCoef = 0.0;
+        double parkCoef = 0.510;
+        double networkDensityCoef = 0.214;
 
-        for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
+        for (SuperPAZ superPAZ: dataSet.getSuperPAZs().values()){
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
             double sizeOTHER =  superPAZ.getTotalEmpl()-superPAZ.getIndustrial();
             double sizeHH = superPAZ.getHousehold();
@@ -34,11 +33,15 @@ public final class HBOtherDistributor extends TripDistributor {
                 sizeHH = sizeHH+1;
             }
 
-            double supportVariable = parkCoef*superPAZ.getPark();
+            double supportVariable = parkCoef*superPAZ.getPark()+networkDensityCoef*superPAZ.getNetworkDesnity();
             double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
             double utility =  sizeOTHERCoef * Math.log(sizeOTHER) + sizeHHCoef * Math.log(sizeHH) + supportVariable + barrierVariable;
-            destinationUtility.put(superPAZ.getIndex(),utility);
+            destinationUtility.put(superPAZ.getIndex(), (float) utility);
         }
+    }
+
+    @Override
+    protected void calculateDestinationUtilityPAZ() {
     }
 
 //    @Override
@@ -67,10 +70,4 @@ public final class HBOtherDistributor extends TripDistributor {
 //            destinationUtility.put(superPAZ.getIndex(),utility);
 //        }
 //    }
-
-    @Override
-    protected Map<Integer, Double> calculateDestinationUtilityPAZ(SuperPAZ superPAZ) {
-
-        return null;
-    }
 }

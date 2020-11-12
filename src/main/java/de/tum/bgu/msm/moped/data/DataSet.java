@@ -41,6 +41,7 @@ public class DataSet {
     private Map<Integer, SimpleFeature> zoneFeatureMap = new HashMap<>();
     private SimpleFeatureSource ozMapSource;
     private QuadTree<MopedZone> zoneSearchTree;
+    private Map<Integer,MopedZone> ohasTripMap = new HashMap<>();
 
 
     private int year;
@@ -52,6 +53,7 @@ public class DataSet {
 
     private final Map<Integer, Integer> external2Internal = new HashMap<>();
     private final Map<Integer, Integer> internal2External = new HashMap<>();
+    private QuadTree<SuperPAZ> superPAZSearchTree;
 
     public void addZone( MopedZone zone) {
         MopedZone test = this.zones.get(zone.getZoneId());
@@ -304,5 +306,21 @@ public class DataSet {
 
     public void setZoneSearchTree(QuadTree<MopedZone> zoneSearchTree) {
         this.zoneSearchTree = zoneSearchTree;
+    }
+
+    public QuadTree<SuperPAZ> getSuperPAZSearchTree() {
+        return superPAZSearchTree;
+    }
+
+    public void setSuperPAZSearchTree(QuadTree<SuperPAZ> superPAZSearchTree) {
+        this.superPAZSearchTree = superPAZSearchTree;
+    }
+
+    public Map<Integer, MopedZone> getOhasTripMap() {
+        return ohasTripMap;
+    }
+
+    public void setOhasTripMap(Map<Integer, MopedZone> ohasTripMap) {
+        this.ohasTripMap = ohasTripMap;
     }
 }

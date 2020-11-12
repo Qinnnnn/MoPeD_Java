@@ -33,7 +33,7 @@ public class OutputWriter {
 //            writeOutIntrazonalTrip();
             System.out.println(totalTrip + "," + totalWalk + "," + totalWalk/totalTrip);
             System.out.println(totalLenghth + "," + totalWalk + "," + totalLenghth/totalWalk);
-            System.out.println(totalIntrazonal + "," + totalWalk + "," + totalIntrazonal/totalWalk);
+//            System.out.println(totalIntrazonal + "," + totalWalk + "," + totalIntrazonal/totalWalk);
     }
 
 
@@ -42,23 +42,14 @@ public class OutputWriter {
         StringBuilder tripGen = new StringBuilder();
 
         //write header
-        tripGen.append("zoneId,tripGen,walkTrips,walkShare,tripLength,averageTripLengthSuperPAZ,intrazonalTripShare,averageTripLengthPAZ");
+        tripGen.append("zoneId,tripGen,walkTrips,walkShare");
         tripGen.append('\n');
-
-        String testpath = Resources.INSTANCE.getString(Properties.BASE) + Resources.INSTANCE.getString(Properties.OUTPUT_OD)+"_"+purpose.toString()+".csv";
-        StringBuilder test = new StringBuilder();
-
-        //write header
-        test.append("origin,destination,trips,impedence");
-        test.append('\n');
 
         //write data
         for (MopedZone zone : dataSet.getOriginPAZs().values()){
 
                 float sumTripGen = 0.0f;
                 float sumWalkTrip = 0.0f;
-                double sumDistribution = 0.0;
-                double sumDistributionPAZ = 0.0;
 
                 tripGen.append(zone.getZoneId());
 
@@ -79,58 +70,10 @@ public class OutputWriter {
                 totalTrip += sumTripGen;
                 totalWalk += sumWalkTrip;
 
-                for (SuperPAZ destination : dataSet.getDestinationSuperPAZs().values()){
-                    double tripsNoCar = dataSet.getDistributionsNoCarByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
-                    double tripsHasCar = dataSet.getDistributionsHasCarByPurpose().get(purpose).get(zone.getIndex(),destination.getIndex());
-                    float impedance = dataSet.getImpedance().get(zone.getSuperPAZId(),destination.getIndex());
-                    if ( (impedance == 0.f)){
-                        continue;
-                    }
-
-                    if(tripsNoCar == 0 && tripsHasCar == 0){
-                        continue;
-                    }
-
-                    double distance = tripsNoCar * impedance + tripsHasCar * impedance;
-
-                    test.append(zone.getZoneId());
-                    test.append(',');
-                    test.append(destination.getSuperPAZId());
-                    test.append(',');
-                    test.append(tripsNoCar+tripsHasCar);
-                    test.append(',');
-                    test.append(impedance);
-                    test.append('\n');
-                    sumDistribution += distance;
-                }
-                tripGen.append(',');
-                tripGen.append(sumDistribution);
-                tripGen.append(',');
-                tripGen.append(sumDistribution/sumWalkTrip);
-
-                totalLenghth += sumDistribution;
-
-
-                for (SuperPAZ superPAZ : dataSet.getDestinationSuperPAZs().values()){
-                    int originSuperPAZ = zone.getSuperPAZId();
-                    if (originSuperPAZ == superPAZ.getSuperPAZId()){
-                        float intrazonalNoCar = dataSet.getDistributionsNoCarByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
-                        float intrazonalHasCar = dataSet.getDistributionsHasCarByPurpose().get(purpose).get(zone.getIndex(),superPAZ.getIndex());
-                        float intrazonal = intrazonalNoCar+intrazonalHasCar;
-                        tripGen.append(",");
-                        tripGen.append(intrazonal/sumWalkTrip);
-                        totalIntrazonal += intrazonal;
-                        break;
-                    }
-                }
-
                 tripGen.append('\n');
 
         }
-
         writeToFile(outputTripGen,tripGen.toString());
-        writeToFile(testpath,test.toString());
-
     }
 
     public void writeOutTG () throws FileNotFoundException  {
