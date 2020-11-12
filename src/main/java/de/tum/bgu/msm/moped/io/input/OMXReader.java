@@ -1,11 +1,6 @@
 package de.tum.bgu.msm.moped.io.input;
 
-import cern.colt.function.tfloat.FloatFunction;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
-import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import de.tum.bgu.msm.moped.data.DataSet;
-import de.tum.bgu.msm.moped.data.Purpose;
 import omx.OmxFile;
 import omx.OmxMatrix;
 import omx.hdf5.OmxHdf5Datatype;
@@ -16,6 +11,7 @@ import java.util.Map;
 /**
  * Created by Nico on 19.07.2017.
  */
+@Deprecated
 public abstract class OMXReader extends AbstractInputReader {
 
     protected OMXReader(DataSet dataSet) {

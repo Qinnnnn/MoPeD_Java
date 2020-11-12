@@ -39,6 +39,7 @@ public final class NHBWorkGenerator extends TripGenerator{
 
     @Override
     protected void scaleProductions() {
+        //TODO: this is from the old METRO model (199?)
 //        double attractionSum = 0;
 //        double test = 0;
 //        for (MopedZone zone : dataSet.getZones().values()){
@@ -52,6 +53,8 @@ public final class NHBWorkGenerator extends TripGenerator{
 //        float factor = (float) attractionSum/(float)productionSum;
 //        System.out.println(attractionSum + "," + productionSum);
 //        production = production.muli(factor);
+
+        //TODO: this is based on new METRO model (2017?), compare the result with the old version
         Map<Integer, Float> zoneWeightList = new HashMap<>();
         float sumWeight = 0.0f;
         for(MopedZone zone : dataSet.getZones().values()){

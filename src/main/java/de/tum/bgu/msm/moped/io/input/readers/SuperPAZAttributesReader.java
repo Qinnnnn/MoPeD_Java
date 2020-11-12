@@ -71,13 +71,11 @@ public class SuperPAZAttributesReader extends CSVReader {
         slopeIndex = MoPeDUtil.findPositionInArray("SLP_MEAN", header);
         freewayIndex = MoPeDUtil.findPositionInArray("FWY_IN_ZONE", header);
         parkIndex = MoPeDUtil.findPositionInArray("PRK", header);
-        //industrialIndex = MoPeDUtil.findPositionInArray("EMP_INDUSTRIAL", header);
         afmIndex = MoPeDUtil.findPositionInArray("EMP_AFM", header);
         conIndex = MoPeDUtil.findPositionInArray("EMP_CON", header);
         mfgIndex = MoPeDUtil.findPositionInArray("EMP_MFG", header);
         tpuIndex = MoPeDUtil.findPositionInArray("EMP_TPU", header);
         whoIndex = MoPeDUtil.findPositionInArray("EMP_WHO", header);
-       // clarkIndex = MoPeDUtil.findPositionInArray("Clark", header);
         blockIndex = MoPeDUtil.findPositionInArray("superPAZ_block_motorway", header);
         networkDensityIndex = MoPeDUtil.findPositionInArray("LENGTH", header);
 
@@ -85,7 +83,6 @@ public class SuperPAZAttributesReader extends CSVReader {
 
     @Override
     protected void processRecord(String[] record) {
-        //System.out.println(count++);
         int superPAZId = Integer.parseInt(record[idIndex]);
 
         SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZId);
@@ -109,8 +106,6 @@ public class SuperPAZAttributesReader extends CSVReader {
         float mfg = Float.parseFloat(record[mfgIndex]);
         float tpu = Float.parseFloat(record[tpuIndex]);
         float who = Float.parseFloat(record[whoIndex]);
-        //float industrial = Float.parseFloat(record[industrialIndex]);
-       // int clark = Integer.parseInt(record[clarkIndex]);//internalIndex
         int block = Integer.parseInt(record[blockIndex]);
         double networkDensity = Double.parseDouble(record[networkDensityIndex]);
 
@@ -131,7 +126,6 @@ public class SuperPAZAttributesReader extends CSVReader {
         dataSet.getSuperPAZ(superPAZId).setManufacturing(mfg);
         dataSet.getSuperPAZ(superPAZId).setTpu(tpu);
         dataSet.getSuperPAZ(superPAZId).setWho(who);
-        //dataSet.getSuperPAZ(superPAZId).setClark(clark==1?Boolean.TRUE:Boolean.FALSE);
         dataSet.getSuperPAZ(superPAZId).setBlock(block);
         dataSet.getSuperPAZ(superPAZId).setNetworkDesnity((float) (networkDensity/1000.));
         if (totalEmpl != 0){

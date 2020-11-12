@@ -8,6 +8,7 @@ import de.tum.bgu.msm.moped.resources.Resources;
 import org.apache.log4j.Logger;
 import org.jblas.FloatMatrix;
 
+@Deprecated
 public class DistanceOMXReader extends OMXReader {
 
     private static final Logger logger = Logger.getLogger(DistanceOMXReader.class);

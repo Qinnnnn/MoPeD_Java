@@ -54,8 +54,6 @@ public class ZonesReader extends CSVReader {
         superPAZIndex = MoPeDUtil.findPositionInArray("superPAZID", header);
         totalHouseholdIndex = MoPeDUtil.findPositionInArray("totalHH", header);
         growthRateIndex = MoPeDUtil.findPositionInArray("Hhgrowth", header);
-        //originIndex = MoPeDUtil.findPositionInArray("OHAS", header);
-        //clarkIndex = MoPeDUtil.findPositionInArray("CLARK", header);
         blockIndex = MoPeDUtil.findPositionInArray("PAZ_block_motorway", header);
     }
 
@@ -66,17 +64,12 @@ public class ZonesReader extends CSVReader {
         int superPAZID = Integer.parseInt(record[superPAZIndex]);//internalIndex
         float totalHH = Float.parseFloat(record[totalHouseholdIndex]);
         float growthRate = Float.parseFloat(record[growthRateIndex]);
-        //int origin = Integer.parseInt(record[originIndex]);//internalIndex
-        //int clark = Integer.parseInt(record[clarkIndex]);//internalIndex
         int block = Integer.parseInt(record[blockIndex]);
 
         MopedZone zone = new MopedZone(zoneId, superPAZID, totalHH);
         //zone.setMitoZoneId(mitoZoneId);
         dataSet.addZone(zone);
-        //dataSet.getInternal2External().put(superPAZID,zoneId);
-        //dataSet.getExternal2Internal().put(zoneId,superPAZID);
         zone.setGrowthRate(growthRate);
-        //zone.setClark(clark==1?Boolean.TRUE:Boolean.FALSE);
         zone.setBlock(block);
         if (totalHH != 0.0){
             SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);

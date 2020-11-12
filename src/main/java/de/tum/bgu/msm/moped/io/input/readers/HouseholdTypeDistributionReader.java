@@ -24,10 +24,6 @@ public class HouseholdTypeDistributionReader extends CSVReader{
         logger.info(" Reading household distribution.");
         distribution = new FloatMatrix(dataSet.getOriginPAZs().size(), dataSet.getHOUSEHOLDTYPESIZE());
         super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION1), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION2), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION3), ",");
-//        super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION4), ",");
         dataSet.setDistribution(distribution);
     }
 

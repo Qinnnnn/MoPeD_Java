@@ -45,7 +45,6 @@ public final class HBWorkGenerator extends TripGenerator{
         }
 
         float factor = (float) ((attractionSum+SCENARIO_JOB)*1.36)/(float)productionSum;
-        //System.out.println(attractionSum + "," + productionSum + "," + totalWorkers);
         production = production.muli(factor);
     }
 }

@@ -1,6 +1,7 @@
 package de.tum.bgu.msm.moped.modules.destinationChoice;
 
 import de.tum.bgu.msm.moped.data.DataSet;
+import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.data.SuperPAZ;
 
@@ -16,7 +17,6 @@ public final class HBOtherDistributor extends TripDistributor {
         double sizeOTHERCoef = 0.389;
         double sizeHHCoef = 0.0;
         double slopeCoef = -0.381;
-        double freewayCoef = 0.0;
         double industrialPropCoef = 0.0;
         double parkCoef = 0.510;
         double networkDensityCoef = 0.214;
@@ -34,40 +34,46 @@ public final class HBOtherDistributor extends TripDistributor {
             }
 
             double supportVariable = parkCoef*superPAZ.getPark()+networkDensityCoef*superPAZ.getNetworkDesnity();
-            double barrierVariable = slopeCoef*superPAZ.getSlope() + freewayCoef*superPAZ.getFreeway() + industrialPropCoef*industrialProp;
+            double barrierVariable = slopeCoef*superPAZ.getSlope() + industrialPropCoef*industrialProp;
             double utility =  sizeOTHERCoef * Math.log(sizeOTHER) + sizeHHCoef * Math.log(sizeHH) + supportVariable + barrierVariable;
+            if (Double.isInfinite(utility) || Double.isNaN(utility)) {
+                throw new RuntimeException(utility + " utility calculated! Please check calculation!" +
+                        " sizeOther: " + sizeOTHER + " | Park: " + superPAZ.getPark() + " | slope: "
+                        + superPAZ.getSlope() + " | networkDensity: " + superPAZ.getNetworkDesnity() +
+                        " | industrial: " + industrialProp + " | HH: " + superPAZ.getHousehold());
+            }
             destinationUtility.put(superPAZ.getIndex(), (float) utility);
         }
     }
 
     @Override
     protected void calculateDestinationUtilityPAZ() {
-    }
+        double sizeRETSERCoef =  0.145;
+        double sizeFINGOVCoef =  0.559;
+        double householdCoef = -0.507;
+        double industrialPropCoef = -0.477;
+        double parkCoef = 0.;
 
-//    @Override
-//    protected void calculateDestinationUtility() {
-//        double size = 0.399613f;
-//        double park = 0.115274f;
-//        double empRETGOV = 3.82922f;
-//        double household = -1.96896f;
-//        double pie = 0.0247138f;
-//        double slope = -0.426383f;
-//        double freeway = 0.10023f;
-//        double empAllOthPropotion = -0.398784f;
-//
-//        for (SuperPAZ superPAZ: dataSet.getDestinationSuperPAZs().values()){
-//            double employmentRETGOV = superPAZ.getRetail() + superPAZ.getGovernment();
-//            double empOtherPropotion;
-//            if (superPAZ.getTotalEmpl() == 0.0){
-//                empOtherPropotion = 0.0f;
-//            }else {
-//                empOtherPropotion = (superPAZ.getTotalEmpl() - employmentRETGOV)/superPAZ.getTotalEmpl();
-//            }
-//            double sizeVariable =  (Math.exp(empRETGOV)* employmentRETGOV + Math.exp(household)* superPAZ.getHousehold());
-//            double supportVariable = pie * superPAZ.getPie() + park * superPAZ.getPark();
-//            double barrierVariable = slope*superPAZ.getSlope() + freeway*superPAZ.getFreeway() + empAllOthPropotion*empOtherPropotion;
-//            double utility =  (size * Math.log(sizeVariable) + supportVariable + barrierVariable);
-//            destinationUtility.put(superPAZ.getIndex(),utility);
-//        }
-//    }
+        for (MopedZone mopedZone: dataSet.getZones().values()){
+            double sizeRETSER = Math.max(1,mopedZone.getRetail()+mopedZone.getService());
+            double sizeFINGOV = Math.max(1,mopedZone.getFinancial()+mopedZone.getGovernment());
+            double sizeHH =  Math.max(1,mopedZone.getTotalHH());
+            double industrialProp = mopedZone.getIndustrial() / mopedZone.getTotalEmpl();
+
+
+            float utility = (float) (sizeRETSERCoef * Math.log(sizeRETSER) +
+                    sizeFINGOVCoef * Math.log(sizeFINGOV) +
+                    householdCoef * Math.log(sizeHH) + industrialPropCoef * industrialProp +
+                    parkCoef * mopedZone.getParkArce());
+            if (Double.isInfinite(utility) || Double.isNaN(utility)) {
+                throw new RuntimeException(utility + " utility calculated! Please check calculation!" +
+                        " sizeRETSER: " + sizeRETSER +
+                        " sizeFINGOV: " + sizeFINGOV +
+                        " sizeHH: " + sizeHH +
+                        " industrial: " + industrialProp +
+                        " parkAcre: " + mopedZone.getParkArce());
+            }
+            destinationUtilityPAZ.put(mopedZone.getZoneId(),utility);
+        }
+    }
 }

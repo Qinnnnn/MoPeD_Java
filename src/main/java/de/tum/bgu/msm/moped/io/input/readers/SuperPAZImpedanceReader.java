@@ -9,7 +9,7 @@ import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
 import org.jblas.FloatMatrix;
-
+@Deprecated
 public class SuperPAZImpedanceReader extends CSVReader{
 
     private FloatMatrix impedance;

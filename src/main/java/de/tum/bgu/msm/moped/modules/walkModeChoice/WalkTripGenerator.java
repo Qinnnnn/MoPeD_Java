@@ -51,14 +51,9 @@ public abstract class WalkTripGenerator {
                 int age = hhType.getAge();
                 int car = hhType.getCars();
                 int kid = hhType.getKids();
-//                float pieActivity = originZone.getPieActivity();
                 float pieEmpl = originZone.getPieEmpl();
-//                float pieArea = originZone.getPieArea();
                 float piePop = originZone.getPiePop();
-//                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, piePop);
-//                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, pieArea);
                 float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy, pieEmpl, piePop);
-//                float utilityZone = calculateZoneRelatedUtility(pie, pieFlag, wa, stfwy);
                 float utilityHousehold = calculateHouseholdRelatedUtility(hhSize, worker, income, age, car, kid);
                 float utilitySum = utilityZone + utilityHousehold;
                 float expUtility = (float) Math.exp(utilitySum);
@@ -97,11 +92,6 @@ public abstract class WalkTripGenerator {
                 }
             }
 
-//            if((totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips)>0.00001){
-//                System.out.println(totalWalkTripsHasCars+totalWalkTripsNoCars-totalWalkTrips);
-//                System.out.println("mistake!");
-//            }
-
             dataSet.getOriginPAZ(index).addTotalWalkTrips(totalWalkTrips,purpose);
             dataSet.getOriginPAZ(index).addTotalWalkTripsNoCar(totalWalkTripsNoCars,purpose);
             dataSet.getOriginPAZ(index).addTotalWalkTripsHasCar(totalWalkTripsHasCars,purpose);
@@ -111,7 +101,6 @@ public abstract class WalkTripGenerator {
         }
     }
 
-    protected abstract float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy, float pieEmpl, float pieArea);
+    protected abstract float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy, float pieEmpl, float piePop);
     protected abstract float calculateHouseholdRelatedUtility(int hhSize, int worker, int income, int age, int car, int kid);
-    protected abstract float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy);
 }

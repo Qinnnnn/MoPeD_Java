@@ -9,15 +9,11 @@ public final class HBSchoolWalk extends WalkTripGenerator{
         super(dataSet, Purpose.HBSCH);
     }
 
+    //TODO: not included in WSTLUR paper application
     @Override
-    protected float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy) {
+    protected float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy, float pieEmpl, float piePop) {
         float utilityZone = -1.093f * stfwy + 0.792f * wa+ 0.043f * pie + 0.530f * pieFlag;
         return utilityZone;
-    }
-
-    @Override
-    protected float calculateZoneRelatedUtility(float pie, int pieFlag, int wa, float stfwy, float pieEmpl, float pieArea) {
-        return 0;
     }
 
     @Override
