@@ -18,13 +18,14 @@ public class HouseholdTypeDistributionReader extends CSVReader{
 
     private static final Logger logger = Logger.getLogger(HouseholdTypeDistributionReader.class);
 
-
+    private float counter;
     @Override
     public void read() {
         logger.info(" Reading household distribution.");
         distribution = new FloatMatrix(dataSet.getOriginPAZs().size(), dataSet.getHOUSEHOLDTYPESIZE());
         super.read(Resources.INSTANCE.getString(Properties.HOUSEHOLDTYPEDISTRIBUTION), ",");
         dataSet.setDistribution(distribution);
+        System.out.println("household distribution "+counter);
     }
 
     @Override
@@ -47,10 +48,13 @@ public class HouseholdTypeDistributionReader extends CSVReader{
                         //float scenariohh = Float.parseFloat(record[id])*zone.getGrowthRate();
                         distribution.put(zone.getIndex(), id, hh);
                         //distribution.put(zone.getIndex(), id, scenariohh);
+                        counter = counter + hh;
                     }
                 }
             }
 
+        }else{
+            logger.warn("zone " + zoneId + "is not in the dataset!");
         }
     }
 }

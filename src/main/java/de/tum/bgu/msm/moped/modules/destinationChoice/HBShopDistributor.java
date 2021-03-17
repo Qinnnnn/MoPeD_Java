@@ -63,6 +63,9 @@ public final class HBShopDistributor extends TripDistributor{
             double sizeHH =  Math.max(1,mopedZone.getTotalHH());
             double industrialProp = mopedZone.getIndustrial() / mopedZone.getTotalEmpl();
 
+            if(mopedZone.getTotalEmpl()==0){
+                industrialProp = 0.;
+            }
 
             float utility = (float) (sizeRETCoef * Math.log(sizeRET) +
                     sizeOtherCoef * Math.log(sizeOther) +

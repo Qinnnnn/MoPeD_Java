@@ -4,6 +4,8 @@ import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
+
 import java.util.ResourceBundle;
 class MoPeDTest {
 
@@ -12,11 +14,17 @@ class MoPeDTest {
 
     public static void main(String[] args) {
         // main run method
-        Purpose purpose = Purpose.HBW;
-        MoPeDTest test = new MoPeDTest();
-        ResourceBundle rb = MoPeDUtil.createResourceBundle(args[0]);
-        MoPeDUtil.setBaseDirectory(rb.getString("base.directory"));
-        test.run(rb,purpose);
+        long t1 = System.currentTimeMillis();
+        for(Purpose purpose : Purpose.purposeSetForStandAlone()) {
+            //Purpose purpose = Purpose.HBOTH;
+            MoPeDTest test = new MoPeDTest();
+            ResourceBundle rb = MoPeDUtil.createResourceBundle(args[0]);
+            MoPeDUtil.setBaseDirectory(rb.getString("base.directory"));
+            test.run(rb, purpose);
+            logger.info("Trip purpose " + purpose.toString() + "is done!");
+        }
+        long runTime = System.currentTimeMillis()- t1;
+        logger.info("Total run time:" + runTime);
     }
 
     private void run (ResourceBundle resources, Purpose purpose) {

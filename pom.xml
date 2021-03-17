@@ -187,7 +187,40 @@
             <version>1.16.1</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.openstreetmap.osmosis</groupId>
+            <artifactId>osmosis-core</artifactId>
+            <version>0.47.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openstreetmap.osmosis/osmosis-pbf -->
+        <dependency>
+            <groupId>org.openstreetmap.osmosis</groupId>
+            <artifactId>osmosis-pbf</artifactId>
+            <version>0.47.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openstreetmap.osmosis</groupId>
+            <artifactId>osmosis-xml</artifactId>
+            <version>0.47.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openstreetmap.osmosis/osmosis-osm-binary -->
+        <dependency>
+            <groupId>org.openstreetmap.osmosis</groupId>
+            <artifactId>osmosis-osm-binary</artifactId>
+            <version>0.47.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openstreetmap.osmosis/osmosis-areafilter -->
+        <dependency>
+            <groupId>org.openstreetmap.osmosis</groupId>
+            <artifactId>osmosis-areafilter</artifactId>
+            <version>0.47.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openstreetmap.osmosis/osmosis-tagfilter -->
+        <dependency>
+            <groupId>org.openstreetmap.osmosis</groupId>
+            <artifactId>osmosis-tagfilter</artifactId>
+            <version>0.47.2</version>
+        </dependency>
 
 
     </dependencies>

@@ -6,7 +6,7 @@ import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
 import org.apache.log4j.Logger;
-
+@Deprecated
 public class TransportReader extends CSVReader {
     private int idIndex;
     private int waIndex;

@@ -23,6 +23,9 @@ public final class HBOtherDistributor extends TripDistributor {
 
         for (SuperPAZ superPAZ: dataSet.getSuperPAZs().values()){
             double industrialProp = superPAZ.getIndustrial() / superPAZ.getTotalEmpl();
+            if(superPAZ.getTotalEmpl()==0){
+                industrialProp = 0.;
+            }
             double sizeOTHER =  superPAZ.getTotalEmpl()-superPAZ.getIndustrial();
             double sizeHH = superPAZ.getHousehold();
             if(sizeOTHER <= 1){
@@ -59,7 +62,9 @@ public final class HBOtherDistributor extends TripDistributor {
             double sizeFINGOV = Math.max(1,mopedZone.getFinancial()+mopedZone.getGovernment());
             double sizeHH =  Math.max(1,mopedZone.getTotalHH());
             double industrialProp = mopedZone.getIndustrial() / mopedZone.getTotalEmpl();
-
+            if(mopedZone.getTotalEmpl()==0){
+                industrialProp = 0.;
+            }
 
             float utility = (float) (sizeRETSERCoef * Math.log(sizeRETSER) +
                     sizeFINGOVCoef * Math.log(sizeFINGOV) +

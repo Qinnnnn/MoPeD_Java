@@ -12,6 +12,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class InputManager {
     private static final Logger logger = Logger.getLogger(InputManager.class);
@@ -25,16 +26,16 @@ public class InputManager {
     public void readAsStandAlone() {
         new ZonesReader(dataSet).read();
         logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new ZoneAttributesReader(dataSet).read();
-        logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        //new ZoneAttributesReader(dataSet).read();
+        //logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
         new HouseholdTypeReader(dataSet).read();
         logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
         new HouseholdTypeDistributionReader(dataSet).read();
         logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new PIEReader(dataSet).read();
-        logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
-        new TransportReader(dataSet).read();
-        logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        //new PIEReader(dataSet).read();
+        //logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+        //new TransportReader(dataSet).read();
+        //logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
         new SuperPAZAttributesReader(dataSet).read();
         logger.info(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
     }

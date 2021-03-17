@@ -19,8 +19,18 @@ public abstract class WalkTripGenerator {
     }
 
     public void run () {
-        int zoneSize = dataSet.getOriginPAZs().size();
+        int zoneSize;
+        //TODO NHB getzones, other getOriginPAZ
+        if(purpose.equals(Purpose.NHBW)||purpose.equals(Purpose.NHBNW)){
+            zoneSize = dataSet.getZones().size();
+        }else {
+            zoneSize = dataSet.getOriginPAZs().size();
+        }
+        System.out.println(zoneSize);
+
         int hhTypeSize = dataSet.getHOUSEHOLDTYPESIZE();
+        System.out.println(hhTypeSize);
+        System.out.println(hhTypeSize*zoneSize);
         WalkTrip = new FloatMatrix(zoneSize, hhTypeSize);
         calculateWalkUtilities();
         calculateVehicleUtilities();
@@ -39,6 +49,7 @@ public abstract class WalkTripGenerator {
     }
 
     public void calculateWalkUtilities(){
+        //TODO NHB getzones, other getOriginPAZ
         for (MopedZone originZone : dataSet.getOriginPAZs().values()) {
             for (HouseholdType hhType : dataSet.getHhTypes().values()) {
                 float pie = originZone.getPie();
@@ -63,7 +74,12 @@ public abstract class WalkTripGenerator {
     }
 
     public void calculateVehicleUtilities() {
-        VehicleExpUtility = FloatMatrix.ones(dataSet.getOriginPAZs().size(),dataSet.getHOUSEHOLDTYPESIZE());
+        if(purpose.equals(Purpose.NHBW)||purpose.equals(Purpose.NHBNW)){
+            VehicleExpUtility = FloatMatrix.ones(dataSet.getOriginPAZs().size(),dataSet.getHOUSEHOLDTYPESIZE());
+        }else {
+            VehicleExpUtility = FloatMatrix.ones(dataSet.getOriginPAZs().size(),dataSet.getHOUSEHOLDTYPESIZE());
+
+        }
     }
 
     public void calculateWalkTrips() {

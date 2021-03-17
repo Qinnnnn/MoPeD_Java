@@ -152,7 +152,19 @@ public abstract class TripDistributor {
                             Coord destinationCoord = CoordUtils.createCoord(((Geometry) (destination.getShapeFeature().getDefaultGeometry())).getCentroid().getCoordinate());
                             Node destinationNode = NetworkUtils.getNearestNode(network, destinationCoord);
                             LeastCostPathCalculator.Path path = pathCalculator.constructPath(originNode, destinationNode, 8 * 3600);
-                            float travelDistance = (float) (path.travelTime/1000.0f);
+                            float travelDistance;
+                            if(path == null){
+                                if(origin.getSuperPAZId()==destination.getSuperPAZId()){
+                                    travelDistance = 0.282f;
+                                }else{
+                                    //logger.warn("There is no path from origin paz: " + origin.getZoneId() + " to destination paz: " + destination.getSuperPAZId());
+                                    //might because WASHI county is disconnected
+                                    continue;
+                                }
+                            }else {
+                                travelDistance = (float) (path.travelTime / 1000.0f);
+                            }
+
                             if (travelDistance > 4.8){
                                 continue;
                             }
@@ -199,7 +211,18 @@ public abstract class TripDistributor {
                                 Coord destinationPAZCoord = CoordUtils.createCoord(((Geometry) (dataSet.getZone(paz).getShapeFeature().getDefaultGeometry())).getCentroid().getCoordinate());
                                 Node destinationPAZNode = NetworkUtils.getNearestNode(network, destinationPAZCoord);
                                 LeastCostPathCalculator.Path path = subPathCalculator.constructPath(originNode, destinationPAZNode, 8 * 3600);
-                                float travelDistancePAZ = (float) (path.travelTime/ 1000.0f);
+                                float travelDistancePAZ;
+                                if(path==null){
+                                    if(origin.getZoneId() == paz){
+                                        travelDistancePAZ = 0.056f;
+                                    }else{
+                                        //logger.warn("There is no path from origin paz: " + origin.getZoneId() + " to destination paz: " + paz);
+                                        continue;
+                                    }
+                                }else{
+                                    travelDistancePAZ = (float) (path.travelTime/ 1000.0f);
+                                }
+
                                 if(travelDistancePAZ > 4.8){
                                     continue;
                                 }
@@ -236,19 +259,21 @@ public abstract class TripDistributor {
                             }
 
                             for (int paz : utilityListPAZ.keys().elements()) {
-                                float distributionPAZ = utilityListPAZ.get(paz)*(utilityList.get(destination.getSuperPAZId())/sumPAZ);
-                                distributionList.append(origin.getZoneId());
-                                distributionList.append(',');
-                                distributionList.append(origin.getSuperPAZId());
-                                distributionList.append(',');
-                                distributionList.append(paz);
-                                distributionList.append(',');
-                                distributionList.append(destinationId);
-                                distributionList.append(',');
-                                distributionList.append(distributionPAZ);
-                                distributionList.append(',');
-                                distributionList.append((short)Math.round(impedanceListPAZ.get(paz)*1000));
-                                distributionList.append('\n');
+                                if (origin.isScenarioZone()||dataSet.getZone(paz).isScenarioZone()){
+                                    float distributionPAZ = utilityListPAZ.get(paz)*(utilityList.get(destination.getSuperPAZId())/sumPAZ);
+                                    distributionList.append(origin.getZoneId());
+                                    distributionList.append(',');
+                                    distributionList.append(origin.getSuperPAZId());
+                                    distributionList.append(',');
+                                    distributionList.append(paz);
+                                    distributionList.append(',');
+                                    distributionList.append(destinationId);
+                                    distributionList.append(',');
+                                    distributionList.append(distributionPAZ);
+                                    distributionList.append(',');
+                                    distributionList.append((short)Math.round(impedanceListPAZ.get(paz)*1000));
+                                    distributionList.append('\n');
+                                }
                             }
 
                         }

@@ -20,8 +20,6 @@ import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.router.*;
 import org.matsim.core.utils.collections.QuadTree;
 import org.matsim.core.utils.geometry.CoordUtils;
-import org.matsim.core.utils.geometry.CoordinateTransformation;
-import org.matsim.core.utils.geometry.transformations.TransformationFactory;
 import org.matsim.core.utils.gis.ShapeFileReader;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -31,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class isochroneGenerator {
 
-    private static final double BUFFER_AREA = 1000;
+    private static final double BUFFER_AREA = 800;
     private static Set<Integer> ohasZones = new HashSet<>();
     private static QuadTree<Integer> zoneSearchTree;
     private static Map<Integer, Point> zoneSimpleFeatures = new HashMap<>();

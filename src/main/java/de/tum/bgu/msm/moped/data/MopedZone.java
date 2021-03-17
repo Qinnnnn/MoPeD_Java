@@ -55,6 +55,8 @@ public class MopedZone {
 
     private float growthRate;
     private int block;
+    private boolean isScenarioZone;
+
     private Map<Integer, Float> distribution = new HashMap<>();
 
     public float getTotalEmpl() {
@@ -408,5 +410,13 @@ public class MopedZone {
 
     public void setBlock(int block) {
         this.block = block;
+    }
+
+    public boolean isScenarioZone() {
+        return isScenarioZone;
+    }
+
+    public void setScenarioZone(boolean scenarioZone) {
+        isScenarioZone = scenarioZone;
     }
 }
