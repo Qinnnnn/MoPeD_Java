@@ -16,13 +16,21 @@ public class ModeChoiceJSCalculator extends JavaScriptCalculator<Double> {
         super(reader);
     }
 
-    public double calculateProbabilities(MopedHousehold household, MopedPerson person,MopedTrip trip){
+    public double calculateProbabilities(MopedHousehold household, MopedTrip trip){
         if (trip.getTripPurpose().equals(Purpose.HBW)){
-            return super.calculate("calculateHBWProbabilities", household,person, trip);
+            return super.calculate("calculateHBWProbabilities", household, trip);
         }else if(trip.getTripPurpose().equals(Purpose.HBE)) {
-            return super.calculate("calculateHBEProbabilities", household, trip);
+            return super.calculate("calculateHBEProbabilities", household,trip);
+        }else if(trip.getTripPurpose().equals(Purpose.HBS)){
+            return super.calculate("calculateHBSProbabilities", household,trip);
+        }else if(trip.getTripPurpose().equals(Purpose.HBO)){
+            return super.calculate("calculateHBOProbabilities", household,trip);
+        }else if(trip.getTripPurpose().equals(Purpose.NHBW)){
+            return super.calculate("calculateNHBWProbabilities", household,trip);
+        }else if(trip.getTripPurpose().equals(Purpose.NHBO)){
+            return super.calculate("calculateNHBOProbabilities", household,trip);
         }else{
-            return super.calculate("calculateOTHERProbabilities", household, trip);
+            throw new RuntimeException("No such purpose: " + trip.getTripPurpose().toString());
         }
     }
 }

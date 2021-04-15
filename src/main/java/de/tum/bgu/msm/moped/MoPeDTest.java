@@ -16,6 +16,7 @@ class MoPeDTest {
         // main run method
         long t1 = System.currentTimeMillis();
         for(Purpose purpose : Purpose.purposeSetForStandAlone()) {
+            logger.info("Trip purpose " + purpose.toString() + "start!");
             //Purpose purpose = Purpose.HBOTH;
             MoPeDTest test = new MoPeDTest();
             ResourceBundle rb = MoPeDUtil.createResourceBundle(args[0]);

@@ -5,8 +5,8 @@ import com.google.common.math.LongMath;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.MopedZone;
 import de.tum.bgu.msm.moped.data.Purpose;
-import javafx.util.Pair;
 import org.apache.log4j.Logger;
+import org.matsim.core.utils.collections.Tuple;
 
 
 import java.io.InputStreamReader;
@@ -14,7 +14,7 @@ import java.io.Reader;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class DestinationUtilityByPurposeGenerator implements Callable<Pair<Purpose, DenseLargeFloatMatrix2D>> {
+public class DestinationUtilityByPurposeGenerator implements Callable<Tuple<Purpose, DenseLargeFloatMatrix2D>> {
 
     private final static Logger logger = Logger.getLogger(DestinationUtilityByPurposeGenerator.class);
 
@@ -33,7 +33,7 @@ public class DestinationUtilityByPurposeGenerator implements Callable<Pair<Purpo
     }
 
     @Override
-    public Pair<Purpose, DenseLargeFloatMatrix2D> call() throws Exception {
+    public Tuple<Purpose, DenseLargeFloatMatrix2D> call() throws Exception {
         final DenseLargeFloatMatrix2D utilityMatrix = new DenseLargeFloatMatrix2D(zones.values().size()+1, zones.values().size()+1);
         long counter = 0;
         for (MopedZone origin : zones.values()) {
@@ -58,6 +58,6 @@ public class DestinationUtilityByPurposeGenerator implements Callable<Pair<Purpo
             }
         }
         logger.info("Utility matrix for purpose " + purpose + " done.");
-        return new Pair<>(purpose, utilityMatrix);
+        return new Tuple<>(purpose, utilityMatrix);
     }
 }

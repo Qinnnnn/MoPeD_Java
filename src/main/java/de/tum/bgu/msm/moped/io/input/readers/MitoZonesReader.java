@@ -20,19 +20,17 @@ import org.opengis.feature.simple.SimpleFeature;
 import java.io.File;
 import java.io.IOException;
 
-public class ZonesReader extends CSVReader {
-    private static final Logger logger = Logger.getLogger(ZonesReader.class);
+public class MitoZonesReader extends CSVReader{
+    private static final Logger logger = Logger.getLogger(MitoZonesReader.class);
+
+    private QuadTree<MopedZone> zoneSearchTree;
 
     private int idIndex;
-    private int mitoZoneIndex;
+    //private int mitoZoneIndex;
     private int superPAZIndex;
     private int totalHouseholdIndex;
     private int index = 0;
-    private int growthRateIndex;
-    private QuadTree<MopedZone> zoneSearchTree;
-    private int blockIndex;
     private int scenarioZoneIndex;
-    
     private int agricultureIndex;
     private int constructionIndex;
     private int financialIndex;
@@ -41,61 +39,46 @@ public class ZonesReader extends CSVReader {
     private int retailIndex;
     private int serviceIndex;
     private int transportationIndex;
+    private int utilityIndex;
     private int wholesaleIndex;
-    private int shoppingAreaIndex;
-    private int collegeVehicleTripIndex;
     private int parkIndex;
-
-    private int waIndex;
-    private int stfwyIndex;
-
     private int pieEmplIndex;
     private int piePopIndex;
 
-    public ZonesReader(DataSet dataSet) {
+    public MitoZonesReader(DataSet dataSet) {
         super(dataSet);
     }
 
-    @Override
     public void read() {
         logger.info("  Reading zones from zone file");
         super.read(Resources.INSTANCE.getString(Properties.ZONES), ",");
         mapFeaturesToZones(dataSet);
     }
 
-    @Override
     protected void processHeader(String[] header) {
-        idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
+        idIndex = MoPeDUtil.findPositionInArray("zoneId", header);
         //mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZone", header);
-        superPAZIndex = MoPeDUtil.findPositionInArray("superPAZID", header);
-        totalHouseholdIndex = MoPeDUtil.findPositionInArray("totalHH", header);
-        //growthRateIndex = MoPeDUtil.findPositionInArray("Hhgrowth", header);
-        blockIndex = MoPeDUtil.findPositionInArray("PAZ_block_motorway", header);
-        scenarioZoneIndex = MoPeDUtil.findPositionInArray("scenarioZone", header);
+        superPAZIndex = MoPeDUtil.findPositionInArray("superPAZId", header);
+        totalHouseholdIndex = MoPeDUtil.findPositionInArray("pop", header);
+        scenarioZoneIndex = MoPeDUtil.findPositionInArray("scenarioPAZ", header);
 
-        idIndex = MoPeDUtil.findPositionInArray("zoneID", header);
-        agricultureIndex = MoPeDUtil.findPositionInArray("afm", header);
-        constructionIndex = MoPeDUtil.findPositionInArray("con", header);
-        financialIndex = MoPeDUtil.findPositionInArray("fi", header);
-        governmentIndex = MoPeDUtil.findPositionInArray("gov", header);
-        manufacturingIndex = MoPeDUtil.findPositionInArray("mfg", header);
-        retailIndex = MoPeDUtil.findPositionInArray("ret", header);
-        serviceIndex = MoPeDUtil.findPositionInArray("ser", header);
-        transportationIndex = MoPeDUtil.findPositionInArray("tpu", header);
-        wholesaleIndex = MoPeDUtil.findPositionInArray("wt", header);
-        shoppingAreaIndex = MoPeDUtil.findPositionInArray("shsqft", header);
-        collegeVehicleTripIndex = MoPeDUtil.findPositionInArray("colveh", header);
+        agricultureIndex = MoPeDUtil.findPositionInArray("Agri", header);
+        constructionIndex = MoPeDUtil.findPositionInArray("Cons", header);
+        financialIndex = MoPeDUtil.findPositionInArray("Finc", header);
+        governmentIndex = MoPeDUtil.findPositionInArray("Admn", header);
+        manufacturingIndex = MoPeDUtil.findPositionInArray("Mnft", header);
+        retailIndex = MoPeDUtil.findPositionInArray("Retl", header);
+        serviceIndex = MoPeDUtil.findPositionInArray("Serv", header);
+        transportationIndex = MoPeDUtil.findPositionInArray("Trns", header);
+        utilityIndex = MoPeDUtil.findPositionInArray("Util", header);
+        wholesaleIndex = MoPeDUtil.findPositionInArray("Rlst", header);
         parkIndex = MoPeDUtil.findPositionInArray("parka", header);
-
-        waIndex = MoPeDUtil.findPositionInArray("WA", header);
-        stfwyIndex = MoPeDUtil.findPositionInArray("stfwy", header);
-
         pieEmplIndex = MoPeDUtil.findPositionInArray("nonIndustrial_in800m", header);
         piePopIndex = MoPeDUtil.findPositionInArray("hh_in800m", header);
 
     }
 
-    @Override
+
     protected void processRecord(String[] record) {
         int zoneId = Integer.parseInt(record[idIndex]);
         int superPAZID = Integer.parseInt(record[superPAZIndex]);//internalIndex
@@ -107,22 +90,19 @@ public class ZonesReader extends CSVReader {
 
         setZonalAttributes(zone,record);
         //if (totalHH != 0.0){
-            SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
-            if (superPAZ == null){
-                superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
-                dataSet.addSuperPAZ(superPAZ);
-            }
-            superPAZ.getPazs().add(zoneId);
-            zone.setIndex(index);
-            dataSet.addOriginPAZ(index, zone);
-            index++;
+        SuperPAZ superPAZ = dataSet.getSuperPAZ(superPAZID);
+        if (superPAZ == null){
+            superPAZ = new SuperPAZ(superPAZID, "ORIGIN");
+            dataSet.addSuperPAZ(superPAZ);
+        }
+        superPAZ.getPazs().add(zoneId);
+        zone.setIndex(index);
+        dataSet.addOriginPAZ(index, zone);
+        index++;
         //}
     }
 
     private void setZonalAttributes(MopedZone zone, String[] record) {
-        //int mitoZoneId = Integer.parseInt(record[mitoZoneIndex]);
-        //float growthRate = Float.parseFloat(record[growthRateIndex]);
-        int block = Integer.parseInt(record[blockIndex]);
         int scenarioZone = Integer.parseInt(record[scenarioZoneIndex]);
         float agriculture = Float.parseFloat(record[agricultureIndex]);
         float construction = Float.parseFloat(record[constructionIndex]);
@@ -132,22 +112,13 @@ public class ZonesReader extends CSVReader {
         float retail = Float.parseFloat(record[retailIndex]);
         float service = Float.parseFloat(record[serviceIndex]);
         float transportation = Float.parseFloat(record[transportationIndex]);
+        float utility = Float.parseFloat(record[utilityIndex]);
         float wholesale = Float.parseFloat(record[wholesaleIndex]);
-        float shoppingArea = Float.parseFloat(record[shoppingAreaIndex]);
-        float collegeVehicleTrip = Float.parseFloat(record[collegeVehicleTripIndex]);
         float park = Float.parseFloat(record[parkIndex]);
-        int wa = Integer.parseInt(record[waIndex]);
-        float stfwy = Float.parseFloat(record[stfwyIndex]);
         float pieEmpl = Float.parseFloat(record[pieEmplIndex]);
         float piePop = Float.parseFloat(record[piePopIndex]);
         zone.setPieEmpl(pieEmpl);
         zone.setPiePop(piePop);
-        zone.setWa(wa);
-        zone.setStfwy(stfwy);
-        //zone.setMitoZoneId(mitoZoneId);
-        //zone.setGrowthRate(growthRate);
-        zone.setBlock(block);
-        zone.setScenarioZone(scenarioZone==1?Boolean.TRUE:Boolean.FALSE);
         zone.setAgriculture(agriculture);
         zone.setConstruction(construction);
         zone.setFinancial(financial);
@@ -155,16 +126,14 @@ public class ZonesReader extends CSVReader {
         zone.setManufacturing(manufacturing);
         zone.setRetail(retail);
         zone.setService(service);
-        zone.setTransportation(transportation);
+        zone.setTransportation(transportation+utility);
         zone.setWholesale(wholesale);
-        zone.setShoppingArea(shoppingArea);
-        zone.setCollegeVehicleTrip(collegeVehicleTrip);
         zone.setSlope(0);
-        zone.setFreeway(0);
         zone.setTotalEmpl();
         zone.setIndustrial(agriculture+construction+manufacturing);
         zone.setParkArce(park);
-        zone.setPark(0);
+        zone.setScenarioZone(scenarioZone==1?Boolean.TRUE:Boolean.FALSE);
+
     }
 
 
@@ -173,20 +142,17 @@ public class ZonesReader extends CSVReader {
         setZoneSearchTree();
         int counter = 0;
         for (SimpleFeature feature: ShapeFileReader.getAllFeatures(Resources.INSTANCE.getString(Properties.ZONE_SHAPEFILE))) {
-            int zoneId = (int) Double.parseDouble(feature.getAttribute("OBJECTID").toString());
+            int zoneId = (int) Double.parseDouble(feature.getAttribute("zoneID").toString());
             MopedZone zone = dataSet.getZones().get(zoneId);
             if (zone != null){
                 zone.setShapeFeature(feature);
-                //zone.setActivityDensity(Double.parseDouble(feature.getAttribute("popInBuffe").toString())+Double.parseDouble(feature.getAttribute("totalJobIn").toString()));
-                //zone.setTotalJobDensity(Double.parseDouble(feature.getAttribute("totalJobIn").toString()));
-                //zone.setIndustrialJobDensity(Double.parseDouble(feature.getAttribute("totalJobIn").toString())-Double.parseDouble(feature.getAttribute("uliJobInBu").toString()));
                 zoneSearchTree.put(((Geometry)feature.getDefaultGeometry()).getCentroid().getX(),((Geometry)feature.getDefaultGeometry()).getCentroid().getY(),zone);
             }else{
                 counter++;
                 //logger.warn("zoneId " + zoneId + " doesn't exist in moped zone system");
             }
         }
-        logger.warn(counter + " zones in shapefile doesn't exist in zone.csv");
+        logger.warn(counter + " zones in shapefile doesn't exist in paz.csv");
 
         dataSet.setZoneSearchTree(zoneSearchTree);
     }

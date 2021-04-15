@@ -1,48 +1,282 @@
-sizeHBWHBE = 0.197;
-barrierHBWHBE = -1.14;
-interceptHBWHBE = -0.761;
-distHasCarHBWHBE = -1.54;
-distNoCarHBWHBE = -1.496;
+//distHasCar,distNoCar,networkDensity,sizeRetSev,sizeFinGov,industrial,barrier,park
+coefficientsHBW = [-1.536, -1.372, 0.141, 0.445, 0.352, -1.249, -0.321, 0];
+coefficientsHBE = [-1.536, -1.372, 0.141, 0.445, 0.352, -1.249, -0.321, 0];
 
-sizeOther = 0.197;
-barrierOther = -1.14;
-interceptOther = -0.761;
-distHasCarOther = -1.54;
-distNoCarOther = -1.496;
+//distHasKid,distNoKid,networkDensity,sizeRet,industrial,barrier,park
+coefficientsHBS = [-2.182, -1.776, 0.049, 0.977, -1.306, -0.279, 0];
 
-var calculateHBWHBE = function (travelDistance, sizeVariable, barrierVariable) {
-    if(sizeVariable <= 1){
-       sizeVariable = sizeVariable+1;
+//dist,networkDensity,sizeAll(non-industrial),industrial,barrier,park
+coefficientsHBO = [-2.217, 0.214, 0.389, 0, -0.828, 0.510];
+coefficientsNHBW = [-1.883, 0.185, 0.667, -0.749, -0.718, 0.0];
+coefficientsNHBO = [-2.141, 0.184, 0.516, 0, -1.361, 0.0];
+
+
+
+var calculateHBWHBE = function (travelDistance, destination, crossMotorway) {
+
+    networkDensity = destination.getNetworkDesnity();
+    sizeRetSev = destination.getRetail()+destination.getService();
+    sizeFinGov = destination.getFinancial()+destination.getGovernment();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
     }
-    
-    if(travelDistance == 141){
-        utility = distHasCarHBWHBE * travelDistance/1000 + sizeHBWHBE * Math.log(sizeVariable) + barrierHBWHBE * barrierVariable/sizeVariable;
-    }else{
-        utility = interceptHBWHBE + distHasCarHBWHBE * travelDistance/1000 + sizeHBWHBE * Math.log(sizeVariable) + barrierHBWHBE * barrierVariable/sizeVariable;
+    park = destination.getPark();
+
+    if(sizeRetSev < 1){
+       sizeRetSev = sizeRetSev+1;
     }
+
+    if(sizeFinGov < 1){
+       sizeFinGov = sizeFinGov+1;
+    }
+
+    utility = coefficientsHBW[0]*travelDistance+coefficientsHBW[2]*networkDensity+
+              coefficientsHBW[3]*Math.log(sizeRetSev)+coefficientsHBW[4]*Math.log(sizeFinGov)+
+              coefficientsHBW[5]*industrialProp+coefficientsHBW[6]*crossMotorway+
+              coefficientsHBW[7]*park
+              
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+var calculateHBS = function (travelDistance, destination, crossMotorway) {
+
+    networkDensity = destination.getNetworkDesnity();
+    sizeRet = destination.getRetail();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getPark();
+
+    if(sizeRet < 1){
+       sizeRet = sizeRet+1;
+    }
+
+    utility = coefficientsHBS[0]*travelDistance+coefficientsHBS[2]*networkDensity+
+              coefficientsHBS[3]*Math.log(sizeRet)+coefficientsHBS[4]*industrialProp+
+              coefficientsHBS[5]*crossMotorway+coefficientsHBS[6]*park
+              
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+var calculateHBO = function (travelDistance, destination, crossMotorway) {
+
+    networkDensity = destination.getNetworkDesnity();
+    sizeAll = destination.getTotalEmpl()-destination.getIndustrial();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getPark();
+
+    if(sizeAll < 1){
+       sizeAll = sizeAll+1;
+    }
+
+    utility = coefficientsHBO[0]*travelDistance+coefficientsHBO[1]*networkDensity+
+              coefficientsHBO[2]*Math.log(sizeAll)+coefficientsHBO[3]*industrialProp+
+              coefficientsHBO[4]*crossMotorway+coefficientsHBO[5]*park
+              
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+var calculateNHBW = function (travelDistance, destination, crossMotorway) {
+
+    networkDensity = destination.getNetworkDesnity();
+    sizeAll = destination.getTotalEmpl()-destination.getIndustrial();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getPark();
+
+    if(sizeAll < 1){
+       sizeAll = sizeAll+1;
+    }
+
+    utility = coefficientsNHBW[0]*travelDistance+coefficientsNHBW[1]*networkDensity+
+              coefficientsNHBW[2]*Math.log(sizeAll)+coefficientsNHBW[3]*industrialProp+
+              coefficientsNHBW[4]*crossMotorway+coefficientsNHBW[5]*park
+              
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+var calculateNHBO = function (travelDistance, destination, crossMotorway) {
+
+    networkDensity = destination.getNetworkDesnity();
+    sizeAll = destination.getTotalEmpl()-destination.getIndustrial();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getPark();
+
+    if(sizeAll < 1){
+       sizeAll = sizeAll+1;
+    }
+
+    utility = coefficientsNHBO[0]*travelDistance+coefficientsNHBO[1]*networkDensity+
+              coefficientsNHBO[2]*Math.log(sizeAll)+coefficientsNHBO[3]*industrialProp+
+              coefficientsNHBO[4]*crossMotorway+coefficientsNHBO[5]*park
+              
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+
+//PAZ level destination choice model
+//origin,dist,sizeRetSer,sizeFinGov,sizeHH,industrial,park
+coefficientsHBWPAZ = [2.068, -1.335, 0.541, 0.541,-0.433, 1.629, 0];
+
+//origin,dist,sizeRet,sizeOther,sizeHH,industrial,park
+coefficientsHBSPAZ = [0.623, -2.120, 0.820, 0.188, -0.169, -0.651, 0];
+
+//origin,dist,sizeRetSer,sizeFinGov,sizeHH,industrial,park
+coefficientsHBOPAZ = [3.162, -2.348, 0.145, 0.559, -0.507, 0.477, 0];
+coefficientsNHBWPAZ = [0.654, -2.894, 0.316, 0.062, -0.051, 0, 0];
+coefficientsNHBOPAZ = [1.628, -2.163, 0.355, 0.137, -0.082, -0.694, 0];
+
+var calculateHBWHBEPAZ = function (travelDistance, destination, originPAZ) {
+
+    sizeRetSev = destination.getRetail()+destination.getService();
+    sizeFinGov = destination.getFinancial()+destination.getGovernment();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getParkArce();
+
+    if(sizeRetSev < 1){
+       sizeRetSev = sizeRetSev+1;
+    }
+
+    if(sizeFinGov < 1){
+       sizeFinGov = sizeFinGov+1;
+    }
+
+    utility = coefficientsHBWPAZ[0]*originPAZ+coefficientsHBWPAZ[1]*travelDistance+
+              coefficientsHBWPAZ[2]*Math.log(sizeRetSev+sizeFinGov)+
+              coefficientsHBWPAZ[4]*industrialProp+coefficientsHBWPAZ[5]*park
 
     probability = Math.exp(utility);
 
     return probability;
 }
 
-var calculateOther = function (travelDistance, sizeVariable, barrierVariable) {
-    if(sizeVariable <= 1){
-       sizeVariable = sizeVariable+1;
+var calculateHBSPAZ = function (travelDistance, destination, originPAZ) {
+
+    sizeRet = destination.getRetail();
+    sizeOther = destination.getFinancial()+destination.getGovernment()+destination.getService();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
     }
-    
-    if(travelDistance == 141){
-        utility = distHasCarOther * travelDistance/1000 + sizeOther * Math.log(sizeVariable) + barrierOther * barrierVariable/sizeVariable;
-    }else{
-        utility = interceptOther + distHasCarOther * travelDistance/1000 + sizeOther * Math.log(sizeVariable) + barrierOther * barrierVariable/sizeVariable;
+    park = destination.getParkArce();
+
+    if(sizeRet < 1){
+       sizeRet = sizeRet+1;
     }
+
+    if(sizeOther < 1){
+       sizeOther = sizeOther+1;
+    }
+
+    utility = coefficientsHBSPAZ[0]*originPAZ+coefficientsHBSPAZ[1]*travelDistance+
+              coefficientsHBSPAZ[2]*Math.log(sizeRet)+coefficientsHBSPAZ[3]*Math.log(sizeOther)+
+              coefficientsHBSPAZ[4]*industrialProp+coefficientsHBSPAZ[5]*park
 
     probability = Math.exp(utility);
-
-    //print(travelDistance + ","+ sizeVariable+ ","+barrierVariable+ ","+utility+ ","+probability)
 
     return probability;
 }
 
+var calculateHBOPAZ = function (travelDistance, destination, originPAZ) {
 
+    sizeRetSev = destination.getRetail()+destination.getService();
+    sizeFinGov = destination.getFinancial()+destination.getGovernment();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getParkArce();
 
+    if(sizeRetSev < 1){
+       sizeRetSev = sizeRetSev+1;
+    }
+
+    if(sizeFinGov < 1){
+       sizeFinGov = sizeFinGov+1;
+    }
+
+    utility = coefficientsHBOPAZ[0]*originPAZ+coefficientsHBOPAZ[1]*travelDistance+
+              coefficientsHBOPAZ[2]*Math.log(sizeRetSev)+coefficientsHBOPAZ[3]*Math.log(sizeFinGov)+
+              coefficientsHBOPAZ[4]*industrialProp+coefficientsHBOPAZ[5]*park
+
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+var calculateNHBWPAZ = function (travelDistance, destination, originPAZ) {
+
+    sizeRetSev = destination.getRetail()+destination.getService();
+    sizeFinGov = destination.getFinancial()+destination.getGovernment();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getParkArce();
+
+    if(sizeRetSev < 1){
+       sizeRetSev = sizeRetSev+1;
+    }
+
+    if(sizeFinGov < 1){
+       sizeFinGov = sizeFinGov+1;
+    }
+
+    utility = coefficientsNHBWPAZ[0]*originPAZ+coefficientsNHBWPAZ[1]*travelDistance+
+              coefficientsNHBWPAZ[2]*Math.log(sizeRetSev)+coefficientsNHBWPAZ[3]*Math.log(sizeFinGov)+
+              coefficientsNHBWPAZ[4]*industrialProp+coefficientsNHBWPAZ[5]*park
+
+    probability = Math.exp(utility);
+
+    return probability;
+}
+
+var calculateNHBOPAZ = function (travelDistance, destination, originPAZ) {
+
+    sizeRetSev = destination.getRetail()+destination.getService();
+    sizeFinGov = destination.getFinancial()+destination.getGovernment();
+    industrialProp = 0.;
+    if(destination.getTotalEmpl()!=0){
+       industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+    }
+    park = destination.getParkArce();
+
+    if(sizeRetSev < 1){
+       sizeRetSev = sizeRetSev+1;
+    }
+
+    if(sizeFinGov < 1){
+       sizeFinGov = sizeFinGov+1;
+    }
+
+    utility = coefficientsNHBOPAZ[0]*originPAZ+coefficientsNHBOPAZ[1]*travelDistance+
+              coefficientsNHBOPAZ[2]*Math.log(sizeRetSev)+coefficientsNHBOPAZ[3]*Math.log(sizeFinGov)+
+              coefficientsNHBOPAZ[4]*industrialProp+coefficientsNHBOPAZ[5]*park
+
+    probability = Math.exp(utility);
+
+    return probability;
+}

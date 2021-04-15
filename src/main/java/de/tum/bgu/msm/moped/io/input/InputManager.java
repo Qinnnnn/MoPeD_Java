@@ -80,7 +80,8 @@ public class InputManager {
 
     //TODO:read and set zone features
     public void readZoneData() {
-        new ZonesReader(dataSet).read();
+        new MitoZonesReader(dataSet).read();
+        new MitoSuperPAZReader(dataSet).read();
         //System.out.println(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
     }
 

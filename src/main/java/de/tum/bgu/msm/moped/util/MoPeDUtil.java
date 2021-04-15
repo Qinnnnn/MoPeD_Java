@@ -273,4 +273,19 @@ public class MoPeDUtil {
         }
         throw new RuntimeException("Error selecting item from weighted probabilities");
     }
+
+    public static synchronized int select(int zone, OpenIntFloatHashMap openIntFloatHashMap, Random rand) {
+        // select item based on probabilities (for mapped double probabilities)
+        double sum = FloatDescriptive.sum(openIntFloatHashMap.values());
+
+        double selectedWeight = rand.nextDouble() * sum;
+        double select = 0;
+        for (int i: openIntFloatHashMap.keys().elements()) {
+            select += openIntFloatHashMap.get(i);
+            if (select > selectedWeight) {
+                return i;
+            }
+        }
+        throw new RuntimeException("Error selecting item from weighted probabilities for zone:  " + zone + "sum utility: " + sum);
+    }
 }

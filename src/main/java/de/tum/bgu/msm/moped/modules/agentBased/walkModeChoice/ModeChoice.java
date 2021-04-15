@@ -53,7 +53,7 @@ public class ModeChoice {
 
 
     private double calculateTripProbabilities(MopedTrip trip) {
-        return calculator.calculateProbabilities(trip.getPerson().getMopedHousehold(), trip.getPerson(),trip);
+        return calculator.calculateProbabilities(trip.getPerson().getMopedHousehold(), trip);
     }
 
     private void chooseMode(MopedTrip trip, double probabilities) {

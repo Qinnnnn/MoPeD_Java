@@ -4,8 +4,8 @@ import cern.colt.matrix.tfloat.impl.DenseLargeFloatMatrix2D;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.data.Purpose;
 import de.tum.bgu.msm.moped.util.concurrent.ConcurrentExecutor;
-import javafx.util.Pair;
 import org.apache.log4j.Logger;
+import org.matsim.core.utils.collections.Tuple;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -40,15 +40,15 @@ public final class AgentTripDistribution {
     }
 
     private void buildMatrices() {
-        List<Callable<Pair<Purpose,DenseLargeFloatMatrix2D>>> utilityCalcTasks = new ArrayList<>();
+        List<Callable<Tuple<Purpose,DenseLargeFloatMatrix2D>>> utilityCalcTasks = new ArrayList<>();
         for (Purpose purpose : Purpose.values()) {
             if(purpose.equals(Purpose.HBW)||purpose.equals(Purpose.HBO))
             utilityCalcTasks.add(new DestinationUtilityByPurposeGenerator(purpose, dataSet));
         }
-        ConcurrentExecutor<Pair<Purpose, DenseLargeFloatMatrix2D>> executor = ConcurrentExecutor.fixedPoolService(Purpose.values().length);
-        List<Pair<Purpose,DenseLargeFloatMatrix2D>> results = executor.submitTasksAndWaitForCompletion(utilityCalcTasks);
-        for(Pair<Purpose, DenseLargeFloatMatrix2D> result: results) {
-            utilityMatrices.put(result.getKey(), result.getValue());
+        ConcurrentExecutor<Tuple<Purpose, DenseLargeFloatMatrix2D>> executor = ConcurrentExecutor.fixedPoolService(Purpose.values().length);
+        List<Tuple<Purpose,DenseLargeFloatMatrix2D>> results = executor.submitTasksAndWaitForCompletion(utilityCalcTasks);
+        for(Tuple<Purpose, DenseLargeFloatMatrix2D> result: results) {
+            utilityMatrices.put(result.getFirst(), result.getSecond());
         }
     }
 

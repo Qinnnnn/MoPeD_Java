@@ -54,6 +54,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -74,6 +75,18 @@
                         <Xmaxerrs>100</Xmaxerrs>
                     </compilerArguments>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -104,7 +117,7 @@
         <dependency>
             <groupId>net.sourceforge.parallelcolt</groupId>
             <artifactId>parallelcolt</artifactId>
-            <version>LATEST</version>
+            <version>0.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -134,21 +147,11 @@
             <artifactId>jts</artifactId>
             <version>1.13</version>
         </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-opengis</artifactId>
-            <version>20.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-shapefile</artifactId>
-            <version>20.2</version>
-        </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-grid</artifactId>
-            <version>20.2</version>
-        </dependency>
+            <version>21.5</version>
+        </dependency>-->
         <dependency>
             <groupId>common-base</groupId>
             <artifactId>common-base</artifactId>
@@ -172,13 +175,13 @@
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>dvrp</artifactId>
-            <version>11.0</version>
+            <version>${matsimVersion}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.matsim.contrib/accessibility -->
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>accessibility</artifactId>
-            <version>11.0</version>
+            <version>${matsimVersion}</version>
         </dependency>
 
         <dependency>
@@ -226,7 +229,7 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <matsimVersion>11.0</matsimVersion>
+        <matsimVersion>12.0</matsimVersion>
     </properties>
 
 </project>

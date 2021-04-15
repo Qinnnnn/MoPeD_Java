@@ -52,7 +52,8 @@ public class MucPIECaculator {
         logger.warn(failedJobMatchingCounter + " jobs cannot find a paz!");
         logger.info("   done job read!");
         writeOutZones(args[4]);
-        //generatePIE(args[2],args[3]);
+        //generateIsochrones();
+        generatePIE(args[2],args[3]);
         logger.info("   done in seconds: " + (System.currentTimeMillis()-startTime));
     }
 
