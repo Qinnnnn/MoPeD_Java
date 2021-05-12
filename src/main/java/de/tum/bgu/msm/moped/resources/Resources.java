@@ -1,6 +1,6 @@
 package de.tum.bgu.msm.moped.resources;
 
-import com.pb.common.util.ResourceUtil;
+import de.tum.bgu.msm.common.util.ResourceUtil;
 
 import java.util.ResourceBundle;
 

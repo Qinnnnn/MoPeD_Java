@@ -1,8 +1,5 @@
 package de.tum.bgu.msm.moped.resources;
 
-import java.util.ResourceBundle;
-import com.pb.common.util.ResourceUtil;
-
 public class Properties {
     public static final String RANDOM_SEED = "random.seed";
     public static final String BASE= "base.directory";

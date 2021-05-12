@@ -1,13 +1,11 @@
 package de.tum.bgu.msm.moped.util;
 
-import cern.colt.function.tdouble.IntDoubleProcedure;
-import cern.colt.list.tdouble.DoubleArrayList;
 import cern.colt.map.tdouble.OpenIntDoubleHashMap;
 import cern.colt.map.tfloat.OpenIntFloatHashMap;
 import cern.colt.matrix.tfloat.impl.SparseFloatMatrix2D;
 import cern.jet.stat.tdouble.DoubleDescriptive;
 import cern.jet.stat.tfloat.FloatDescriptive;
-import com.pb.common.util.ResourceUtil;
+import de.tum.bgu.msm.common.util.ResourceUtil;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import omx.OmxMatrix;
