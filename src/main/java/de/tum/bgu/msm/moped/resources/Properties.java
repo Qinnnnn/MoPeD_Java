@@ -1,7 +1,5 @@
 package de.tum.bgu.msm.moped.resources;
 
-import java.util.ResourceBundle;
-import com.pb.common.util.ResourceUtil;
 
 public class Properties {
 

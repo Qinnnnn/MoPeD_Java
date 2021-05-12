@@ -1,6 +1,6 @@
 package de.tum.bgu.msm.moped.util;
 
-import com.pb.common.util.ResourceUtil;
+import de.tum.bgu.msm.common.util.ResourceUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
