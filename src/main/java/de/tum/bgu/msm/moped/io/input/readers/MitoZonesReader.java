@@ -26,7 +26,7 @@ public class MitoZonesReader extends CSVReader{
     private QuadTree<MopedZone> zoneSearchTree;
 
     private int idIndex;
-    //private int mitoZoneIndex;
+    private int mitoZoneIndex;
     private int superPAZIndex;
     private int totalHouseholdIndex;
     private int index = 0;
@@ -57,7 +57,7 @@ public class MitoZonesReader extends CSVReader{
 
     protected void processHeader(String[] header) {
         idIndex = MoPeDUtil.findPositionInArray("zoneId", header);
-        //mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZone", header);
+        mitoZoneIndex = MoPeDUtil.findPositionInArray("mitoZoneId", header);
         superPAZIndex = MoPeDUtil.findPositionInArray("superPAZId", header);
         totalHouseholdIndex = MoPeDUtil.findPositionInArray("pop", header);
         scenarioZoneIndex = MoPeDUtil.findPositionInArray("scenarioPAZ", header);
@@ -103,6 +103,7 @@ public class MitoZonesReader extends CSVReader{
     }
 
     private void setZonalAttributes(MopedZone zone, String[] record) {
+        int mitoZoneId = Integer.parseInt(record[mitoZoneIndex]);
         int scenarioZone = Integer.parseInt(record[scenarioZoneIndex]);
         float agriculture = Float.parseFloat(record[agricultureIndex]);
         float construction = Float.parseFloat(record[constructionIndex]);
@@ -133,7 +134,7 @@ public class MitoZonesReader extends CSVReader{
         zone.setIndustrial(agriculture+construction+manufacturing);
         zone.setParkArce(park);
         zone.setScenarioZone(scenarioZone==1?Boolean.TRUE:Boolean.FALSE);
-
+        zone.setMitoZoneId(mitoZoneId);
     }
 
 

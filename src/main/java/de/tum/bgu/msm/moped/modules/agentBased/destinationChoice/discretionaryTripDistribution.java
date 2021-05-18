@@ -1,13 +1,11 @@
-package de.tum.bgu.msm.moped.modules.agentBased;
+package de.tum.bgu.msm.moped.modules.agentBased.destinationChoice;
 
 import cern.colt.map.tfloat.OpenIntFloatHashMap;
 import cern.jet.math.tfloat.FloatFunctions;
 import cern.jet.stat.tfloat.FloatDescriptive;
-import com.google.common.collect.ImmutableList;
 import com.google.common.math.LongMath;
 import de.tum.bgu.msm.moped.data.*;
-import de.tum.bgu.msm.moped.modules.agentBased.destinationChoice.DestinationUtilityCalculatorImpl;
-import de.tum.bgu.msm.moped.modules.agentBased.walkModeChoice.ModeChoiceCalculatorImpl;
+import de.tum.bgu.msm.moped.modules.agentBased.AgentBasedModel;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
@@ -27,14 +25,12 @@ import org.matsim.core.utils.geometry.CoordUtils;
 
 import java.util.*;
 
-import static de.tum.bgu.msm.moped.data.Purpose.*;
-
 /**
  * @author Qin
  */
-public final class HomeBasedDistribution extends RandomizableConcurrentFunction<Void> {
+public final class discretionaryTripDistribution extends RandomizableConcurrentFunction<Void> {
 
-    private final static Logger logger = Logger.getLogger(HomeBasedDistribution.class);
+    private final static Logger logger = Logger.getLogger(discretionaryTripDistribution.class);
     private final int partitionId;
     private List<MopedZone> zoneList;
     private final DataSet dataSet;
@@ -42,14 +38,13 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
     private final MultiNodePathCalculator subPathCalculator;
     private final Network network;
     private final DestinationUtilityCalculatorImpl destinationCalculator;
-    private final ModeChoiceCalculatorImpl modeChoiceCalculator;
     private final Map<MopedZone,List<MopedTrip>> tripsByZone;
+    private final List<Purpose> purposes;
 
-    public HomeBasedDistribution(DataSet dataSet, List<MopedZone> zoneList, MultiNodePathCalculator pathCalculator,
-                                  MultiNodePathCalculator subPathCalculator, Network network,
-                                  DestinationUtilityCalculatorImpl destinationCalculator,
-                                  ModeChoiceCalculatorImpl modeChoiceCalculator,
-                                  Map<MopedZone,List<MopedTrip>> tripsByZone, int partitionId) {
+    public discretionaryTripDistribution(DataSet dataSet, List<Purpose> purposes, List<MopedZone> zoneList, MultiNodePathCalculator pathCalculator,
+                                         MultiNodePathCalculator subPathCalculator, Network network,
+                                         DestinationUtilityCalculatorImpl destinationCalculator,
+                                         Map<MopedZone,List<MopedTrip>> tripsByZone, int partitionId) {
         super(MoPeDUtil.getRandomObject().nextLong());
         this.zoneList = zoneList;
         this.dataSet = dataSet;
@@ -57,9 +52,9 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
         this.subPathCalculator = subPathCalculator;
         this.network = network;
         this.destinationCalculator = destinationCalculator;
-        this.modeChoiceCalculator = modeChoiceCalculator;
         this.tripsByZone = tripsByZone;
         this.partitionId = partitionId;
+        this.purposes = purposes;
     }
 
     @Override
@@ -79,7 +74,7 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
                 EnumMap<Purpose, OpenIntFloatHashMap> utilityMatrices = new EnumMap<>(Purpose.class);
                 EnumMap<Purpose, OpenIntFloatHashMap> utilityMatricesPAZ = new EnumMap<>(Purpose.class);
 
-                for(Purpose purpose : ImmutableList.of(HBW,HBE,HBS,HBO)){
+                for(Purpose purpose : purposes){
                     OpenIntFloatHashMap utility = new OpenIntFloatHashMap();
                     OpenIntFloatHashMap utilityPAZ = new OpenIntFloatHashMap();
 
@@ -129,7 +124,7 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
                         crossMotorway = 1;
                     }
 
-                    for (Purpose purpose : ImmutableList.of(HBW,HBE,HBS,HBO)){
+                    for (Purpose purpose : purposes){
                         float utility = destinationCalculator.calculateUtility(purpose,destination,travelDistance,crossMotorway);
                         if (Float.isInfinite(utility) || Float.isNaN(utility)) {
                             throw new RuntimeException(utility + " utility calculated! Please check calculation!" +
@@ -142,18 +137,17 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
                 }
 
 
-                for (Purpose purpose : ImmutableList.of(HBW,HBE,HBS,HBO)) {
+                for (Purpose purpose : purposes) {
                     float sum = FloatDescriptive.sum(utilityMatrices.get(purpose).values());
                     utilityMatrices.get(purpose).assign(FloatFunctions.mult((float) (1. / sum)));
                 }
 
-                int destinationCounter = 0;
-                for ( int destinationId : utilityMatrices.get(HBW).keys().elements()) {
+                for ( int destinationId : utilityMatrices.get(purposes.get(0)).keys().elements()) {
                     SuperPAZ destination = dataSet.getSuperPAZ(destinationId);
                     //generate toNodes vector (toPAZ) and calculate Least Cost Path to all destination nodes
                     Map<Purpose, OpenIntFloatHashMap> utilityListPAZ = new HashMap<>();
 
-                    for(Purpose purpose : ImmutableList.of(HBW,HBE,HBS,HBO)){
+                    for(Purpose purpose : purposes){
                         OpenIntFloatHashMap utilityPAZ = new OpenIntFloatHashMap();
                         utilityListPAZ.put(purpose,utilityPAZ);
                     }
@@ -196,7 +190,7 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
                             originPAZ = 1;
                         }
 
-                        for (Purpose purpose : ImmutableList.of(HBW,HBE,HBS,HBO)){
+                        for (Purpose purpose : purposes){
                             float utilityPAZ = destinationCalculator.calculateUtility(purpose,dataSet.getZone(paz),travelDistancePAZ,originPAZ);
                             if (Float.isInfinite(utilityPAZ) || Float.isNaN(utilityPAZ)) {
                                 throw new RuntimeException(utilityPAZ + " utility calculated! Please check calculation!" +
@@ -211,7 +205,7 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
                         impedanceListPAZ.put(paz, travelDistancePAZ);
                     }
 
-                    for (Purpose purpose : ImmutableList.of(HBW,HBE,HBS,HBO)){
+                    for (Purpose purpose : purposes){
                         float sumPAZ = FloatDescriptive.sum(utilityListPAZ.get(purpose).values());
                         if (sumPAZ == 0.0f) {
                             continue;
@@ -222,45 +216,18 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
                             utilityMatricesPAZ.get(purpose).put(paz,probabilityPAZ);
                         }
                     }
-                    destinationCounter++;
                 }
-
-
 
                 //find destination and set trip distance for all trips generated from this zone
                 for (MopedTrip trip : tripsByZone.get(origin)){
-                    AgentBasedModel.totalProcessedTrip.incrementAndGet();
-                    if(trip.getTripPurpose().equals(Purpose.HBW)||trip.getTripPurpose().equals(Purpose.HBE)){
-                        if(trip.getTripOrigin()==null||trip.getTripDestination()==null){
-                            //logger.warn("trip " + trip.getTripId() + ", purpose " + trip.getTripPurpose()+", has no home or occupation zone" + trip.getTripOrigin() + "," + trip.getTripDestination());
-                            AgentBasedModel.NOOCCUPATIONCOUNTER.incrementAndGet();
-                            continue;
-                        }else{
-                            //TODO: allow HBW walk trip allow 4.8km
-                            if (!impedanceListPAZ.containsKey(trip.getTripDestination().getZoneId())){
-                                trip.setWalkMode(Boolean.FALSE);
-                                continue;
-                            }else{
-                                trip.setTripDistance(impedanceListPAZ.get(trip.getTripDestination().getZoneId()));
-                                chooseMode(trip, calculateTripProbabilities(trip), random);
-                                continue;
-                            }
-                        }
+                    if(FloatDescriptive.sum(utilityMatricesPAZ.get(trip.getTripPurpose()).values())==0){
+                        logger.warn("origin: " + origin.getZoneId() + " Purpose: " + trip.getTripPurpose() + " PAZ utility sum 0");
+                        continue;
                     }
-
-
-                    chooseMode(trip, calculateTripProbabilities(trip), random);
-
-                    if(trip.isWalkMode()){
-                        if(FloatDescriptive.sum(utilityMatricesPAZ.get(trip.getTripPurpose()).values())==0){
-                            logger.warn("origin: " + origin.getZoneId() + " Purpose: " + trip.getTripPurpose() + " PAZ utility sum 0");
-                            continue;
-                        }
-                        final int selectedZoneId = MoPeDUtil.select(origin.getZoneId(),utilityMatricesPAZ.get(trip.getTripPurpose()), random);
-                        trip.setTripDestination(dataSet.getZone(selectedZoneId));
-                        trip.setTripDistance(impedanceListPAZ.get(selectedZoneId));
-                        AgentBasedModel.distributedTripsCounter.incrementAndGet();
-                    }
+                    final int selectedZoneId = MoPeDUtil.select(origin.getZoneId(),utilityMatricesPAZ.get(trip.getTripPurpose()), random);
+                    trip.setTripDestination(dataSet.getZone(selectedZoneId));
+                    trip.setTripDistance(impedanceListPAZ.get(selectedZoneId));
+                    AgentBasedModel.distributedTripsCounter.incrementAndGet();
                 }
                 counter++;
             }
@@ -270,14 +237,5 @@ public final class HomeBasedDistribution extends RandomizableConcurrentFunction<
         }
 
         return null;
-    }
-
-    private double calculateTripProbabilities(MopedTrip trip) {
-        return modeChoiceCalculator.calculateProbabilities(trip.getPerson().getMopedHousehold(), trip);
-    }
-
-    private void chooseMode(MopedTrip trip, double probabilities, Random rand) {
-        double random = rand.nextDouble();
-        trip.setWalkMode(random <= probabilities);
     }
 }

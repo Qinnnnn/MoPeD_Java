@@ -1,6 +1,7 @@
 package pie.data;
 
-import com.vividsolutions.jts.geom.Coordinate;
+
+import org.locationtech.jts.geom.Coordinate;
 
 public class FourWayIntersection {
     private  int id;

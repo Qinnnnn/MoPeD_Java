@@ -12,6 +12,8 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
     //distHasKid,distNoKid,networkDensity,sizeRet,industrial,barrier,park
     private double[] coefficientsHBS = {-2.182, -1.776, 0.049, 0.977, -1.306, -0.279, 0};
+    //distHasKid,distNoKid,networkDensity,sizeRetSev,sizeHH,barrier,park
+    private double[] coefficientsHBR = {-2.321, -1.955, 0, 0.133, 0.054, -0.568, 0.662};
 
     //dist,networkDensity,sizeAll(non-industrial),industrial,barrier,park
     private double[] coefficientsHBO = {-2.217, 0.214, 0.389, 0, -0.828, 0.510};
@@ -24,6 +26,8 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
     //origin,dist,sizeRet,sizeOther,sizeHH,industrial,park
     private double[] coefficientsHBSPAZ = {0.623, -2.120, 0.820, 0.188, -0.169, 0, -0.651};
+    //origin,dist,sizeRet,sizeOther,sizeHH,industrial,park
+    private double[] coefficientsHBRPAZ = {2.704, -1.974, 0.123, 0.123, -0.560, -1.602, 1.473};
 
     //origin,dist,sizeRetSer,sizeFinGov,sizeHH,industrial,park
     private double[] coefficientsHBOPAZ = {3.162, -2.348, 0.145, 0.559, -0.507, -0.477, 0};
@@ -44,7 +48,6 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
     @Override
     public float calculateUtility(Purpose purpose, SuperPAZ destination, double travelDistance, int crossMotorway) {
-
 
         switch (purpose) {
             case HBW:
@@ -87,8 +90,29 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
                 }
 
                 utility = (float) (coefficientsHBS[0]*travelDistance+coefficientsHBS[2]*networkDensity+
-                                        coefficientsHBS[3]*Math.log(sizeRet)+coefficientsHBS[4]*industrialProp+
-                                        coefficientsHBS[5]*crossMotorway+coefficientsHBS[6]*park);
+                        coefficientsHBS[3]*Math.log(sizeRet)+coefficientsHBS[4]*industrialProp+
+                        coefficientsHBS[5]*crossMotorway+coefficientsHBS[6]*park);
+
+                probability = (float) Math.exp(utility);
+
+                return probability;
+            case HBR:
+                networkDensity = destination.getNetworkDesnity();
+                sizeRetSev = destination.getRetail()+destination.getService();
+                sizeHH = Math.max(1,destination.getHousehold());
+                industrialProp = 0.;
+                if(destination.getTotalEmpl()!=0){
+                    industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+                }
+                park = destination.getPark();
+
+                if(sizeRetSev < 1){
+                    sizeRetSev = sizeRetSev+1;
+                }
+
+                utility = (float) (coefficientsHBR[0]*travelDistance+coefficientsHBR[2]*networkDensity+
+                        coefficientsHBR[3]*Math.log(sizeRetSev)+coefficientsHBR[4]*Math.log(sizeHH)+
+                        coefficientsHBR[5]*crossMotorway+coefficientsHBR[6]*park);
 
                 probability = (float) Math.exp(utility);
 
@@ -208,8 +232,27 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
                 utility = (float) (coefficientsHBSPAZ[0]*originPAZ+coefficientsHBSPAZ[1]*travelDistance+
                                         coefficientsHBSPAZ[2]*Math.log(sizeRet)+coefficientsHBSPAZ[3]*Math.log(sizeOther)+
-                                        coefficientsHBWPAZ[4]*Math.log(sizeHH)+
+                                        coefficientsHBSPAZ[4]*Math.log(sizeHH)+
                                         coefficientsHBSPAZ[5]*industrialProp+coefficientsHBSPAZ[6]*park);
+
+                probability = (float) Math.exp(utility);
+
+                return probability;
+            case HBR:
+                sizeAll = destination.getRetail()+destination.getFinancial()+destination.getGovernment()+destination.getService();
+                sizeAll = Math.max(1, sizeAll);
+                sizeHH =  Math.max(1,destination.getTotalHH());
+                industrialProp = 0.;
+                if(destination.getTotalEmpl()!=0){
+                    industrialProp = destination.getIndustrial()/destination.getTotalEmpl();
+                }
+                park = destination.getParkArce();
+
+
+                utility = (float) (coefficientsHBRPAZ[0]*originPAZ+coefficientsHBRPAZ[1]*travelDistance+
+                        coefficientsHBRPAZ[2]*Math.log(sizeAll)+
+                        coefficientsHBRPAZ[4]*Math.log(sizeHH)+
+                        coefficientsHBRPAZ[5]*industrialProp+coefficientsHBRPAZ[6]*park);
 
                 probability = (float) Math.exp(utility);
 
@@ -234,7 +277,7 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
                 utility = (float) (coefficientsHBOPAZ[0]*originPAZ+coefficientsHBOPAZ[1]*travelDistance+
                                         coefficientsHBOPAZ[2]*Math.log(sizeRetSev)+coefficientsHBOPAZ[3]*Math.log(sizeFinGov)+
-                                        coefficientsHBWPAZ[4]*Math.log(sizeHH)+
+                                        coefficientsHBOPAZ[4]*Math.log(sizeHH)+
                                         coefficientsHBOPAZ[5]*industrialProp+coefficientsHBOPAZ[6]*park);
 
                 probability = (float) Math.exp(utility);
@@ -260,7 +303,7 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
                 utility = (float) (coefficientsNHBWPAZ[0]*originPAZ+coefficientsNHBWPAZ[1]*travelDistance+
                                         coefficientsNHBWPAZ[2]*Math.log(sizeRetSev)+coefficientsNHBWPAZ[3]*Math.log(sizeFinGov)+
-                                        coefficientsHBWPAZ[4]*Math.log(sizeHH)+
+                                        coefficientsNHBWPAZ[4]*Math.log(sizeHH)+
                                         coefficientsNHBWPAZ[5]*industrialProp+coefficientsNHBWPAZ[6]*park);
 
                 probability = (float) Math.exp(utility);
@@ -286,7 +329,7 @@ public class DestinationUtilityCalculatorImpl implements DestinationUtilityCalcu
 
                 utility = (float) (coefficientsNHBOPAZ[0]*originPAZ+coefficientsNHBOPAZ[1]*travelDistance+
                                         coefficientsNHBOPAZ[2]*Math.log(sizeRetSev)+coefficientsNHBOPAZ[3]*Math.log(sizeFinGov)+
-                        coefficientsHBWPAZ[4]*Math.log(sizeHH)+
+                        coefficientsNHBOPAZ[4]*Math.log(sizeHH)+
                         coefficientsNHBOPAZ[5]*industrialProp+coefficientsNHBOPAZ[6]*park);
 
                 probability = (float) Math.exp(utility);

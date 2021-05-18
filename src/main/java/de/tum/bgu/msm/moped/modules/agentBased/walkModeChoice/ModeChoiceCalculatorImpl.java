@@ -3,17 +3,18 @@ package de.tum.bgu.msm.moped.modules.agentBased.walkModeChoice;
 import de.tum.bgu.msm.moped.data.*;
 
 public class ModeChoiceCalculatorImpl implements ModeChoiceCalculator {
-    //intercept,distanceKm,car,kid1,kid2,kid2+,LogpedestrianAccessibility,HBE
-    private double[] coefficientsHBW = {-5.798, -0.299, -0.296, 1.099, 1.123, 0.836, 0.559, 0.0};
-    private double[] coefficientsHBE = {-5.798, -0.299, -0.296, 1.099, 1.123, 0.836, 0.559, 0.938};
+    //intercept,distanceKm,car,kid1,kid2,kid2+,LogpedestrianAccessibility,factor
+    private double[] coefficientsHBW = {-7.344, -0.128, -0.468, 0.745, 0.745, 0.745, 0.764, -0.4833};
+    private double[] coefficientsHBE = {-2.231, -0.376, -0.474, 1.583, 1.558, 1.178, 0.213, -0.4548};
 
-    //intercept,car0,car2,car2+,kidYes,LogpedestrianAccessibility,HBS
-    private double[] coefficientsHBS = {-7.276, 0.945, -0.239, -0.408, 0.184, 0.727, -0.513};
-    private double[] coefficientsHBO = {-7.276, 0.945, -0.239, -0.408, 0.184, 0.727, 0};
+    //intercept,car0,car2,car2+,kidYes,LogpedestrianAccessibility,factor
+    private double[] coefficientsHBR = {-7.276, 0.945, -0.239, -0.408, 0.184, 0.727, -0.38344};
+    private double[] coefficientsHBS = {-7.276, 0.945, -0.239, -0.408, 0.184, 0.727, 0.001459};
+    private double[] coefficientsHBO = {-7.276, 0.945, -0.239, -0.408, 0.184, 0.727, -0.42791};
 
-    //intercept,income2,income3,income4,car0,car2,car2+,kidYes,LogpedestrianAccessibility,NHBW
-    private double[] coefficientsNHBW = {-7.411, -0.205, 0.222, 0.448, 1.375, -0.898, -0.963, -0.162, 0.686, -0.362};
-    private double[] coefficientsNHBO = {-7.411, -0.205, 0.222, 0.448, 1.375, -0.898, -0.963, -0.162, 0.686, 0.0};
+    //intercept,income2,income3,income4,car0,car2,car2+,kidYes,LogpedestrianAccessibility,factor
+    private double[] coefficientsNHBW = {-7.411, -0.205, 0.222, 0.448, 1.375, -0.898, -0.963, -0.162, 0.686, 0.295716};
+    private double[] coefficientsNHBO = {-7.411, -0.205, 0.222, 0.448, 1.375, -0.898, -0.963, -0.162, 0.686, 0.173773};
 
     private int car;
     private int kid;
@@ -69,6 +70,19 @@ public class ModeChoiceCalculatorImpl implements ModeChoiceCalculator {
                 probabilityWalk = Math.exp(utilityWalk) / (Math.exp(utilityWalk) + 1);
 
                 return probabilityWalk;
+            case HBR:
+                car = hh.getAutos();
+                kid = hh.getKids();
+                activityDensity = hh.getHomeZone().getPieEmpl()+hh.getHomeZone().getPiePop();
+                activityDensity = Math.max(activityDensity,1);
+
+                utilityWalk = coefficientsHBR[0]+coefficientsHBR[1]*(car==0?1:0)+coefficientsHBR[2]*(car==2?1:0) +
+                        coefficientsHBR[3]*(car>2?1:0)+coefficientsHBR[4]*(kid>0?1:0)+
+                        coefficientsHBR[5]*Math.log(activityDensity)+coefficientsHBR[6];
+
+                probabilityWalk = Math.exp(utilityWalk) / (Math.exp(utilityWalk) + 1);
+
+                return probabilityWalk;
             case HBO:
                 car = hh.getAutos();
                 kid = hh.getKids();
@@ -88,16 +102,16 @@ public class ModeChoiceCalculatorImpl implements ModeChoiceCalculator {
                 kid = hh.getKids();
                 monthlyIncome = hh.getIncome();
                 incomeGroup = 0;
-                if (monthlyIncome*12<=18000){
+                if (monthlyIncome*12<=22000){
                     incomeGroup = 1;
-                }else if(monthlyIncome*12<=24000){
+                }else if(monthlyIncome*12<=28000){
                     incomeGroup = 2;
-                }else if(monthlyIncome*12<=36000){
+                }else if(monthlyIncome*12<=45000){
                     incomeGroup = 3;
                 }else{
                     incomeGroup = 4;
                 }
-                activityDensity = hh.getHomeZone().getPieEmpl()+hh.getHomeZone().getPiePop();
+                activityDensity = trip.getTripOrigin().getPieEmpl()+trip.getTripOrigin().getPiePop();
                 activityDensity = Math.max(activityDensity,1);
 
                 utilityWalk = coefficientsNHBW[0]+coefficientsNHBW[1]*(incomeGroup==2?1:0)+
@@ -114,16 +128,16 @@ public class ModeChoiceCalculatorImpl implements ModeChoiceCalculator {
                 kid = hh.getKids();
                 monthlyIncome = hh.getIncome();
                 incomeGroup = 0;
-                if (monthlyIncome*12<=18000){
+                if (monthlyIncome*12<=22000){
                     incomeGroup = 1;
-                }else if(monthlyIncome*12<=24000){
+                }else if(monthlyIncome*12<=28000){
                     incomeGroup = 2;
-                }else if(monthlyIncome*12<=36000){
+                }else if(monthlyIncome*12<=45000){
                     incomeGroup = 3;
                 }else{
                     incomeGroup = 4;
                 }
-                activityDensity = hh.getHomeZone().getPieEmpl()+hh.getHomeZone().getPiePop();
+                activityDensity = trip.getTripOrigin().getPieEmpl()+trip.getTripOrigin().getPiePop();
                 activityDensity = Math.max(activityDensity,1);
 
                 utilityWalk = coefficientsNHBO[0]+coefficientsNHBO[1]*(incomeGroup==2?1:0)+

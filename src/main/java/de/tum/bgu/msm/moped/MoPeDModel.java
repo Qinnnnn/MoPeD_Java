@@ -4,8 +4,6 @@ import de.tum.bgu.msm.moped.data.*;
 import de.tum.bgu.msm.moped.io.input.InputManager;
 import de.tum.bgu.msm.moped.io.output.*;
 import de.tum.bgu.msm.moped.modules.agentBased.AgentBasedModel;
-import de.tum.bgu.msm.moped.modules.agentBased.destinationChoice.AgentTripDistribution;
-import de.tum.bgu.msm.moped.modules.agentBased.walkModeChoice.ModeChoice;
 import de.tum.bgu.msm.moped.modules.destinationChoice.TripDistribution;
 import de.tum.bgu.msm.moped.modules.tripGeneration.TripGeneration;
 import de.tum.bgu.msm.moped.modules.walkModeChoice.WalkModeChoice;
@@ -45,20 +43,22 @@ public class MoPeDModel {
     }
 
     //TODO: create new mode choice and trip distribution model for agent based
-    public void runAgentBasedModel(){
-        logger.info("Started the Model of Pedestrian Demand (MoPeD)");
-        agentBasedModel.runHomeBased();
+    public void runAgentBasedModelForMandatoryTrips(){
+        logger.info("Started Moped for mandatory trips");
+        agentBasedModel.runMandatoryTrips(Purpose.getMandatoryPurposes());
+
+    }
+
+    public void runAgentBasedModelForHomeBasedDiscretionaryTrips(){
+        logger.info("Started Moped for Home Based Discretionary Trips");
+        agentBasedModel.runHomeBasedDiscretionaryTrips(Purpose.getHomeBasedDiscretionaryPurposes());
 
     }
 
     //TODO: create new mode choice and trip distribution model for agent based
-    public void runAgentBasedModelForNonHomeBased(){
-        logger.info("Started the Model of Pedestrian Demand (MoPeD)");
-//        ModeChoice walkMode = new ModeChoice(dataSet);
-//        walkMode.run();
-//        AgentTripDistribution distribution = new AgentTripDistribution(dataSet);
-//        distribution.run();
-        agentBasedModel.runNonHomeBased();
+    public void runAgentBasedModelForNonHomeBasedTrips(){
+        logger.info("Started Moped for Non Home Based Trips");
+        agentBasedModel.runNonHomeBasedTrips(Purpose.getNonHomeBasedPurposes());
 
     }
 

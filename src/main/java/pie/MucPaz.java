@@ -1,9 +1,5 @@
 package pie;
 
-import com.google.common.util.concurrent.AtomicDouble;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import de.tum.bgu.msm.moped.data.Purpose;
 import org.opengis.feature.simple.SimpleFeature;
 
 import java.util.HashMap;

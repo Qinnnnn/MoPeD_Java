@@ -1,6 +1,5 @@
 package de.tum.bgu.msm.moped.data;
 
-import com.vividsolutions.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 
 import java.util.HashMap;

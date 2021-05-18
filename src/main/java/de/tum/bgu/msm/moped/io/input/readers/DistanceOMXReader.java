@@ -6,7 +6,6 @@ import de.tum.bgu.msm.moped.io.input.OMXReader;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
 import org.apache.log4j.Logger;
-import org.jblas.FloatMatrix;
 
 @Deprecated
 public class DistanceOMXReader extends OMXReader {

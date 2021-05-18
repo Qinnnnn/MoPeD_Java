@@ -6,23 +6,19 @@
 
     <groupId>de.tum.bgu.msm</groupId>
     <artifactId>moped_java</artifactId>
-    <version>0.1</version>
+    <version>moped</version>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>msm</id>
-            <url>https://maven.cloudsmith.io/msmobility/msm/</url>
-        </snapshotRepository>
         <repository>
-            <id>msm-snapshots</id>
-            <url>https://maven.cloudsmith.io/msmobility/msm/</url>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/qinnnnn/moped_java</url>
         </repository>
     </distributionManagement>
-
     <scm>
-        <url>https://github.com/Qinnnnn/moped_java</url>
-        <connection>scm:git:git://github.com/Qinnnnn/moped_java.git</connection>
-        <developerConnection>scm:git:git@github.com:Qinnnnn/moped_java.git</developerConnection>
+        <url>https://github.com/Qinnnnn/MoPeD_Java</url>
+        <connection>scm:git:git://github.com/qinnnnn/moped_java.git</connection>
+        <developerConnection>scm:git:git@github.com:qinnnnn/moped_java.git</developerConnection>
     </scm>
 
     <repositories>
@@ -39,29 +35,30 @@
             </snapshots>
         </repository>
         <repository>
-            <id>matsim</id>
-            <url>https://repo.matsim.org/repository/matsim</url>
-        </repository>
-        <repository>
-            <id>oss-jfrog-artifactory</id>
-            <name>artifactory-snapshots</name>
-            <url>https://oss.jfrog.org/oss-snapshot-local</url>
-        </repository>
-        <repository>
             <id>maven2-repository.dev.java.net</id>
             <name>Java.net repository</name>
             <url>http://download.java.net/maven/2</url>
         </repository>
         <repository>
             <id>osgeo</id>
-            <name>OSGeo Release Repository</name>
-            <url>https://repo.osgeo.org/repository/release/</url>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+        </repository>
+        <repository>
             <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
                 <enabled>true</enabled>
-            </releases>
+            </snapshots>
+            <id>boundless</id>
+            <name>Boundless Maven Repository</name>
+            <url>http://repo.boundlessgeo.com/main</url>
+        </repository>
+        <repository>
+            <id>matsim</id>
+            <url>https://repo.matsim.org/repository/matsim</url>
+        </repository>
+        <repository>
+            <id>ojo-snapshots</id>
+            <url>http://oss.jfrog.org/libs-snapshot</url>
         </repository>
     </repositories>
 
@@ -148,36 +145,25 @@
             <version>3.6.1</version>
         </dependency>
         <dependency>
+            <groupId>de.tum.bgu.msm</groupId>
+            <artifactId>msm-commons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+<!--        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>23.2-jre</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.jblas</groupId>
             <artifactId>jblas</artifactId>
             <version>1.2.4</version>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.vividsolutions</groupId>
-            <artifactId>jts</artifactId>
-            <version>1.13</version>
-        </dependency>
-        <!--<dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-grid</artifactId>
-            <version>21.5</version>
-        </dependency>-->
-        <dependency>
-            <groupId>de.tum.bgu.msm</groupId>
-            <artifactId>msm-commons</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>omx</groupId>
@@ -205,13 +191,6 @@
             <artifactId>accessibility</artifactId>
             <version>${matsimVersion}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.locationtech.jts</groupId>
-            <artifactId>jts-core</artifactId>
-            <version>1.16.1</version>
-        </dependency>
-
         <dependency>
             <groupId>org.openstreetmap.osmosis</groupId>
             <artifactId>osmosis-core</artifactId>

@@ -17,12 +17,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class DataSet {
 
     private static final Logger logger = Logger.getLogger(DataSet.class);
     private final int HOUSEHOLDTYPESIZE = 4097;
-    private Map<Integer, MopedZone> zones = new HashMap<>();
+    private ConcurrentMap<Integer, MopedZone> zones = new ConcurrentHashMap<>();
     private Map<Integer, SuperPAZ> superPAZs = new HashMap<>();
     private Map<Integer, HouseholdType> hhTypes = new HashMap<>();
     private Map<Integer, MopedZone> originPAZs = new HashMap<>();
@@ -44,9 +46,9 @@ public class DataSet {
 
 
     private int year;
-    private final Map<Integer, MopedHousehold> households = new LinkedHashMap<>();
-    private final Map<Integer, MopedPerson> persons = new LinkedHashMap<>();
-    private final Map<Integer, MopedTrip> trips = new LinkedHashMap<>();
+    private final ConcurrentMap<Integer, MopedHousehold> households = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, MopedPerson> persons = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, MopedTrip> trips = new ConcurrentHashMap<>();
     private SparseFloatMatrix2D PAZImpedance;
     private final float totalPop = 592234.327f;
 

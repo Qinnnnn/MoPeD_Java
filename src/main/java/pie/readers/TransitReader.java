@@ -1,9 +1,9 @@
 package pie.readers;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import de.tum.bgu.msm.moped.data.DataSet;
 import de.tum.bgu.msm.moped.io.input.CSVReader;
 import de.tum.bgu.msm.moped.util.MoPeDUtil;
+import org.locationtech.jts.geom.Coordinate;
 import org.osgeo.proj4j.BasicCoordinateTransform;
 import org.osgeo.proj4j.ProjCoordinate;
 import pie.data.Transit;

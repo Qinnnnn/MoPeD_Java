@@ -1,4 +1,4 @@
-package de.tum.bgu.msm.moped.modules.agentBased;
+package de.tum.bgu.msm.moped.modules.agentBased.destinationChoice;
 
 import cern.colt.map.tfloat.OpenIntFloatHashMap;
 import cern.jet.math.tfloat.FloatFunctions;
@@ -6,7 +6,7 @@ import cern.jet.stat.tfloat.FloatDescriptive;
 import com.google.common.collect.ImmutableList;
 import com.google.common.math.LongMath;
 import de.tum.bgu.msm.moped.data.*;
-import de.tum.bgu.msm.moped.modules.agentBased.destinationChoice.DestinationUtilityCalculatorImpl;
+import de.tum.bgu.msm.moped.modules.agentBased.AgentBasedModel;
 import de.tum.bgu.msm.moped.modules.agentBased.walkModeChoice.ModeChoiceCalculatorImpl;
 import de.tum.bgu.msm.moped.resources.Properties;
 import de.tum.bgu.msm.moped.resources.Resources;
@@ -33,6 +33,7 @@ import static de.tum.bgu.msm.moped.data.Purpose.NHBW;
 /**
  * @author Qin
  */
+@Deprecated
 public final class NonHomeBasedDistribution extends RandomizableConcurrentFunction<Void> {
 
     private final static Logger logger = Logger.getLogger(NonHomeBasedDistribution.class);
@@ -227,7 +228,7 @@ public final class NonHomeBasedDistribution extends RandomizableConcurrentFuncti
 
             //find destination and set trip distance for all trips generated from this zone
             for (MopedTrip trip : tripsByZone.get(origin)){
-                AgentBasedModel.totalProcessedTrip.incrementAndGet();
+                //AgentBasedModel.totalProcessedTrip.incrementAndGet();
                 if(trip.getTripPurpose().equals(Purpose.HBW)||trip.getTripPurpose().equals(Purpose.HBE)){
                     if(trip.getTripOrigin()==null||trip.getTripDestination()==null){
                         //logger.warn("trip " + trip.getTripId() + ", purpose " + trip.getTripPurpose()+", has no home or occupation zone" + trip.getTripOrigin() + "," + trip.getTripDestination());
