@@ -274,7 +274,11 @@ public class MoPeDUtil {
 
     public static synchronized int select(int zone, OpenIntFloatHashMap openIntFloatHashMap, Random rand) {
         // select item based on probabilities (for mapped double probabilities)
-        double sum = FloatDescriptive.sum(openIntFloatHashMap.values());
+        float sum = FloatDescriptive.sum(openIntFloatHashMap.values());
+        if (sum > 1){
+            //logger.warn("Error selecting item from weighted probabilities for zone:  " + zone + "sum utility: " + sum);
+            sum = 1.f;
+        }
 
         double selectedWeight = rand.nextDouble() * sum;
         double select = 0;
