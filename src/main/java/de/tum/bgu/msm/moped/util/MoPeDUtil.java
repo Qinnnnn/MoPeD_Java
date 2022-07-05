@@ -259,10 +259,10 @@ public class MoPeDUtil {
 
     public static synchronized int select(OpenIntFloatHashMap openIntFloatHashMap, Random rand) {
         // select item based on probabilities (for mapped double probabilities)
-        double sum = FloatDescriptive.sum(openIntFloatHashMap.values());
+        float sum = FloatDescriptive.sum(openIntFloatHashMap.values());
 
-        double selectedWeight = rand.nextDouble() * sum;
-        double select = 0;
+        float selectedWeight = rand.nextFloat() * sum;
+        float select = 0;
         for (int i: openIntFloatHashMap.keys().elements()) {
             select += openIntFloatHashMap.get(i);
             if (select > selectedWeight) {
@@ -274,14 +274,20 @@ public class MoPeDUtil {
 
     public static synchronized int select(int zone, OpenIntFloatHashMap openIntFloatHashMap, Random rand) {
         // select item based on probabilities (for mapped double probabilities)
+        if(openIntFloatHashMap.size()==1){
+            int i = openIntFloatHashMap.keys().get(0);
+            logger.warn("For zone: " + zone + " there is only one alternative destination zone in the map: " + i);
+            return i;
+        }
+
         float sum = FloatDescriptive.sum(openIntFloatHashMap.values());
         if (sum > 1){
             //logger.warn("Error selecting item from weighted probabilities for zone:  " + zone + "sum utility: " + sum);
             sum = 1.f;
         }
 
-        double selectedWeight = rand.nextDouble() * sum;
-        double select = 0;
+        float selectedWeight = rand.nextFloat() * sum;
+        float select = 0;
         for (int i: openIntFloatHashMap.keys().elements()) {
             select += openIntFloatHashMap.get(i);
             if (select > selectedWeight) {

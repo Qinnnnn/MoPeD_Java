@@ -3,6 +3,7 @@ package pie.data.employmentAllocation;
 
 
 import org.locationtech.jts.geom.Geometry;
+import pie.TimelineLocationPOICounter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class OSMObject {
     private Map<Integer,Float> areasByType = new HashMap<>();
     private Map<Integer,Float> jobsByType = new HashMap<>();
     private int numberOfIntersectPAZ;
+    private TimelineLocationPOICounter.OSMType amenityType;
 
     public OSMObject(long id) {
         this.id = id;
@@ -83,5 +85,13 @@ public class OSMObject {
 
     public void setNumberOfIntersectPAZ(int numberOfIntersectPAZ) {
         this.numberOfIntersectPAZ = numberOfIntersectPAZ;
+    }
+
+    public TimelineLocationPOICounter.OSMType getAmenityType() {
+        return amenityType;
+    }
+
+    public void setAmenityType(TimelineLocationPOICounter.OSMType amenityType) {
+        this.amenityType = amenityType;
     }
 }
